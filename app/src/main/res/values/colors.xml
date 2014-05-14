@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_theme">#80DAE4</color>
+    <color name="good">#8AE480</color>
+    <color name="bad">#E48080</color>
+    <color name="neutral">#809EE4</color>
+</resources>

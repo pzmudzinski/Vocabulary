@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Vocabulary</string>
+    <string name="title_section1">Dodaj tłumaczenie</string>
+    <string name="title_section2">Test</string>
+    <string name="title_section3">Statystyki</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="add_translation">Dodaj tłumaczenie</string>
+
+    <string name="find_online">Znajdz tłumaczenie online</string>
+    <string name="title_from">Po polsku</string>
+    <string name="title_to">Po angielsku</string>
+    <string name="association">Skojarzenie</string>
+    <string name="pronunciation">Wymowa</string>
+    <string name="start_tough_words_test">Sprawdz slowa ktorych nie znasz</string>
+    <string name="start_test">Sprawdz wszystkie slowa</string>
+
+    <string name="stats_all_tests">Liczba podjetych testow: %d</string>
+    <string name="stats_translation_number">Liczba wpisanych tlumaczen: %d</string>
+</resources>
