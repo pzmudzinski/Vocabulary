@@ -37,7 +37,5 @@
         android:layout_height="wrap_content"
         android:text="@string/add_translation"
         android:id="@+id/button"
-        style="@style/ButtonText"
-        android:background="@drawable/button_background"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

@@ -1,21 +1,27 @@
 package com.pz.vocabulary.app.models;
 
 /**
- * Created by piotr on 27.04.2014.
+ * Created by piotr on 04/06/14.
  */
-public class Translation {
-    private int[] source;
-    private int[] destination;
-    private int association;
+public class Translation extends BaseEntity {
 
-    public Translation(String from, String to, String association)
+    private long wordTo;
+    private Memory memory;
+    
+    public Translation(long id, long wordTo, Memory memory)
     {
-
+        super(id);
+        this.wordTo = wordTo;
+        this.memory = memory;
     }
 
-    public Translation(String from, String to)
+    public Memory getMemory()
     {
-
+        return memory;
     }
 
+    public long getWordTo()
+    {
+        return wordTo;
+    }
 }

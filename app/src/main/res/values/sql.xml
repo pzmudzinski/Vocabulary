@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="database_name">
+        vocabulary
+    </string>
+
+    <string name="query_create_table_words">
+        CREATE TABLE words
+        (
+            id INTEGER NOT NULL,
+            spelling TEXT NOT NULL UNIQUE,
+            language_id INTEGER,
+
+            PRIMARY KEY (id)
+            FOREIGN KEY (language_id) REFERENCES languages(id)
+        );
+    </string>
+
+    <string name="query_create_table_translations">
+        CREATE TABLE translations
+        (
+            id INTEGER NOT NULL,
+            word_from INTEGER,
+            word_to INTEGER,
+            memory_id INTEGER,
+
+            PRIMARY KEY (id)
+            FOREIGN KEY (word_from) REFERENCES words(id)
+            FOREIGN KEY (word_to) REFERENCES words(id)
+            FOREIGN KEY (memory_id) REFERENCES memories(id)
+        );
+    </string>
+
+    <string name="query_create_table_languages">
+        CREATE TABLE languages
+        (
+            id INTEGER NOT NULL,
+            name TEXT NOT NULL UNIQUE,
+
+            PRIMARY KEY (id)
+        );
+    </string>
+
+    <string name="query_create_table_memories">
+        CREATE TABLE memories
+        (
+            id INTEGER NOT NULL,
+            description TEXT NOT NULL UNIQUE,
+
+            PRIMARY KEY (id)
+        );
+    </string>
+
+    <string name="query_insert_languages">
+        INSERT INTO languages(id, name) VALUES (1, \'pl\');
+        INSERT INTO languages(id, name) VALUES (2, \'eng\');
+    </string>
+
+    <string name="query_select_meanings">
+        SELECT id, memory_id, CASE
+            WHEN word_to=?
+                THEN word_from
+                    ELSE word_to
+            END
+            FROM translations
+                WHERE word_to=? OR word_from=?
+    </string>
+
+    <string name="query_select_memory">
+        SELECT *
+        FROM memories
+        WHERE id=?
+    </string>
+
+</resources>

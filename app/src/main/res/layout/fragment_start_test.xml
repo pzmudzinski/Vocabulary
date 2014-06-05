@@ -10,8 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/start_test"
-        style="@style/ButtonText"
-        android:background="@drawable/button_background"
         android:id="@+id/button"
         android:layout_marginTop="25dp"
         android:layout_marginBottom="25dp"
@@ -20,9 +18,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/ButtonText"
         android:text="@string/start_tough_words_test"
-        android:background="@drawable/button_background"
         android:id="@+id/button2"
         android:layout_gravity="center_horizontal" />
 

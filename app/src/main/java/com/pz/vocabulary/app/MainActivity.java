@@ -1,7 +1,6 @@
 package com.pz.vocabulary.app;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -10,15 +9,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.pz.vocabulary.app.screens.AddTranslationFragment;
 import com.pz.vocabulary.app.screens.AddTranslationFragment_;
+import com.pz.vocabulary.app.screens.SectionsPagerAdapter;
+import com.pz.vocabulary.app.screens.StartTestFragment;
 import com.pz.vocabulary.app.screens.StartTestFragment_;
+import com.pz.vocabulary.app.screens.StatisticsFragment;
 import com.pz.vocabulary.app.screens.StatisticsFragment_;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-
-import java.util.Locale;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -45,7 +46,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        AddTranslationFragment addTranslationFragment = AddTranslationFragment_.builder().build();
+        StartTestFragment startTestFragment = StartTestFragment_.builder().build();
+        StatisticsFragment statisticsFragment_ = StatisticsFragment_.builder().build();
+        Fragment[] fragments = new Fragment[] { addTranslationFragment, startTestFragment, statisticsFragment_};
+        String[] titles = getResources().getStringArray(R.array.tab_titles);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(fragments, titles, getSupportFragmentManager());
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -98,43 +104,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-
-            switch(position)
-            {
-                case 0: return AddTranslationFragment_.builder().build();
-                case 1 : return StartTestFragment_.builder().build();
-                case 2: return StatisticsFragment_.builder().build();
-                    default: return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
-            }
-            return null;
-        }
-    }
 
 }
