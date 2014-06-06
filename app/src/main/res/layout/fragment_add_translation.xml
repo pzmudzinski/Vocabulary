@@ -12,15 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
+        android:imeOptions="actionNext"
+        android:singleLine="true"
         android:hint="@string/title_from"
-        android:id="@+id/editText"
+        android:id="@+id/editTextFrom"
         android:layout_gravity="center_horizontal" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/editTextTo"
         android:hint="@string/title_to"
+        android:imeOptions="actionNext"
+        android:singleLine="true"
         android:layout_marginBottom="15dp"
         android:layout_gravity="center_horizontal" />
 
@@ -28,14 +32,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:id="@+id/editText3"
+        android:imeOptions="actionNext"
+        android:singleLine="true"
+        android:id="@+id/editTextMemory"
         android:hint="@string/association"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:text="@string/add_translation"
-        android:id="@+id/button"
+        android:id="@+id/buttonAddTranslation"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

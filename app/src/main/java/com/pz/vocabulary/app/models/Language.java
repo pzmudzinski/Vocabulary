@@ -10,6 +10,12 @@ public class Language extends BaseEntity {
 
     private String name;
 
+    public Word newWord(String spelling)
+    {
+        Word word = new Word(this.id, spelling);
+        return word;
+    }
+
     public Language(long id, String name)
     {
         super(id);
@@ -18,6 +24,11 @@ public class Language extends BaseEntity {
 
     public String getName()
     {
+        return name;
+    }
+
+    @Override
+    public String toString() {
         return name;
     }
 }

@@ -2,8 +2,12 @@ package com.pz.vocabulary.app.sql;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
+import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQuery;
 
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.utils.Logger;
@@ -13,7 +17,7 @@ import com.pz.vocabulary.app.utils.Logger;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     public static final String TABLE_WORDS = "words";
     public static final String TABLE_TRANSLATIONS = "translations";
@@ -22,14 +26,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Resources resources;
 
-    public DatabaseHelper(Context context)
-    {
-        this(context, context.getResources().getString(R.string.database_name));
-    }
+//    public DatabaseHelper(Context context)
+//    {
+//        this(context, context.getResources().getString(R.string.database_name));
+//    }
 
     public DatabaseHelper(Context context, String dbName)
     {
-        super(context, dbName, null, DATABASE_VERSION);
+        super(context, dbName, new SQLiteDatabase.CursorFactory() {
+            @Override
+            public Cursor newCursor(SQLiteDatabase sqLiteDatabase, SQLiteCursorDriver sqLiteCursorDriver, String s, SQLiteQuery sqLiteQuery) {
+                Logger.log("db", "query: " + sqLiteQuery.toString());
+                return new SQLiteCursor(sqLiteDatabase, sqLiteCursorDriver, s, sqLiteQuery);
+            }
+        }, DATABASE_VERSION);
         this.resources = context.getResources();
     }
 
@@ -39,12 +49,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createLanguages = resources.getString(R.string.query_create_table_languages);
         String createTranslations = resources.getString(R.string.query_create_table_translations);
         String createMemories = resources.getString(R.string.query_create_table_memories);
-        String insertLanguages = resources.getString(R.string.query_insert_languages);
+        String[] insertLanguages = resources.getStringArray(R.array.query_insert_languages);
         db.execSQL(createLanguages);
         db.execSQL(createWords);
         db.execSQL(createTranslations);
         db.execSQL(createMemories);
-        db.execSQL(insertLanguages);
+
+        for (String insert : insertLanguages)
+        {
+            db.execSQL(insert);
+        }
     }
 
     @Override

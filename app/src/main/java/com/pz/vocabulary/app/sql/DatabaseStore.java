@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.pz.vocabulary.app.R;
+import com.pz.vocabulary.app.models.Dictionary;
+import com.pz.vocabulary.app.models.Language;
 import com.pz.vocabulary.app.models.Memory;
 import com.pz.vocabulary.app.models.Translation;
 import com.pz.vocabulary.app.models.Word;
@@ -17,7 +19,7 @@ import java.util.List;
 /**
  * Created by piotr on 14/05/14.
  */
-public class DatabaseStore{
+public class DatabaseStore implements Dictionary{
     private SQLiteDatabase db;
     private DatabaseHelper databaseHelper;
     private Resources resources;
@@ -31,23 +33,24 @@ public class DatabaseStore{
 
     public void close()
     {
-        db.close();
+        databaseHelper.close();
     }
 
+    @Override
     public long insertWord(Word word)
     {
         ContentValues values = new ContentValues();
         values.put(DBColumns.SPELLING, word.getSpelling());
         values.put(DBColumns.LANGUAGE_ID, word.getLanguage());
 
-        long id;
-        Word currentWord = findWord(word.getId());
-        if (currentWord == null)
+        values.put(DBColumns.NORMALIZED_SPELLING, word.getNormalizedSpelling());
+        long id = findWord(word.getLanguage(), word.getNormalizedSpelling());
+        if (id == -1)
         {
             id = db.insert(DatabaseHelper.TABLE_WORDS, null, values);
         } else
         {
-            id = db.update(DatabaseHelper.TABLE_WORDS, values, DBColumns.ID+"=?", new String[] { String.valueOf(currentWord.getId())});
+            id = db.update(DatabaseHelper.TABLE_WORDS, values, DBColumns.ID+"=?", new String[] { String.valueOf(id)});
         }
 
         word.setId(id);
@@ -55,15 +58,17 @@ public class DatabaseStore{
         return id;
     }
 
-    public long findWord(String spelling)
+    @Override
+    public long findWord(long langID, String spelling)
     {
-        Cursor cursor = db.query(DatabaseHelper.TABLE_WORDS, new String[] {DBColumns.ID}, DBColumns.SPELLING+"='"+spelling+"'", null, null, null, null);
+        Cursor cursor = db.query(DatabaseHelper.TABLE_WORDS, new String[] {DBColumns.ID}, DBColumns.NORMALIZED_SPELLING+"='"+spelling+"' AND " + DBColumns.LANGUAGE_ID + "="+langID, null, null, null, null);
         if (cursor.moveToFirst())
             return cursor.getLong(0);
 
         return -1;
     }
 
+    @Override
     public Word findWord(long id)
     {
         Cursor cursor = db.query(DatabaseHelper.TABLE_WORDS, null, DBColumns.ID+"="+String.valueOf(id), null, null, null, null);
@@ -87,6 +92,7 @@ public class DatabaseStore{
         return id;
     }
 
+    @Override
     public void addMemoryToTranslation(long memoryId, long translationId)
     {
         ContentValues values = new ContentValues();
@@ -94,11 +100,13 @@ public class DatabaseStore{
         db.update(DatabaseHelper.TABLE_TRANSLATIONS, values,DBColumns.ID +" = ?", new String[] {String.valueOf(translationId)});
     }
 
+    @Override
     public long insertTranslation(long wordFrom, long wordTo)
     {
         return insertTranslation(wordFrom, wordTo, null);
     }
 
+    @Override
     public long insertTranslation(long wordFrom, long wordTo, Long memoryId)
     {
         ContentValues values = new ContentValues();
@@ -111,16 +119,22 @@ public class DatabaseStore{
         return id;
     }
 
-    public long insertWordAndTranslation(Word word1, Word word2, Memory memory)
+    @Override
+    public long insertWordsAndTranslation(Word word1, Word word2, Memory memory)
     {
         long wordId1 = insertWord(word1);
         long wordId2 = insertWord(word2);
 
-        Long memoryId = insertMemory(memory);
+        Long memoryId;
+        if (memory != null)
+            memoryId = insertMemory(memory);
+        else
+            memoryId = null;
 
         return insertTranslation(wordId1, wordId2, memoryId);
     }
 
+    @Override
     public List<Translation> findMeanings(long wordId)
     {
         String id = Long.toString(wordId);
@@ -142,6 +156,7 @@ public class DatabaseStore{
         return results;
     }
 
+    @Override
     public Memory findMemory(long memoryId)
     {
         Cursor cursor = db.query(DatabaseHelper.TABLE_MEMORIES, null, DBColumns.ID+"=?", new String[] { String.valueOf(memoryId)}, null, null, null);
@@ -154,10 +169,11 @@ public class DatabaseStore{
         return null;
     }
 
+    @Override
     public List<Word> getAllWords()
     {
         List<Word> results = new ArrayList<Word>();
-        Cursor query = db.query(DatabaseHelper.TABLE_WORDS, null, null, null, null, null, null);
+        Cursor query = db.query(DatabaseHelper.TABLE_WORDS, null, null, null, null, null, "language_id");
         long id;
         String spelling;
         long langId;
@@ -171,5 +187,36 @@ public class DatabaseStore{
         }
         query.close();
         return results;
+    }
+
+    @Override
+    public Language getLanguage(long id) {
+        Cursor query = db.query(DatabaseHelper.TABLE_LANGUAGES, null, DBColumns.ID+"=?", new String[] { String.valueOf(id)}, null, null, null);
+
+        if (query.moveToFirst())
+        {
+            Language language = new Language(query.getLong(query.getColumnIndex(DBColumns.ID)), query.getString(query.getColumnIndex(DBColumns.NAME)));
+            query.close();
+            return language;
+        }
+        query.close();
+        return null;
+    }
+
+    public List<Language> getLanguages()
+    {
+        Cursor query = db.query(DatabaseHelper.TABLE_LANGUAGES, null, null, null, null, null, null);
+
+        long id;
+        String name;
+        List<Language> languages = new ArrayList<Language>();
+        while (query.moveToNext()) {
+            id = query.getLong(query.getColumnIndex(DBColumns.ID));
+            name = query.getString(query.getColumnIndex(DBColumns.NAME));
+
+            languages.add(new Language(id, name));
+        }
+        query.close();
+        return languages;
     }
 }

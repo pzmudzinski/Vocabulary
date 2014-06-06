@@ -9,7 +9,8 @@
         CREATE TABLE words
         (
             id INTEGER NOT NULL,
-            spelling TEXT NOT NULL UNIQUE,
+            spelling TEXT NOT NULL COLLATE NOCASE,
+            normalized_spelling TEXT NOT NULL COLLATE NOCASE,
             language_id INTEGER,
 
             PRIMARY KEY (id)
@@ -52,10 +53,10 @@
         );
     </string>
 
-    <string name="query_insert_languages">
-        INSERT INTO languages(id, name) VALUES (1, \'pl\');
-        INSERT INTO languages(id, name) VALUES (2, \'eng\');
-    </string>
+    <string-array name="query_insert_languages">
+        <item>INSERT INTO languages(id, name) VALUES (1, \'pl\');</item>
+        <item>INSERT INTO languages(id, name) VALUES (2, \'eng\');</item>
+    </string-array>
 
     <string name="query_select_meanings">
         SELECT id, memory_id, CASE
