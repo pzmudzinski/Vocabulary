@@ -2,9 +2,9 @@ package com.pz.vocabulary.app;
 
 import android.app.Application;
 
-import com.pz.vocabulary.app.models.Dictionary;
+import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.sql.DatabaseHelper;
-import com.pz.vocabulary.app.sql.DatabaseStore;
+import com.pz.vocabulary.app.sql.SQLDictionary;
 
 import org.androidannotations.annotations.EApplication;
 
@@ -25,7 +25,7 @@ public class App extends Application {
     public void initDictionary()
     {
         DatabaseHelper helper = new DatabaseHelper(this, getString(R.string.database_name));
-        this.dictionary = new DatabaseStore(this, helper);
+        this.dictionary = new SQLDictionary(this, helper);
     }
 
     public Dictionary getDictionary()

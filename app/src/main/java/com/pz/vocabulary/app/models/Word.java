@@ -1,5 +1,9 @@
 package com.pz.vocabulary.app.models;
 
+import android.database.Cursor;
+
+import com.pz.vocabulary.app.sql.DBColumns;
+
 import java.text.Normalizer;
 
 /**
@@ -7,16 +11,25 @@ import java.text.Normalizer;
  */
 public class Word extends BaseEntity{
     private String spelling;
-    private long language;
+    private Language language;
 
-    public Word(long id,long language, String spelling)
+    public static Word fromCursor(Cursor query, Language language)
     {
-        super(id);
-        this.language = language;
-        this.spelling = spelling;
+        Word word = new Word();
+
+        word.id = query.getLong(query.getColumnIndex(DBColumns.ID));
+        word.spelling = query.getString(query.getColumnIndex(DBColumns.SPELLING));
+        word.language = language;
+
+        return word;
     }
 
-    public Word(long language, String spelling)
+    private Word()
+    {
+
+    }
+
+    public Word(Language language, String spelling)
     {
         super();
         this.language = language;
@@ -35,7 +48,12 @@ public class Word extends BaseEntity{
         return spelling;
     }
 
-    public long getLanguage()
+    public long getLanguageID()
+    {
+        return language.getId();
+    }
+
+    public Language getLanguage()
     {
         return language;
     }
@@ -47,7 +65,7 @@ public class Word extends BaseEntity{
 
         Word other = (Word) o;
 
-        return other.getLanguage() == this.getLanguage() && other.getSpelling().equals(this.getSpelling());
+        return other.getLanguageID() == this.getLanguageID() && other.getNormalizedSpelling().equals(this.getNormalizedSpelling());
     }
 
     @Override

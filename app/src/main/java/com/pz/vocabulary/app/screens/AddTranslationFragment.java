@@ -5,7 +5,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.pz.vocabulary.app.R;
-import com.pz.vocabulary.app.models.Dictionary;
+import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.models.Language;
 import com.pz.vocabulary.app.models.Memory;
 import com.pz.vocabulary.app.models.Word;
@@ -44,8 +44,8 @@ public class AddTranslationFragment extends VocabularyFragment {
         }
 
         Dictionary dictionary = getDictionary();
-        Language polish = dictionary.getLanguage(Language.POLISH);
-        Language english = dictionary.getLanguage(Language.ENGLISH);
+        Language polish = dictionary.findLanguage(Language.POLISH);
+        Language english = dictionary.findLanguage(Language.ENGLISH);
 
         Word polishWord = polish.newWord(textFrom);
         Word englishWord = english.newWord(textTo);

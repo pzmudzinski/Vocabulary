@@ -1,18 +1,18 @@
 package com.pz.vocabulary.app.screens;
 
-import android.support.v4.app.Fragment;
+
+import android.support.v4.app.FragmentActivity;
 
 import com.pz.vocabulary.app.App;
 import com.pz.vocabulary.app.sql.Dictionary;
 
 /**
- * Created by piotr on 07/05/14.
+ * Created by piotr on 06/06/14.
  */
-public class VocabularyFragment extends Fragment {
-
+public class VocabularyActivity extends FragmentActivity {
     protected App getApp()
     {
-        return (App) getActivity().getApplicationContext();
+        return (App)getApplicationContext();
     }
 
     protected Dictionary getDictionary()

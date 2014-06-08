@@ -2,6 +2,7 @@ package com.pz.vocabulary.app.screens;
 
 import com.pz.vocabulary.app.R;
 
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 
 /**
@@ -10,4 +11,10 @@ import org.androidannotations.annotations.EFragment;
  */
 @EFragment(R.layout.fragment_start_test)
 public class StartTestFragment extends VocabularyFragment {
+
+    @Click(R.id.buttonStartTest)
+    protected void onStartTest()
+    {
+        QuizActivity_.open(getActivity());
+    }
 }

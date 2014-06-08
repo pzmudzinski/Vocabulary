@@ -1,13 +1,9 @@
 package com.pz.vocabulary.test;
 
-import android.test.AndroidTestCase;
-
 import com.pz.vocabulary.app.models.Language;
 import com.pz.vocabulary.app.models.Memory;
 import com.pz.vocabulary.app.models.Translation;
 import com.pz.vocabulary.app.models.Word;
-import com.pz.vocabulary.app.sql.DatabaseHelper;
-import com.pz.vocabulary.app.sql.DatabaseStore;
 import com.pz.vocabulary.app.utils.Logger;
 
 import java.util.List;
@@ -15,31 +11,7 @@ import java.util.List;
 /**
  * Created by piotr on 04/06/14.
  */
-public class DatabaseStoreTest extends AndroidTestCase {
-
-    private DatabaseStore dbStore;
-    private DatabaseHelper dbHelper;
-
-    private Word polishHome = new Word(Language.POLISH, "dom");
-    private Word englishHome = new Word(Language.ENGLISH, "house");
-    private Word polishKey = new Word(Language.POLISH, "klucz");
-    private Word polishImportant = new Word(Language.POLISH, "ważny");
-    private Word englishKey = new Word(Language.ENGLISH, "key");
-    private Memory memory = new Memory("hi-hi-hi");
-    private Memory memory2 = new Memory("hi-hi-hi2");
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        this.dbHelper = new DatabaseHelper(getContext(), null);
-        this.dbStore = new DatabaseStore(getContext(), dbHelper);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        dbStore.close();
-    }
+public class DatabaseStoreTest extends VocabularyTest {
 
     public void testInitialLanguages()
     {
@@ -60,8 +32,8 @@ public class DatabaseStoreTest extends AndroidTestCase {
 
     public void testStoringManyWords()
     {
-        Language polish = dbStore.getLanguage(Language.POLISH);
-        Language english = dbStore.getLanguage(Language.ENGLISH);
+        Language polish = dbStore.findLanguage(Language.POLISH);
+        Language english = dbStore.findLanguage(Language.ENGLISH);
         dbStore.insertWordsAndTranslation(polish.newWord("dom"), english.newWord("house"), null);
         dbStore.insertWordsAndTranslation(polish.newWord("kot"), english.newWord("cat"), null);
 
@@ -70,7 +42,7 @@ public class DatabaseStoreTest extends AndroidTestCase {
 
     public void testStoringTheSameWordsTwice()
     {
-        assertEquals(-1, dbStore.findWord(polishHome.getLanguage(), polishHome.getNormalizedSpelling()));
+        assertEquals(-1, dbStore.findWord(polishHome.getLanguageID(), polishHome.getNormalizedSpelling()));
         long id1 = dbStore.insertWord(polishHome);
         assertNotNull(dbStore.findWord(polishHome.getId()));
         long id2 = dbStore.insertWord(polishHome);
@@ -81,9 +53,9 @@ public class DatabaseStoreTest extends AndroidTestCase {
     {
         dbStore.insertWord(polishHome);
 
-        assertEquals(polishHome.getId(), dbStore.findWord(polishHome.getLanguage(), polishHome.getNormalizedSpelling()));
+        assertEquals(polishHome.getId(), dbStore.findWord(polishHome.getLanguageID(), polishHome.getNormalizedSpelling()));
 
-        assertEquals(-1, dbStore.findWord(englishHome.getLanguage(), englishHome.getNormalizedSpelling()));
+        assertEquals(-1, dbStore.findWord(englishHome.getLanguageID(), englishHome.getNormalizedSpelling()));
     }
 
     public void testSimpleTranslation()
@@ -146,6 +118,19 @@ public class DatabaseStoreTest extends AndroidTestCase {
 
     }
 
+    public void testAddingMemoryTwice()
+    {
+        Memory memory1 = new Memory("haha!");
+        dbStore.insertMemory(memory1);
+
+        Memory insertedMemory = dbStore.findMemory(memory1.getId());
+        insertedMemory.setDescription("oh no");
+
+        dbStore.insertMemory(insertedMemory);
+
+        assertEquals("oh no", dbStore.findMemory(insertedMemory.getId()).getDescription());
+    }
+
     public void testAddingMemoryToExistingTranslation()
     {
         dbStore.insertWord(polishHome);
@@ -170,7 +155,7 @@ public class DatabaseStoreTest extends AndroidTestCase {
     {
         dbStore.insertWord(polishImportant);
 
-        long id = dbStore.findWord(polishImportant.getLanguage(), polishImportant.getNormalizedSpelling());
+        long id = dbStore.findWord(polishImportant.getLanguageID(), polishImportant.getNormalizedSpelling());
         Word word = dbStore.findWord(id);
         assertNotNull(word);
     }
@@ -179,7 +164,7 @@ public class DatabaseStoreTest extends AndroidTestCase {
     {
         dbStore.insertWord(polishImportant);
 
-        long id = dbStore.findWord(polishImportant.getLanguage(), "wazny");
+        long id = dbStore.findWord(polishImportant.getLanguageID(), "wazny");
 
         Word word = dbStore.findWord(id);
 
@@ -193,17 +178,37 @@ public class DatabaseStoreTest extends AndroidTestCase {
     {
         dbStore.insertWord(polishImportant);
 
-        long id = dbStore.findWord(polishImportant.getLanguage(), "wAzNY");
+        long id = dbStore.findWord(polishImportant.getLanguageID(), "wAzNY");
 
         assertNotNull(dbStore.findWord(id));
     }
 
     public void testFindingLanguage()
     {
-        Language polish = dbStore.getLanguage(Language.POLISH);
-        Language english = dbStore.getLanguage(Language.ENGLISH);
+        Language polish = dbStore.findLanguage(Language.POLISH);
+        Language english = dbStore.findLanguage(Language.ENGLISH);
 
         assertNotNull(polish);
         assertNotNull(english);
     }
+
+    public void testGettingAllLanguages()
+    {
+        List<Language> langs = dbStore.getLanguages();
+
+        assertTrue(langs.size() > 0);
+    }
+
+    public void testFindingWordsByLanguage()
+    {
+        dbStore.insertWord(polishHome);
+        dbStore.insertWord(englishHome);
+        dbStore.insertWord(polishImportant);
+
+        List<Word> polish = dbStore.findWords(Language.POLISH);
+        List<Word> english = dbStore.findWords(Language.ENGLISH);
+
+        assertEquals(2, polish.size());
+        assertEquals(1, english.size());
+     }
 }

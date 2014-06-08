@@ -22,4 +22,23 @@
 
     <string name="stats_all_tests">Liczba podjetych testow: %d</string>
     <string name="stats_translation_number">Liczba wpisanych tlumaczen: %d</string>
+    <string name="stats_show_all_words">Pokaz wszystkie slowa</string>
+
+    <string name="word_empty_meanings">Brak znaczeń</string>
+    <string name="word_title_meanings">Znaczenia</string>
+
+    <string name="answer_tip">Podpowiedz: %s</string>
+    <string name="answer_no_tip">Podpowiedz: (brak)</string>
+
+    <string name="answer_correct">Dobrze!</string>
+    <string name="answer_wrong">Zle!</string>
+    <string name="answer_take_next">Wybierz nastepne pytanie</string>
+    <string name="answer_do">Odpowiedz</string>
+
+    <string name="results_title">Wyniki testu</string>
+    <string name="results_questions_count">Liczba pytan:</string>
+    <string name="results_questions_correct">Poprawne odpowiedzi:</string>
+    <string name="results_questions_wrong">Niepoprawne odpowiedzi:</string>
+
+    <string name="quit">Koniec</string>
 </resources>
