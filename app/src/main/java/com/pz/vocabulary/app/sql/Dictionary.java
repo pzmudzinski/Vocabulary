@@ -6,6 +6,7 @@ import com.pz.vocabulary.app.models.Translation;
 import com.pz.vocabulary.app.models.Word;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by piotr on 05/06/14.
@@ -27,5 +28,6 @@ public interface Dictionary {
     public List<Language> getLanguages();
 
     public List<Word> findWords(long languageId);
+    public Map<Language, List<Word>> getWordsByLanguage();
 
 }

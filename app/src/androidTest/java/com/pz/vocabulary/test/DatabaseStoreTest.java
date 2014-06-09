@@ -7,6 +7,7 @@ import com.pz.vocabulary.app.models.Word;
 import com.pz.vocabulary.app.utils.Logger;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by piotr on 04/06/14.
@@ -211,4 +212,19 @@ public class DatabaseStoreTest extends VocabularyTest {
         assertEquals(2, polish.size());
         assertEquals(1, english.size());
      }
+
+    public void testGettingFullDictionary()
+    {
+        dbStore.insertWord(polishHome);
+        dbStore.insertWord(englishKey);
+        dbStore.insertWordsAndTranslation(polishHome, englishKey, null);
+
+        Map<Language, List<Word>> dict = dbStore.getWordsByLanguage();
+        assertEquals(2,dict.keySet().size());
+        List<Word> polish = dict.get(dbStore.findLanguage(Language.POLISH));
+        List<Word> english = dict.get(dbStore.findLanguage(Language.ENGLISH));
+
+        assertEquals(1, polish.size());
+        assertEquals(1, english.size());
+    }
 }

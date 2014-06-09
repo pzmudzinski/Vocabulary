@@ -8,6 +8,7 @@ import android.widget.EditText;
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.Language;
 import com.pz.vocabulary.app.models.Word;
+import com.pz.vocabulary.app.utils.Arguments;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -28,12 +29,13 @@ public class WordDetailsActivity extends VocabularyActivity {
     protected EditText editTextLanguage;
 
     @FragmentById(R.id.fragment)
-    protected WordMeaningsFragment wordMeaningsFragment;
+    protected WordsListFragment wordsListFragment;
 
     public static void open(Context context, long wordID)
     {
         Bundle args = new Bundle();
         args.putLong(ARG_WORD_ID, wordID);
+        args.putLong(Arguments.ARG_WORD_MEANINGS, wordID);
 
         Intent intent = WordDetailsActivity_.intent(context).get();
         intent.putExtras(args);
@@ -51,7 +53,7 @@ public class WordDetailsActivity extends VocabularyActivity {
 
         bindWord();
 
-        wordMeaningsFragment.setEmptyText(getString(R.string.word_empty_meanings));
+        wordsListFragment.setEmptyText(getString(R.string.word_empty_meanings));
     }
 
     protected void bindWord()

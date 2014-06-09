@@ -11,7 +11,9 @@ import com.pz.vocabulary.app.models.Translation;
 import com.pz.vocabulary.app.models.Word;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by piotr on 14/05/14.
@@ -36,7 +38,7 @@ public class SQLDictionary extends SQLStore implements Dictionary{
             word.setId(id);
         } else
         {
-            db.update(DatabaseHelper.TABLE_WORDS, values, DBColumns.ID+"=?", new String[] { String.valueOf(id)});
+            db.update(DatabaseHelper.TABLE_WORDS, values, DBColumns.ID + "=?", new String[]{String.valueOf(id)});
         }
 
         return id;
@@ -73,7 +75,7 @@ public class SQLDictionary extends SQLStore implements Dictionary{
         long id;
         if (findMemory(memory.getDescription()) != null)
         {
-            db.update(DatabaseHelper.TABLE_MEMORIES, values, DBColumns.ID +" = ?", new String[] {String.valueOf(memory.getId())});
+            db.update(DatabaseHelper.TABLE_MEMORIES, values, DBColumns.ID + " = ?", new String[]{String.valueOf(memory.getId())});
         } else {
             id = db.insert(DatabaseHelper.TABLE_MEMORIES, null, values);
             memory.setId(id);
@@ -223,6 +225,18 @@ public class SQLDictionary extends SQLStore implements Dictionary{
         }
         query.close();
         return words;
+    }
+
+    @Override
+    public Map<Language, List<Word>> getWordsByLanguage() {
+        List<Language> languages = getLanguages();
+        Map<Language, List<Word>> dict = new HashMap<Language, List<Word>>();
+        for (Language language : languages)
+        {
+            List<Word> words = findWords(language.getId());
+            dict.put(language, words);
+        }
+        return dict;
     }
 
 

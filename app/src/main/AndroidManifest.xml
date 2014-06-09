@@ -42,6 +42,12 @@
             >
 
         </activity>
+
+        <activity
+            android:name=".screens.WordsByLanguageActivity_"
+            >
+
+        </activity>
     </application>
 
 

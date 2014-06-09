@@ -43,6 +43,16 @@
         );
     </string>
 
+    <string name="query_create_table_answers">
+        CREATE TABLE answers
+        (
+            id INTEGER NOT NULL,
+            name TEXT NOT NULL UNIQUE,
+
+            PRIMARY KEY (id)
+        );
+    </string>
+
     <string name="query_create_table_memories">
         CREATE TABLE memories
         (

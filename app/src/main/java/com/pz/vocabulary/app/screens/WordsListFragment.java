@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.Translation;
 import com.pz.vocabulary.app.models.Word;
+import com.pz.vocabulary.app.utils.Arguments;
 
 import org.androidannotations.annotations.EFragment;
 
@@ -22,13 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EFragment(R.layout.fragment_word)
-public class WordMeaningsFragment extends VocabularyFragment implements AbsListView.OnItemClickListener {
+public class WordsListFragment extends VocabularyFragment implements AbsListView.OnItemClickListener {
 
     private ListView mListView;
 
     private ListAdapter mAdapter;
 
-    public WordMeaningsFragment()
+    public WordsListFragment()
     {
 
     }
@@ -37,14 +38,18 @@ public class WordMeaningsFragment extends VocabularyFragment implements AbsListV
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        long wordID = getActivity().getIntent().getExtras().getLong(WordDetailsActivity.ARG_WORD_ID);
-        List<Translation> meanings = getDictionary().findMeanings(wordID);
-
         List<Word> words = new ArrayList<Word>();
-
-        for (Translation meaning : meanings)
+        if (getArguments() == null ||  getArguments().getLong(Arguments.ARG_WORDS_FROM_LANGUAGE) == 0)
         {
-            words.add(getDictionary().findWord(meaning.getWordTo()));
+            long wordID = getActivity().getIntent().getExtras().getLong(WordDetailsActivity.ARG_WORD_ID);
+            List<Translation> meanings = getDictionary().findMeanings(wordID);
+            for (Translation meaning : meanings)
+            {
+                words.add(getDictionary().findWord(meaning.getWordTo()));
+            }
+        } else {
+            long langId = getArguments().getLong(Arguments.ARG_WORDS_FROM_LANGUAGE);
+            words = getDictionary().findWords(langId);
         }
 
         mAdapter = new ArrayAdapter<Word>(getActivity(),
@@ -71,12 +76,10 @@ public class WordMeaningsFragment extends VocabularyFragment implements AbsListV
         return view;
     }
 
-
     @Override
     public void onDetach() {
         super.onDetach();
     }
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
