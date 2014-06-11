@@ -103,4 +103,11 @@ public class QuizTest extends VocabularyTest {
         boolean correct = quiz.answer(polishKey.getSpelling());
         assertTrue(correct);
     }
+
+    public void testStoringResponse()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+
+
+    }
 }

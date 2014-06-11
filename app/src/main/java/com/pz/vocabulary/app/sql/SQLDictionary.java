@@ -7,6 +7,7 @@ import android.database.Cursor;
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.Language;
 import com.pz.vocabulary.app.models.Memory;
+import com.pz.vocabulary.app.models.QuizResponse;
 import com.pz.vocabulary.app.models.Translation;
 import com.pz.vocabulary.app.models.Word;
 
@@ -47,7 +48,7 @@ public class SQLDictionary extends SQLStore implements Dictionary{
     @Override
     public long findWord(long langID, String spelling)
     {
-        Cursor cursor = db.query(DatabaseHelper.TABLE_WORDS, new String[] {DBColumns.ID}, DBColumns.NORMALIZED_SPELLING+"='"+spelling+"' AND " + DBColumns.LANGUAGE_ID + "="+langID, null, null, null, null);
+        Cursor cursor = db.query(DatabaseHelper.TABLE_WORDS, new String[]{DBColumns.ID}, DBColumns.NORMALIZED_SPELLING + "='" + spelling + "' AND " + DBColumns.LANGUAGE_ID + "=" + langID, null, null, null, null);
         if (cursor.moveToFirst())
             return cursor.getLong(0);
 
@@ -237,6 +238,29 @@ public class SQLDictionary extends SQLStore implements Dictionary{
             dict.put(language, words);
         }
         return dict;
+    }
+
+    @Override
+    public long insertResponse(long wordFrom, String response, QuizQuestionResult result) {
+        ContentValues values = new ContentValues();
+        values.put(DBColumns.WORD_FROM, wordFrom);
+        values.put(DBColumns.RESPONSE, response);
+        values.put(DBColumns.RESULT, result.ordinal());
+
+        return db.insert(DatabaseHelper.TABLE_RESPONSES, null, values);
+    }
+
+    @Override
+    public List<QuizResponse> findResponsesWithResult(QuizQuestionResult result) {
+        Cursor query = getSelectQuery(DatabaseHelper.TABLE_RESPONSES, DBColumns.RESULT, String.valueOf(result.ordinal()));
+        List<QuizResponse> responses = new ArrayList<QuizResponse>();
+        while (query.moveToNext())
+        {
+            responses.add(QuizResponse.fromQuery(query, this));
+        }
+
+        query.close();
+        return responses;
     }
 
 

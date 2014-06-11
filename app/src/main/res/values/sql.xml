@@ -43,13 +43,17 @@
         );
     </string>
 
-    <string name="query_create_table_answers">
-        CREATE TABLE answers
+    <string name="query_create_table_responses">
+        CREATE TABLE responses
         (
             id INTEGER NOT NULL,
-            name TEXT NOT NULL UNIQUE,
+            word_from INTEGER NOT NULL,
+            result INTEGER NOT NULL,
+            response TEXT,
+            ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 
             PRIMARY KEY (id)
+            FOREIGN KEY (word_from) REFERENCES words(id)
         );
     </string>
 

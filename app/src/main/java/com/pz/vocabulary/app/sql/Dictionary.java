@@ -2,6 +2,7 @@ package com.pz.vocabulary.app.sql;
 
 import com.pz.vocabulary.app.models.Language;
 import com.pz.vocabulary.app.models.Memory;
+import com.pz.vocabulary.app.models.QuizResponse;
 import com.pz.vocabulary.app.models.Translation;
 import com.pz.vocabulary.app.models.Word;
 
@@ -29,5 +30,15 @@ public interface Dictionary {
 
     public List<Word> findWords(long languageId);
     public Map<Language, List<Word>> getWordsByLanguage();
+
+    public long insertResponse(long wordFrom, String response, QuizQuestionResult result);
+    public List<QuizResponse> findResponsesWithResult(QuizQuestionResult result);
+
+    public enum QuizQuestionResult
+    {
+        ResponseCorrect,
+        ResponseWrong,
+        ResponseSkipped
+    }
 
 }

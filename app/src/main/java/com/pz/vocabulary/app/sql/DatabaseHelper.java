@@ -23,6 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_TRANSLATIONS = "translations";
     public static final String TABLE_LANGUAGES = "languages";
     public static final String TABLE_MEMORIES = "memories";
+    public static final String TABLE_RESPONSES = "responses";
 
     private Resources resources;
 
@@ -49,6 +50,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createLanguages = resources.getString(R.string.query_create_table_languages);
         String createTranslations = resources.getString(R.string.query_create_table_translations);
         String createMemories = resources.getString(R.string.query_create_table_memories);
+        String createResponses = resources.getString(R.string.query_create_table_responses);
+
         String[] insertLanguages = resources.getStringArray(R.array.query_insert_languages);
         db.execSQL(createLanguages);
         db.execSQL(createWords);

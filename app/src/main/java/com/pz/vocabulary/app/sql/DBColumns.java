@@ -15,4 +15,7 @@ public interface DBColumns extends BaseColumns {
     public static final String DESCRIPTION = "description";
     public static final String ID = "id";
     public static final String NORMALIZED_SPELLING = "normalized_spelling";
+    public static final String RESULT = "result";
+    public static final String RESPONSE = "response";
+    public static final String TIMESTAMP = "ts";
 }
