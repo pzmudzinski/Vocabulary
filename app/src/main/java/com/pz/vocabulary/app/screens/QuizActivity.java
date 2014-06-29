@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.Question;
 import com.pz.vocabulary.app.models.Quiz;
-import com.pz.vocabulary.app.models.Word;
+import com.pz.vocabulary.app.models.db.Word;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;

@@ -1,5 +1,9 @@
 package com.pz.vocabulary.app.models;
 
+import com.pz.vocabulary.app.models.db.Language;
+import com.pz.vocabulary.app.models.db.Memory;
+import com.pz.vocabulary.app.models.db.Translation;
+import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.sql.Dictionary;
 
 import java.util.ArrayList;

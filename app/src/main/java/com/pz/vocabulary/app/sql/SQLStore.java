@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Created by piotr on 06/06/14.
@@ -11,10 +12,10 @@ import android.database.sqlite.SQLiteDatabase;
 public abstract class SQLStore {
 
     protected SQLiteDatabase db;
-    protected DatabaseHelper databaseHelper;
+    protected SQLiteOpenHelper databaseHelper;
     protected Resources resources;
 
-    public SQLStore(Context context, DatabaseHelper helper)
+    public SQLStore(Context context, SQLiteOpenHelper helper)
     {
         this.databaseHelper = helper;
         this.db = helper.getWritableDatabase();

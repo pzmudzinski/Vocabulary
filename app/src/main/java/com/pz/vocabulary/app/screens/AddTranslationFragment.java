@@ -6,9 +6,9 @@ import android.widget.EditText;
 
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.sql.Dictionary;
-import com.pz.vocabulary.app.models.Language;
-import com.pz.vocabulary.app.models.Memory;
-import com.pz.vocabulary.app.models.Word;
+import com.pz.vocabulary.app.models.db.Language;
+import com.pz.vocabulary.app.models.db.Memory;
+import com.pz.vocabulary.app.models.db.Word;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;

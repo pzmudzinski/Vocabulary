@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.pz.vocabulary.app.App;
 import com.pz.vocabulary.app.sql.Dictionary;
-import com.pz.vocabulary.app.models.Word;
+import com.pz.vocabulary.app.models.db.Word;
 
 import org.androidannotations.annotations.EActivity;
 

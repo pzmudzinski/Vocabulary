@@ -13,8 +13,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pz.vocabulary.app.R;
-import com.pz.vocabulary.app.models.Translation;
-import com.pz.vocabulary.app.models.Word;
+import com.pz.vocabulary.app.models.db.Translation;
+import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.utils.Arguments;
 
 import org.androidannotations.annotations.EFragment;

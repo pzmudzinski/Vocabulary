@@ -12,4 +12,14 @@ public class Logger {
         //if (BuildConfig.DEBUG)
             Log.d(tag, msg);
     }
+
+    public static void error(String tag, String msg)
+    {
+        Log.e(tag, msg);
+    }
+
+    public static void error(String tag, String msg, Throwable throwable)
+    {
+        Log.e(tag,msg, throwable);
+    }
 }

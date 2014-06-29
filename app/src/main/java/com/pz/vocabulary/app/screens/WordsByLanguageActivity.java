@@ -9,7 +9,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.pz.vocabulary.app.R;
-import com.pz.vocabulary.app.models.Language;
+import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.utils.Arguments;
 
 import org.androidannotations.annotations.AfterViews;

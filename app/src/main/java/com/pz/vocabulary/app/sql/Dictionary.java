@@ -1,10 +1,10 @@
 package com.pz.vocabulary.app.sql;
 
-import com.pz.vocabulary.app.models.Language;
-import com.pz.vocabulary.app.models.Memory;
-import com.pz.vocabulary.app.models.QuizResponse;
-import com.pz.vocabulary.app.models.Translation;
-import com.pz.vocabulary.app.models.Word;
+import com.pz.vocabulary.app.models.db.Language;
+import com.pz.vocabulary.app.models.db.Memory;
+import com.pz.vocabulary.app.models.db.QuizResponse;
+import com.pz.vocabulary.app.models.db.Translation;
+import com.pz.vocabulary.app.models.db.Word;
 
 import java.util.List;
 import java.util.Map;
@@ -40,5 +40,7 @@ public interface Dictionary {
         ResponseWrong,
         ResponseSkipped
     }
+
+    public void close();
 
 }

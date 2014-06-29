@@ -1,5 +1,8 @@
 package com.pz.vocabulary.app.models;
 
+import com.pz.vocabulary.app.models.db.Memory;
+import com.pz.vocabulary.app.models.db.Word;
+
 /**
 * Created by piotr on 07/06/14.
 */

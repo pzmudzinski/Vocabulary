@@ -1,11 +1,11 @@
 package com.pz.vocabulary.test;
 
-import com.pz.vocabulary.app.models.Memory;
+import com.pz.vocabulary.app.models.db.Memory;
 import com.pz.vocabulary.app.models.Question;
 import com.pz.vocabulary.app.models.Quiz;
 import com.pz.vocabulary.app.models.QuizResults;
-import com.pz.vocabulary.app.models.Translation;
-import com.pz.vocabulary.app.models.Word;
+import com.pz.vocabulary.app.models.db.Translation;
+import com.pz.vocabulary.app.models.db.Word;
 
 import java.util.ArrayList;
 import java.util.List;

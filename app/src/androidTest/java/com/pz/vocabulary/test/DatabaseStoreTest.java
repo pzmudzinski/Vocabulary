@@ -1,9 +1,9 @@
 package com.pz.vocabulary.test;
 
-import com.pz.vocabulary.app.models.Language;
-import com.pz.vocabulary.app.models.Memory;
-import com.pz.vocabulary.app.models.Translation;
-import com.pz.vocabulary.app.models.Word;
+import com.pz.vocabulary.app.models.db.Language;
+import com.pz.vocabulary.app.models.db.Memory;
+import com.pz.vocabulary.app.models.db.Translation;
+import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.utils.Logger;
 
 import java.util.List;

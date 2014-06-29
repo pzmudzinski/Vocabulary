@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 import com.pz.vocabulary.app.R;
-import com.pz.vocabulary.app.models.Language;
-import com.pz.vocabulary.app.models.Word;
+import com.pz.vocabulary.app.models.db.Language;
+import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.utils.Arguments;
 
 import org.androidannotations.annotations.AfterViews;

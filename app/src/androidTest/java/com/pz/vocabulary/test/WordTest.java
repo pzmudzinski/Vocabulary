@@ -1,7 +1,7 @@
 package com.pz.vocabulary.test;
 
-import com.pz.vocabulary.app.models.Language;
-import com.pz.vocabulary.app.models.Word;
+import com.pz.vocabulary.app.models.db.Language;
+import com.pz.vocabulary.app.models.db.Word;
 
 import junit.framework.TestCase;
 
