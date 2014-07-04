@@ -4,10 +4,13 @@ import com.pz.vocabulary.app.models.db.Memory;
 import com.pz.vocabulary.app.models.Question;
 import com.pz.vocabulary.app.models.Quiz;
 import com.pz.vocabulary.app.models.QuizResults;
+import com.pz.vocabulary.app.models.db.QuizResponse;
 import com.pz.vocabulary.app.models.db.Translation;
 import com.pz.vocabulary.app.models.db.Word;
+import com.pz.vocabulary.app.sql.Dictionary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -107,7 +110,36 @@ public class QuizTest extends VocabularyTest {
     public void testStoringResponse()
     {
         dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+        this.quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey));
 
+        Question question = quiz.takeNextQuestion();
 
+        quiz.answer("dupa");
+
+        question = quiz.takeNextQuestion();
+
+        Translation translation = dbStore.findMeanings(question.getWord().getId()).get(0);
+
+        assertNotNull(translation.getTimestamp());
+        String correctAnswer = translation.getTranslation().getSpelling();
+
+        quiz.answer(correctAnswer);
+
+        List<QuizResponse> allResponses = dbStore.getAllResponses();
+
+        assertEquals(2, allResponses.size());
+
+        List<QuizResponse> correctResponses = dbStore.findResponsesWithResult(Dictionary.QuizQuestionResult.ResponseCorrect);
+
+        // check if timestamp was injected
+        QuizResponse response = correctResponses.get(0);
+
+        assertNotNull(response.getTimestamp());
+        assertTrue(response.getTimestamp().getTime() > 0);
+
+        List<QuizResponse> wrongResponses = dbStore.findResponsesWithResult(Dictionary.QuizQuestionResult.ResponseWrong);
+
+        assertEquals(1, correctResponses.size());
+        assertEquals(1, wrongResponses.size());
     }
 }

@@ -33,7 +33,6 @@ public class VocabularyTest extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         this.dbHelper = OpenHelperManager.getHelper(getContext(), OrmLiteSQLDatabaseHelper.class);
-
         this.dbStore = new OrmLiteSQLDictionary(getContext(), (OrmLiteSQLDatabaseHelper) dbHelper);
     }
 

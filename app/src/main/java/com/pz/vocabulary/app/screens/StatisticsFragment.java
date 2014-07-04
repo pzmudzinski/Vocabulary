@@ -14,6 +14,7 @@ public class StatisticsFragment extends VocabularyFragment {
     @Click(R.id.buttonShowAllWords)
     protected void showAllWords()
     {
+        //if (getDictionary().find)
         WordsByLanguageActivity.open(getActivity());
     }
 }

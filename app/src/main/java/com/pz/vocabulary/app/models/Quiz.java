@@ -58,29 +58,26 @@ public class Quiz {
     public void skipQuestion()
     {
         results.addSkippedAnswer();
+        dictionary.insertResponse(currentWord.getId(), null, Dictionary.QuizQuestionResult.ResponseSkipped);
     }
 
     public boolean answer(String answer)
     {
         List<Translation> meanings = dictionary.findMeanings(currentWord.getId());
-        List<Word> toWords = new ArrayList<Word>();
 
         for (Translation translation : meanings)
         {
-            toWords.add(dictionary.findWord(translation.getWordTo()));
-        }
-
-        for (Word word : toWords)
-        {
-            Word answerWord = new Word(word.getLanguage(), answer);
-            if (answerWord.equals(word))
+            Word answerWord = new Word(translation.getTranslation().getLanguage(), answer);
+            if (answerWord.equals(translation.getTranslation()))
             {
                 results.addCorrectAnswer();
+                dictionary.insertResponse(currentWord.getId(), answer, Dictionary.QuizQuestionResult.ResponseCorrect);
                 return true;
             }
         }
 
         results.addWrongAnswer();
+        dictionary.insertResponse(currentWord.getId(), answer, Dictionary.QuizQuestionResult.ResponseWrong);
         return false;
     }
 

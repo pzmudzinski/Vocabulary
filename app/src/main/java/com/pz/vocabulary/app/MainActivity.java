@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,13 +15,14 @@ import com.pz.vocabulary.app.screens.StartTestFragment;
 import com.pz.vocabulary.app.screens.StartTestFragment_;
 import com.pz.vocabulary.app.screens.StatisticsFragment;
 import com.pz.vocabulary.app.screens.StatisticsFragment_;
+import com.pz.vocabulary.app.screens.VocabularyActionBarActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 @EActivity(R.layout.activity_main)
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class MainActivity extends VocabularyActionBarActivity implements ActionBar.TabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide

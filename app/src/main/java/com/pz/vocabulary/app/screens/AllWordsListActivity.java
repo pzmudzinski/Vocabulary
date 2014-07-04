@@ -1,15 +1,13 @@
 package com.pz.vocabulary.app.screens;
 
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.pz.vocabulary.app.App;
-import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.models.db.Word;
+import com.pz.vocabulary.app.sql.Dictionary;
 
 import org.androidannotations.annotations.EActivity;
 
@@ -19,7 +17,7 @@ import java.util.List;
  * Created by piotr on 05/06/14.
  */
 @EActivity
-public class AllWordsListActivity extends ListActivity implements AdapterView.OnItemClickListener {
+public class AllWordsListActivity extends VocabularyListActivity implements AdapterView.OnItemClickListener {
 
     private List<Word> words;
     @Override
@@ -30,8 +28,7 @@ public class AllWordsListActivity extends ListActivity implements AdapterView.On
 
     private void displayWords()
     {
-        App app = (App) getApplicationContext();
-        Dictionary dictionary = app.getDictionary();
+        Dictionary dictionary = getDictionary();
 
         List<Word> words = dictionary.getAllWords();
         this.words = words;

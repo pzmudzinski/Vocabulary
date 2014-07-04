@@ -4,8 +4,10 @@ import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.models.db.Memory;
 import com.pz.vocabulary.app.models.db.Translation;
 import com.pz.vocabulary.app.models.db.Word;
+import com.pz.vocabulary.app.utils.DateUtils;
 import com.pz.vocabulary.app.utils.Logger;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -226,5 +228,31 @@ public class DatabaseStoreTest extends VocabularyTest {
 
         assertEquals(1, polish.size());
         assertEquals(1, english.size());
+    }
+
+    public void testGettingWordsSinceToday()
+    {
+        dbStore.insertWord(polishHome);
+        dbStore.insertWord(englishKey);
+        dbStore.insertWordsAndTranslation(polishHome, englishKey, null);
+
+        List<Word> wordsSinceToday = dbStore.getWordsInsertedSince(DateUtils.today());
+        assertEquals(2, wordsSinceToday.size());
+        assertTrue(wordsSinceToday.contains(polishHome));
+        assertTrue(wordsSinceToday.contains(englishKey));
+
+        dbStore.insertWordsAndTranslation(polishImportant, englishKey, null);
+
+        wordsSinceToday = dbStore.getWordsInsertedSince(DateUtils.today());
+        assertEquals(3, wordsSinceToday.size());
+
+        List<Word> wordsSinceNow = dbStore.getWordsInsertedSince(new Date());
+        assertEquals(0, wordsSinceNow.size());
+
+        List<Word> wordsSinceYesterday = dbStore.getWordsInsertedSince(DateUtils.todayMinusXDays(1));
+        assertEquals(3, wordsSinceYesterday.size());
+
+        List<Word> wordsSinceWeek = dbStore.getWordsInsertedSince(DateUtils.todayMinusXDays(7));
+        assertEquals(3, wordsSinceWeek.size());
     }
 }

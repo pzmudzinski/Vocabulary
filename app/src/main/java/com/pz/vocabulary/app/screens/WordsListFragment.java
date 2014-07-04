@@ -66,9 +66,10 @@ public class WordsListFragment extends VocabularyFragment implements AbsListView
         TextView textView = new TextView(getActivity());
         textView.setGravity(Gravity.CENTER);
         textView.setTextSize(25);
-
+        textView.setClickable(false);
         textView.setText(getString(R.string.word_title_meanings));
         mListView.addHeaderView(textView);
+
         mListView.setAdapter(mAdapter);
 
         mListView.setOnItemClickListener(this);
@@ -83,7 +84,9 @@ public class WordsListFragment extends VocabularyFragment implements AbsListView
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Word word = (Word) mListView.getAdapter().getItem(position);
+            Word word = (Word) mListView.getItemAtPosition(position);
+            if (word == null)
+                throw new RuntimeException("selected null-word on position " + position);
             WordDetailsActivity.open(getActivity(), word.getId());
     }
 

@@ -41,4 +41,5 @@
     <string name="results_questions_wrong">Niepoprawne odpowiedzi:</string>
 
     <string name="quit">Koniec</string>
+    <string name="empty_words_database">Brak dodanych słów</string>
 </resources>

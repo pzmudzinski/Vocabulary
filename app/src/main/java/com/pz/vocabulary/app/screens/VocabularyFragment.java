@@ -8,15 +8,16 @@ import com.pz.vocabulary.app.sql.Dictionary;
 /**
  * Created by piotr on 07/05/14.
  */
-public class VocabularyFragment extends Fragment {
+public class VocabularyFragment extends Fragment implements DictionaryProvider {
 
     protected App getApp()
     {
         return (App) getActivity().getApplicationContext();
     }
 
-    protected Dictionary getDictionary()
+    @Override
+    public Dictionary getDictionary()
     {
-        return getApp().getDictionary();
+        return ((DictionaryProvider)getActivity()).getDictionary();
     }
 }
