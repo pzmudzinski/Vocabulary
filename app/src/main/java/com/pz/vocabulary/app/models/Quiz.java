@@ -24,6 +24,7 @@ public class Quiz {
     private List<Memory> currentTips;
     private Stack<Word> words = new Stack<Word>();
     private QuizResults results = new QuizResults();
+    private int questionsNumber;
 
     public Quiz(Dictionary dictionary, List<Word> words) {
         this.dictionary = dictionary;
@@ -31,11 +32,22 @@ public class Quiz {
         this.words = new Stack<Word>();
         this.words.addAll(words);
         this.results = new QuizResults(words.size());
+        this.questionsNumber = words.size();
     }
 
     public boolean hasQuestionsLeft()
     {
         return words.size() > 0;
+    }
+
+    public int currentQuestionNumber()
+    {
+        return questionsNumber - words.size() ;
+    }
+
+    public int totalQuestionNumber()
+    {
+        return questionsNumber;
     }
 
     public Question takeNextQuestion()

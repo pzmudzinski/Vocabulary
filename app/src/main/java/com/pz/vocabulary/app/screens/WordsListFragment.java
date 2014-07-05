@@ -56,6 +56,11 @@ public class WordsListFragment extends VocabularyFragment implements AbsListView
                 android.R.layout.simple_list_item_1, android.R.id.text1, words);
     }
 
+    private boolean isDisplayingAllWordsFromLanguage()
+    {
+        return !(getArguments() == null ||  getArguments().getLong(Arguments.ARG_WORDS_FROM_LANGUAGE) == 0);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,8 +72,10 @@ public class WordsListFragment extends VocabularyFragment implements AbsListView
         textView.setGravity(Gravity.CENTER);
         textView.setTextSize(25);
         textView.setClickable(false);
-        textView.setText(getString(R.string.word_title_meanings));
-        mListView.addHeaderView(textView);
+        if (!isDisplayingAllWordsFromLanguage()) {
+            textView.setText(getString(R.string.word_title_meanings));
+            mListView.addHeaderView(textView);
+        }
 
         mListView.setAdapter(mAdapter);
 
@@ -86,7 +93,7 @@ public class WordsListFragment extends VocabularyFragment implements AbsListView
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Word word = (Word) mListView.getItemAtPosition(position);
             if (word == null)
-                throw new RuntimeException("selected null-word on position " + position);
+                return;
             WordDetailsActivity.open(getActivity(), word.getId());
     }
 

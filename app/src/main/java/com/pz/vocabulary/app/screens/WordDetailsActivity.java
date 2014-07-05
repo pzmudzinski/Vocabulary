@@ -3,7 +3,7 @@ package com.pz.vocabulary.app.screens;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.db.Language;
@@ -24,9 +24,9 @@ public class WordDetailsActivity extends VocabularyActivity {
     private Word word;
 
     @ViewById(R.id.spellingEditText)
-    protected EditText editTextSpelling;
+    protected TextView editTextSpelling;
     @ViewById(R.id.languageEditText)
-    protected EditText editTextLanguage;
+    protected TextView editTextLanguage;
 
     @FragmentById(R.id.fragment)
     protected WordsListFragment wordsListFragment;

@@ -3,22 +3,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/base_padding"
+    android:paddingLeft="@dimen/base_padding"
+    android:paddingRight="@dimen/base_padding"
+    android:paddingBottom="@dimen/base_padding"
     >
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:enabled="false"
+    <TextView
         android:id="@+id/spellingEditText"
-        android:layout_gravity="center_horizontal" />
+        android:text="TEST"
+        style="@style/TextViewTitle" />
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
+        android:text="pl"
         android:id="@+id/languageEditText"
-        android:layout_gravity="center_horizontal" />
+        android:layout_marginTop="5dp"
+        android:gravity="center" />
 
     <fragment
         android:layout_width="match_parent"

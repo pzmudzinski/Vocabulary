@@ -4,4 +4,20 @@
     <color name="good">#8AE480</color>
     <color name="bad">#E48080</color>
     <color name="neutral">#809EE4</color>
+
+    <color name="theme_white">#FFF</color>
+    <color name="theme_white_transparent">#66FFFFFF</color>
+    <color name="theme_white_full_transparent">#FFFFFFFF</color>
+
+    <color name="theme_color_1">#286864</color>
+    <color name="theme_color_2">#6DB1AC</color>
+    <color name="theme_color_3">#488B86</color>
+    <color name="theme_color_4">#164D49</color>
+    <color name="theme_color_5">#082F2D</color>
+
+    <color name="theme_color_1_transparent">#01286864</color>
+    <color name="theme_color_2_transparent">#016DB1AC</color>
+    <color name="theme_color_3_transparent">#01488B86</color>
+    <color name="theme_color_4_transparent">#01164D49</color>
+    <color name="theme_color_5_transparent">#01082F2D</color>
 </resources>

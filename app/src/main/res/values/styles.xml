@@ -1,26 +1,59 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.Myactionbar" >
         <!-- Customize your theme here. -->
         <item name="android:textColorHint">#000</item>
         <item name="android:buttonStyle">@style/ButtonText</item>
-        <item name="android:windowBackground">@color/neutral</item>
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="android:windowBackground">@color/theme_color_1</item>
+        <item name="android:textColorHighlight">#996db1ac</item>
+        <item name="android:textSelectHandleLeft">@drawable/myactionbar_text_select_handle_left</item>
+        <item name="android:textSelectHandleRight">@drawable/myactionbar_text_select_handle_right</item>
+        <item name="android:textSelectHandle">@drawable/myactionbar_text_select_handle_middle</item>
+
+    </style>
+
+    <style name="AutoCompleteTextViewMyActionBar" parent="android:Widget.AutoCompleteTextView">
+        <item name="android:dropDownSelector">@drawable/myactionbar_list_selector_holo_dark</item>
+        <item name="android:background">@drawable/myactionbar_edit_text_holo_dark</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="TextViewStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/theme_white</item>
+    </style>
+
+    <style name="TextViewTitle" parent="@style/TextViewStyle">
+        <item name="android:background">@drawable/border_bottom</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">30dp</item>
+        <item name="android:textSize">@dimen/base_font_big_size</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="ButtonText">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@drawable/text_selector</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_margin">3dp</item>
-        <item name="android:textSize">30dp</item>
+        <item name="android:textSize">@dimen/base_font_size</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowColor">@color/theme_color_5</item>
         <item name="android:background">@drawable/button_background</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">2</item>
     </style>
 
+    <style name="EditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:textSize">@dimen/base_font_size</item>
+        <item name="android:textColor">@color/theme_white</item>
+        <item name="android:textColorHint">@color/theme_color_2</item>
+        <item name="android:background">@drawable/myactionbar_edit_text_holo_dark</item>
+    </style>
 </resources>

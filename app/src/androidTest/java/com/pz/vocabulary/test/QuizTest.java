@@ -142,4 +142,18 @@ public class QuizTest extends VocabularyTest {
         assertEquals(1, correctResponses.size());
         assertEquals(1, wrongResponses.size());
     }
+
+    public void testQuestionNumbers()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+        this.quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey));
+
+        assertEquals(2, quiz.totalQuestionNumber());
+        quiz.takeNextQuestion();
+        assertEquals(1, quiz.currentQuestionNumber());
+        quiz.skipQuestion();
+        quiz.takeNextQuestion();
+        assertEquals(2, quiz.currentQuestionNumber());
+        quiz.skipQuestion();
+    }
 }

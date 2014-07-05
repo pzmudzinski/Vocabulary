@@ -1,19 +1,26 @@
 package com.pz.vocabulary.app.screens;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.pz.vocabulary.app.R;
-import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.models.db.Memory;
 import com.pz.vocabulary.app.models.db.Word;
+import com.pz.vocabulary.app.sql.Dictionary;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.TextChange;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by piotr on 27.04.2014.
@@ -28,6 +35,8 @@ public class AddTranslationFragment extends VocabularyFragment {
     protected EditText memory;
     @ViewById(R.id.buttonAddTranslation)
     protected Button addTranslationButton;
+    @ViewById(R.id.selectMemory)
+    protected Button selectMemoryButton;
 
     @Click(R.id.buttonAddTranslation)
     public void onAddTranslation()
@@ -51,6 +60,34 @@ public class AddTranslationFragment extends VocabularyFragment {
         Word englishWord = english.newWord(textTo);
         dictionary.insertWordsAndTranslation(polishWord, englishWord, memory1);
         clearFocus();
+        setSelectMemoryButtonState();
+    }
+
+    @AfterViews
+    public void setSelectMemoryButtonState()
+    {
+        boolean hasMemories = getDictionary().hasItems(Memory.class);
+        selectMemoryButton.setVisibility(hasMemories? View.VISIBLE : View.GONE);
+    }
+
+    @Click(R.id.selectMemory)
+    protected void selectMemoryClicked()
+    {
+        AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+        b.setTitle(R.string.select_memory);
+        List<Memory> memories = getDictionary().getAllMemories();
+        final List<String> titles = new ArrayList<String>(memories.size());
+        for (Memory memory : memories)
+            titles.add(memory.getDescription());
+
+         b.setItems(titles.toArray(new String[titles.size()]), new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialogInterface, int i) {
+                 memory.setText(titles.get(i));
+             }
+         });
+
+        b.show();
     }
 
     private void clearFocus()

@@ -13,6 +13,9 @@ import java.util.Map;
  * Created by piotr on 05/06/14.
  */
 public interface Dictionary extends QuizHistory{
+
+    public boolean hasItems(Class clz);
+
     public long insertWord(Word word);
     public long findWord(long langID, String spelling);
     public Word findWord(long id);
@@ -25,6 +28,7 @@ public interface Dictionary extends QuizHistory{
     public long insertTranslation(long wordFrom, long wordTo);
     public long insertTranslation(long wordFrom, long wordTo, Long memoryId);
     public long insertWordsAndTranslation(Word word1, Word word2, Memory memory);
+    public Translation findTranslation(long wordFrom, long wordTo);
     public List<Translation> findMeanings(long wordId);
 
     public Memory findMemory(long memoryId);
@@ -35,4 +39,5 @@ public interface Dictionary extends QuizHistory{
 
     public void close();
 
+    List<Memory> getAllMemories();
 }

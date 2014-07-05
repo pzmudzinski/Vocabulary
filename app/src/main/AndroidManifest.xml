@@ -10,6 +10,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.pz.vocabulary.app.MainActivity_"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             android:label="@string/app_name" >
             <intent-filter>
@@ -21,30 +22,35 @@
 
         <activity
             android:name=".screens.AllWordsListActivity_"
+            android:screenOrientation="portrait"
             >
 
         </activity>
 
         <activity
             android:name=".screens.WordDetailsActivity_"
+            android:screenOrientation="portrait"
             >
 
         </activity>
         
         <activity android:name=".screens.QuizActivity_"
             android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"
             >
 
         </activity>
 
         <activity
             android:name=".screens.QuizResultsActivity_"
+            android:screenOrientation="portrait"
             >
 
         </activity>
 
         <activity
             android:name=".screens.WordsByLanguageActivity_"
+            android:screenOrientation="portrait"
             >
 
         </activity>

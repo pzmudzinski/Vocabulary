@@ -1,6 +1,5 @@
 package com.pz.vocabulary.test;
 
-import android.database.sqlite.SQLiteOpenHelper;
 import android.test.AndroidTestCase;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -17,7 +16,7 @@ import com.pz.vocabulary.app.sql.ormlite.OrmLiteSQLDictionary;
 public class VocabularyTest extends AndroidTestCase {
 
     protected Dictionary dbStore;
-    protected SQLiteOpenHelper dbHelper;
+    protected OrmLiteSQLDatabaseHelper dbHelper;
 
     protected Language polish = new Language(Language.POLISH, "pl");
     protected Language english = new Language(Language.ENGLISH, "eng");

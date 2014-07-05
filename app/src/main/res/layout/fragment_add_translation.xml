@@ -26,15 +26,37 @@
         android:layout_marginBottom="15dp"
         android:layout_gravity="center_horizontal" />
 
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            android:id="@+id/editTextMemory"
+            android:hint="@string/association"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="10" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/selectMemory"
+            android:background="@android:drawable/ic_input_add"
+            android:layout_weight="1"
+            android:focusableInTouchMode="true" />
+    </LinearLayout>
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:imeOptions="actionNext"
-        android:singleLine="true"
-        android:id="@+id/editTextMemory"
-        android:hint="@string/association"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="0dp"
+
+        android:layout_weight="1">
+
+        </View>
 
     <Button
         android:layout_width="match_parent"
@@ -42,5 +64,5 @@
         android:enabled="false"
         android:text="@string/add_translation"
         android:id="@+id/buttonAddTranslation"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="bottom" />
 </LinearLayout>

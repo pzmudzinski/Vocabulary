@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- PRESSED -->
     <item android:state_pressed="true" >
         <shape>
             <solid
-                android:color="#449def" />
+                android:color="@color/theme_color_2" />
             <stroke
                 android:width="1dp"
-                android:color="#2f6699" />
+                android:color="@color/theme_white" />
             <corners
-                android:radius="3dp" />
+                android:radius="4dp" />
             <padding
                 android:left="10dp"
                 android:top="10dp"
                 android:right="10dp"
-                android:bottom="10dp" />
+                android:bottom="10dp"
+                />
         </shape>
     </item>
+
+    <!-- DISABLED -->
     <item android:state_enabled="false">
-        <shape>
+        <shape >
             <solid
-                android:color="@color/neutral"
+                android:color="@color/theme_color_2_transparent"
                 ></solid>
             <stroke
                 android:width="1dp"
-                android:color="#2f6699" />
+                android:color="@color/theme_white_transparent" />
             <corners
-                android:radius="4dp" />
+                android:radius="@dimen/base_radius" />
             <padding
                 android:left="10dp"
                 android:top="10dp"
@@ -34,17 +38,15 @@
         </shape>
     </item>
 
+    <!-- NORMAL -->
     <item>
         <shape>
-            <gradient
-                android:startColor="#449def"
-                android:endColor="#2f6699"
-                android:angle="270" />
+            <solid android:color="@color/theme_color_4"></solid>
             <stroke
                 android:width="1dp"
-                android:color="#2f6699" />
+                android:color="@color/theme_white" />
             <corners
-                android:radius="4dp" />
+                android:radius="@dimen/base_radius" />
             <padding
                 android:left="10dp"
                 android:top="10dp"

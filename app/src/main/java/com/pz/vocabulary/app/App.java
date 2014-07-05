@@ -16,7 +16,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Logger.log("app", "onCreate() dziwko");
+        Logger.log("app", "onCreate()");
     }
 
 }

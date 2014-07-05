@@ -1,12 +1,16 @@
 package com.pz.vocabulary.test;
 
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.models.db.Memory;
 import com.pz.vocabulary.app.models.db.Translation;
 import com.pz.vocabulary.app.models.db.Word;
+import com.pz.vocabulary.app.sql.DBColumns;
 import com.pz.vocabulary.app.utils.DateUtils;
 import com.pz.vocabulary.app.utils.Logger;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -177,6 +181,38 @@ public class DatabaseStoreTest extends VocabularyTest {
         assertNotNull(word);
     }
 
+    public void testInsertTheSameMemoryTwoTimes()
+    {
+        dbStore.insertWordsAndTranslation(polishHome, englishHome, memory);
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, memory);
+
+        assertEquals(1, dbStore.getAllMemories().size());
+    }
+
+    public void testInsertTheSameTranslationTwoTimes()
+    {
+        dbStore.insertWordsAndTranslation(polishHome, englishHome, memory);
+        Word newPolishHome = new Word(polish, "dom");
+        Word newEnglishHome = new Word(english, "house");
+        dbStore.insertWordsAndTranslation(newPolishHome, newEnglishHome, memory);
+        assertEquals(2, dbStore.getAllWords().size());
+        List<Translation> meanings = dbStore.findMeanings(polishHome.getId());
+        assertEquals(1, meanings.size());
+    }
+
+    public void testInsertTheSameTranslationWithMemoryOnSecond()
+    {
+        dbStore.insertWordsAndTranslation(polishHome, englishHome, null);
+        Word newPolishHome = new Word(polish, "dom");
+        Word newEnglishHome = new Word(english, "house");
+        dbStore.insertWordsAndTranslation(newPolishHome, newEnglishHome, memory);
+        assertEquals(2, dbStore.getAllWords().size());
+        List<Translation> meanings = dbStore.findMeanings(newPolishHome.getId());
+        assertEquals(1, meanings.size());
+        Translation translation = meanings.get(0);
+        assertEquals(translation.getMemory().getDescription(), memory.getDescription());
+    }
+
     public void testFindingCaseSensitive()
     {
         dbStore.insertWord(polishImportant);
@@ -230,29 +266,112 @@ public class DatabaseStoreTest extends VocabularyTest {
         assertEquals(1, english.size());
     }
 
-    public void testGettingWordsSinceToday()
+    public void testGettingWordsUntilNow()
     {
         dbStore.insertWord(polishHome);
-        dbStore.insertWord(englishKey);
-        dbStore.insertWordsAndTranslation(polishHome, englishKey, null);
+        dbStore.insertWord(englishHome);
+        dbStore.insertWordsAndTranslation(polishHome, englishHome, null);
 
         List<Word> wordsSinceToday = dbStore.getWordsInsertedSince(DateUtils.today());
         assertEquals(2, wordsSinceToday.size());
         assertTrue(wordsSinceToday.contains(polishHome));
-        assertTrue(wordsSinceToday.contains(englishKey));
+        assertTrue(wordsSinceToday.contains(englishHome));
 
         dbStore.insertWordsAndTranslation(polishImportant, englishKey, null);
 
         wordsSinceToday = dbStore.getWordsInsertedSince(DateUtils.today());
-        assertEquals(3, wordsSinceToday.size());
+        assertEquals(4, wordsSinceToday.size());
 
         List<Word> wordsSinceNow = dbStore.getWordsInsertedSince(new Date());
         assertEquals(0, wordsSinceNow.size());
 
         List<Word> wordsSinceYesterday = dbStore.getWordsInsertedSince(DateUtils.todayMinusXDays(1));
-        assertEquals(3, wordsSinceYesterday.size());
+        assertEquals(4, wordsSinceYesterday.size());
 
-        List<Word> wordsSinceWeek = dbStore.getWordsInsertedSince(DateUtils.todayMinusXDays(7));
-        assertEquals(3, wordsSinceWeek.size());
+        List<Word> wordsSinceWeek = dbStore.getWordsInsertedSince(DateUtils.startWeek());
+        assertEquals(4, wordsSinceWeek.size());
+
+        List<Word> wordsSinceMonth = dbStore.getWordsInsertedSince(DateUtils.startMonth());
+        assertEquals(4, wordsSinceMonth.size());
+    }
+
+    public void testGettingWordsOutOfDate()
+    {
+        dbStore.insertWordsAndTranslation(polishHome, englishHome, null);
+        dbStore.insertWordsAndTranslation(polishImportant, englishKey, null);
+
+        try {
+            Dao<Translation, Long> translations = dbHelper.getDao(Translation.class);
+            Translation translation = translations.queryForAll().get(0);
+            translation.setTimestamp(DateUtils.todayMinusXDays(7));
+
+            //translations.update(translation);
+            // don't use udpate method
+            // it's trying to match translation based on both id and timestamp
+            // updatebuilder is more 'low-lewel'
+            updateTranslation(translation);
+            List<Word> words = dbStore.getWordsInsertedSince(DateUtils.today());
+            assertEquals(2, words.size());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+    }
+
+    public void testFindingTranslation()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+        Translation translation = dbStore.findTranslation(polishKey.getId(), englishKey.getId());
+        assertNotNull(translation);
+    }
+
+    public void testGettingWordSinceWhenItHasTwoMeanings()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+        dbStore.insertWordsAndTranslation(polishImportant, englishKey, null);
+
+        Translation translation = dbStore.findTranslation(polishKey.getId(), englishKey.getId());
+        translation.setTimestamp(DateUtils.todayMinusXDays(5));
+        updateTranslation(translation);
+
+        List<Word> wordsSinceYesterday = dbStore.getWordsInsertedSince(DateUtils.todayMinusXDays(1));
+        assertEquals(2, wordsSinceYesterday.size());
+        assertTrue(wordsSinceYesterday.contains(englishKey));
+        assertTrue(wordsSinceYesterday.contains(polishImportant));
+    }
+
+    private void updateTranslation(Translation translation)
+    {
+        Dao<Translation, Long> translations = null;
+        try {
+            translations = dbHelper.getDao(Translation.class);
+            UpdateBuilder<Translation, Long> updateBuilder = translations.updateBuilder();
+            updateBuilder.updateColumnValue(DBColumns.TIMESTAMP, translation.getTimestamp());
+            updateBuilder.where().eq(DBColumns.ID, translation.getId());
+
+            String query = updateBuilder.prepareStatementString();
+            translations.update(updateBuilder.prepare());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void testHasItems()
+    {
+        assertFalse(dbStore.hasItems(Word.class));
+        dbStore.insertWordsAndTranslation(polishHome, englishHome, null);
+        assertTrue(dbStore.hasItems(Word.class));
+        assertFalse(dbStore.hasItems(Memory.class));
+
+        Translation translation = dbStore.findTranslation(polishHome.getId(), englishHome.getId());
+        dbStore.insertMemory(memory);
+        dbStore.addMemoryToTranslation(memory.getId(), translation.getId());
+
+        assertTrue(dbStore.hasItems(Memory.class));
+        assertTrue(dbStore.hasItems(Translation.class));
+
     }
 }
