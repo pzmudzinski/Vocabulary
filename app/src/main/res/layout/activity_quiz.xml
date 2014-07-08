@@ -28,6 +28,7 @@
         android:layout_height="50dp"
         android:id="@+id/editTextAnswer"
         android:layout_gravity="center_horizontal"
+        android:inputType="text"
         android:hint="@string/your_answer"
         android:layout_marginTop="@dimen/base_padding" />
 

@@ -15,6 +15,7 @@ import java.util.Map;
 public interface Dictionary extends QuizHistory{
 
     public boolean hasItems(Class clz);
+    public long numberOfItems(Class clz);
 
     public long insertWord(Word word);
     public long findWord(long langID, String spelling);
@@ -40,4 +41,6 @@ public interface Dictionary extends QuizHistory{
     public void close();
 
     List<Memory> getAllMemories();
+
+    public void destroyEverything();
 }

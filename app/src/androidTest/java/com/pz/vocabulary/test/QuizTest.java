@@ -8,6 +8,9 @@ import com.pz.vocabulary.app.models.db.QuizResponse;
 import com.pz.vocabulary.app.models.db.Translation;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.sql.Dictionary;
+import com.pz.vocabulary.app.sql.QuizHistory;
+
+import org.joda.time.Period;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -141,6 +144,12 @@ public class QuizTest extends VocabularyTest {
 
         assertEquals(1, correctResponses.size());
         assertEquals(1, wrongResponses.size());
+
+        long numberOfCorrect = dbStore.numberOfResponsesWithResult(QuizHistory.QuizQuestionResult.ResponseWrong);
+        long numberOfWrong = dbStore.numberOfResponsesWithResult(QuizHistory.QuizQuestionResult.ResponseWrong);
+        assertEquals(1, numberOfCorrect);
+        assertEquals(1, numberOfWrong);
+        assertEquals(2, dbStore.numberOfAllResponses());
     }
 
     public void testQuestionNumbers()
@@ -155,5 +164,89 @@ public class QuizTest extends VocabularyTest {
         quiz.takeNextQuestion();
         assertEquals(2, quiz.currentQuestionNumber());
         quiz.skipQuestion();
+    }
+
+    public void testStoringQuiz()
+    {
+        assertEquals(0, dbStore.numberOfItems(Quiz.class));
+        Quiz quiz1 = executeCorrectWrongQuiz();
+        assertTrue(dbStore.hasItems(Quiz.class));
+
+        assertNotNull(quiz1.getTsStart());
+        assertNotNull(quiz1.getTsEnd());
+        assertNotSame(quiz1.getTsStart(), quiz1.getTsEnd());
+        assertTrue(quiz1.getTsStart().compareTo(quiz1.getTsEnd()) < 0);
+        assertEquals((float)0.5, quiz1.getScore());
+        assertEquals(1, dbStore.numberOfItems(Quiz.class));
+
+        List<QuizResponse> responses = dbStore.getAllResponses();
+        assertTrue(responses.size() == 2);
+        for (QuizResponse response : responses)
+        {
+            assertEquals(quiz1.getId(), response.getQuizID());
+        }
+    }
+
+    private Quiz executeCorrectWrongQuiz()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+        Quiz quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey));
+
+        Question question = quiz.takeNextQuestion();
+        quiz.skipQuestion();
+        Question question1 = quiz.takeNextQuestion();
+        Word answer = dbStore.findWord(dbStore.findMeanings(question1.getWord().getId()).get(0).getWordTo());
+        assertTrue(quiz.answer(answer.getSpelling()));
+
+        quiz.store();
+        return quiz;
+    }
+
+    private void executeCorrectCorrectQuiz()
+    {
+        dbStore.insertWordsAndTranslation(polishHome, englishHome, null);
+        Quiz quiz1 = new Quiz(dbStore, Arrays.asList(englishHome, polishHome));
+
+        Question question = quiz1.takeNextQuestion();
+        assertTrue(quiz1.answer(question.getWord().equals(polishHome) ? englishHome.getSpelling() : polishHome.getSpelling()));
+        question = quiz1.takeNextQuestion();
+        assertTrue(quiz1.answer(question.getWord().equals(polishHome) ? englishHome.getSpelling() : polishHome.getSpelling()));
+        quiz1.store();
+    }
+
+    /*     <string name="stats_all_tests">Liczba podjętych testow</string>
+    <string name="stats_tests_duration">Czas spędzony na testach</string>
+    <string name="stats_tests_average_duration">Średni czas trwania testu</string>
+    <string name="stats_tests_average_result">Średni wynik testu</string> */
+
+    public void testQuizStats() throws InterruptedException {
+        assertEquals(0, dbStore.numberOfItems(Quiz.class));
+        assertEquals((float)0, dbStore.quizAverageScore());
+        executeCorrectWrongQuiz();
+        assertEquals((float) 0.5, dbStore.quizAverageScore());
+        //Thread.sleep(2000);
+        executeCorrectCorrectQuiz();
+        assertEquals(2, dbStore.numberOfItems(Quiz.class));
+        // 1 + 0 + 1 + 1 = 3; 3/4 = 0.75
+        assertEquals((float)0.75, dbStore.quizAverageScore());
+
+        Period totalPeriod = dbStore.quizTotalTimeSpent();
+        Period averagePeriod = dbStore.quizAverageTimeSpent();
+        assertNotNull(averagePeriod);
+        assertNotNull(totalPeriod);
+
+        assertTrue(totalPeriod.getMillis() > 0);
+    }
+
+    public void testStoringUnfinishedQuiz()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+        this.quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey));
+
+        quiz.takeNextQuestion();
+        quiz.skipQuestion();
+        quiz.store();
+
+        assertTrue(dbStore.quizAverageTimeSpent().getMillis() > 0);
     }
 }

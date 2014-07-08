@@ -18,4 +18,8 @@ public interface DBColumns extends BaseColumns {
     public static final String RESULT = "result";
     public static final String RESPONSE = "response";
     public static final String TIMESTAMP = "ts";
+    public static final String QUIZ_ID = "quiz_id";
+
+    public static final String TIMESTAMP_START ="ts_start";
+    public static final String TIMESTAMP_END = "ts_end";
 }

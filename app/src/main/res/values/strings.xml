@@ -8,8 +8,6 @@
         <item>Test</item>
         <item>Statystyki</item>
     </string-array>
-    <string name="action_settings">Settings</string>
-
     <string name="add_translation">Dodaj słówko</string>
 
     <string name="find_online">Znajdz tłumaczenie online</string>
@@ -32,8 +30,16 @@
         <item>W tym miesiącu</item>
     </string-array>
 
-    <string name="stats_all_tests">Liczba podjetych testow: %d</string>
-    <string name="stats_translation_number">Liczba wpisanych tlumaczen: %d</string>
+    <string name="stats_all_tests">Liczba podjętych testow</string>
+    <string name="stats_tests_duration">Czas spędzony na testach</string>
+    <string name="stats_tests_average_duration">Średni czas trwania testu</string>
+    <string name="stats_tests_average_result">Średni wynik testu</string>
+    <string name="stats_translation_number">Liczba wpisanych słówek</string>
+    <string name="stats_responses_all">Liczba wszystkich odpowiedzi</string>
+    <string name="stats_responses_wrong">Liczba błędnych odpowiedzi</string>
+    <string name="stats_responses_correct">Liczba poprawnych odpowiedzi</string>
+    <string name="stats_responses_skipped">Liczba pominiętych pytań</string>
+
     <string name="stats_show_all_words">Pokaz wszystkie slowa</string>
 
     <string name="word_empty_meanings">Brak znaczeń</string>
@@ -49,16 +55,26 @@
 
     <string name="question_number_of_total" formatted="false">Pytanie %d/%d</string>
 
-    <string name="answer_correct">Dobrze!</string>
-    <string name="answer_wrong">Zle!</string>
+    <string name="answer_correct">dobrze!</string>
+    <string name="answer_wrong">źle!</string>
     <string name="answer_take_next">Pomiń to pytanie</string>
     <string name="answer_do">Odpowiedz</string>
 
     <string name="results_title">Wyniki testu</string>
-    <string name="results_questions_count">Liczba pytan:</string>
-    <string name="results_questions_correct">Poprawne odpowiedzi:</string>
-    <string name="results_questions_wrong">Niepoprawne odpowiedzi:</string>
+    <string name="results_questions_count">Liczba pytan</string>
+    <string name="results_questions_correct">Poprawne odpowiedzi</string>
+    <string name="results_questions_wrong">Niepoprawne odpowiedzi</string>
+    <string name="results_questions_skipped">Pominięte pytania</string>
 
     <string name="quit">Koniec</string>
     <string name="empty_words_database">Brak dodanych słów</string>
+
+    <string name="quit_are_you_sure_title">Czy na pewno chcesz zakończyć test?</string>
+    <string name="test_lost_progress">Utracisz cały postęp.</string>
+
+    <string name="refresh">Odśwież</string>
+    <string name="settings">Ustawienia</string>
+    <string name="reset">Reset</string>
+    <string name="delete_are_you_sure">Czy na pewno chcesz usunąć wszystkie dane? Wszystkie Twoje tłumaczenia i statysyki zostaną usunięte.</string>
+    <string name="delete_all">Usuń wszystkie dane</string>
 </resources>

@@ -1,23 +1,26 @@
 package com.pz.vocabulary.app.screens;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.Question;
 import com.pz.vocabulary.app.models.Quiz;
 import com.pz.vocabulary.app.models.db.Word;
+import com.pz.vocabulary.app.utils.AlertUtils;
 import com.pz.vocabulary.app.utils.DictionaryUtils;
 
+import org.androidannotations.annotations.AfterTextChange;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
-import org.androidannotations.annotations.TextChange;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
@@ -69,12 +72,14 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
 
 
         this.quiz = new Quiz(getDictionary(), quizWords);
-
+        answerButton.setOnClickListener(buttonAnswerClick);
 
         takeNextQuestionOrGoToResults();
     }
+    private Question currentQuestion;
 
     private void display(Question question) {
+        this.currentQuestion = question;
         Word word = question.getWord();
         textViewQuestion.setText(word.getSpelling());
         editTextAnswer.setText("");
@@ -86,19 +91,19 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
         }
     }
 
-    @TextChange(R.id.editTextAnswer)
-    protected void onTextChange() {
-        answerButton.setEnabled(editTextAnswer.getText().length() > 0);
-    }
+    final View.OnClickListener buttonAnswerClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            onAnswerClicked();
+        }
+    };
 
-    @Click(R.id.buttonAnswer)
-    protected void onAnswerClicked() {
+    protected synchronized void onAnswerClicked() {
         boolean correct = quiz.answer(editTextAnswer.getText().toString());
         if (correct)
             onCorrectAnswer();
         else
             onWrongAnswer();
-        takeNextQuestionOrGoToResults();
     }
 
     @Click(R.id.buttonTakeNext)
@@ -107,27 +112,63 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
         takeNextQuestionOrGoToResults();
     }
 
-    private void takeNextQuestionOrGoToResults() {
+    @AfterTextChange(R.id.editTextAnswer)
+    protected void onTextChanged()
+    {
+        answerButton.setEnabled(editTextAnswer.getText().length() > 0);
+    }
+
+    private synchronized void takeNextQuestionOrGoToResults() {
+        answerButton.setOnClickListener(null);
+        answerButton.setEnabled(false);
         if (quiz.hasQuestionsLeft()) {
-            display(quiz.takeNextQuestion());
-            getSupportActionBar().setTitle(String.format(getString(R.string.question_number_of_total), quiz.currentQuestionNumber(), quiz.totalQuestionNumber()));
+            Question nextQuestion = quiz.takeNextQuestion();
+
+            String title = String.format(getString(R.string.question_number_of_total), quiz.currentQuestionNumber(), quiz.totalQuestionNumber());
+            title = title + " (" + nextQuestion.getWord().getLanguage().getName() + ")";
+            getSupportActionBar().setTitle(title);
+            display(nextQuestion);
+
         }
         else {
             goToResults();
         }
+
+        answerButton.setOnClickListener(buttonAnswerClick);
     }
 
     public void onCorrectAnswer() {
-        Toast.makeText(this, R.string.answer_correct, Toast.LENGTH_SHORT).show();
+        AlertUtils.showToastWithText(this, R.string.answer_correct, R.color.good);
         takeNextQuestionOrGoToResults();
     }
 
     public void goToResults() {
+        quiz.store();
         QuizResultsActivity.open(this, quiz.getResults());
         finish();
     }
 
     public void onWrongAnswer() {
-        Toast.makeText(this, R.string.answer_wrong, Toast.LENGTH_SHORT).show();
+        AlertUtils.showToastWithText(this, R.string.answer_wrong, R.color.bad);
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog alertDialog = new AlertDialog.Builder(
+                this).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        }).setNegativeButton(android.R.string.cancel, null).create();
+
+        // Setting Dialog Title
+        alertDialog.setTitle(getString(R.string.quit_are_you_sure_title));
+
+        // Setting Dialog Message
+        alertDialog.setMessage(getString(R.string.test_lost_progress));
+
+        // Showing Alert Message
+        alertDialog.show();
     }
 }

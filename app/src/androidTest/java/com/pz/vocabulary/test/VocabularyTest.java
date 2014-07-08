@@ -2,7 +2,6 @@ package com.pz.vocabulary.test;
 
 import android.test.AndroidTestCase;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.models.db.Memory;
 import com.pz.vocabulary.app.models.db.Word;
@@ -31,7 +30,8 @@ public class VocabularyTest extends AndroidTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        this.dbHelper = OpenHelperManager.getHelper(getContext(), OrmLiteSQLDatabaseHelper.class);
+        this.dbHelper = new OrmLiteSQLDatabaseHelper(getContext(), null);
+
         this.dbStore = new OrmLiteSQLDictionary(getContext(), (OrmLiteSQLDatabaseHelper) dbHelper);
     }
 
@@ -39,6 +39,5 @@ public class VocabularyTest extends AndroidTestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
         dbStore.close();
-        OpenHelperManager.releaseHelper();
     }
 }
