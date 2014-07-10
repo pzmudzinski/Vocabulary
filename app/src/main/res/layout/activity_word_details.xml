@@ -1,31 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/base_padding"
-    android:paddingRight="@dimen/base_padding"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/base_padding"
-    >
+    android:paddingLeft="@dimen/base_padding"
+    android:paddingRight="@dimen/base_padding">
 
     <TextView
         android:id="@+id/spellingEditText"
-        android:text="TEST"
-        style="@style/TextViewTitle" />
+        style="@style/TextViewTitle"
+        android:text="TEST" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="pl"
-        android:id="@+id/languageEditText"
-        android:layout_marginTop="5dp"
-        android:gravity="center" />
+        android:layout_marginBottom="@dimen/small_padding"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/small_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/word_acquaintance" />
+
+        <view
+            android:id="@+id/scoreView"
+            class="com.pz.vocabulary.app.views.ScoreView_"
+            android:layout_width="@dimen/score_view_size"
+            android:layout_height="@dimen/score_view_size" />
+
+        <TextView
+            android:id="@+id/languageEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/language" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+
+    </RelativeLayout>
 
     <fragment
+        android:id="@+id/fragment"
+        android:name="com.pz.vocabulary.app.screens.WordsListFragment_"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.pz.vocabulary.app.screens.WordsListFragment_"
-        android:id="@+id/fragment"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/base_padding"
+        android:text="@string/delete_word" />
+
 </LinearLayout>

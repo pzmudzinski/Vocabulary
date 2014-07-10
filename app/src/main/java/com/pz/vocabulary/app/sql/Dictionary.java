@@ -20,6 +20,7 @@ public interface Dictionary extends QuizHistory{
     public long insertWord(Word word);
     public long findWord(long langID, String spelling);
     public Word findWord(long id);
+    public boolean deleteWord(long wordID);
     public List<Word> getAllWords();
     public List<Word> findWords(long languageId);
     public Map<Language, List<Word>> getWordsByLanguage();

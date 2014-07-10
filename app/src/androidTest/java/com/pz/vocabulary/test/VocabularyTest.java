@@ -38,6 +38,7 @@ public class VocabularyTest extends AndroidTestCase {
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-        dbStore.close();
+        dbHelper.close();
+
     }
 }

@@ -25,6 +25,8 @@ public interface QuizHistory {
     public org.joda.time.Period quizTotalTimeSpent();
     public org.joda.time.Period quizAverageTimeSpent();
 
+    public float getWordAcquaintance(long wordID);
+
     public enum QuizQuestionResult
     {
         ResponseCorrect,

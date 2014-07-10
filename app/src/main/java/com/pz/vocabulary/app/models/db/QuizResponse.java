@@ -17,11 +17,11 @@ import java.util.Date;
 @DatabaseTable(tableName = DatabaseTables.TABLE_RESPONSES)
 public class QuizResponse extends BaseEntity{
 
-    @DatabaseField(foreign = true, foreignColumnName = DBColumns.ID)
+    @DatabaseField(foreign = true, foreignColumnName = DBColumns.ID, columnName = DBColumns.WORD_FROM)
     private Word wordFrom;
     @DatabaseField
     private String response;
-    @DatabaseField
+    @DatabaseField(dataType = DataType.ENUM_INTEGER)
     private Dictionary.QuizQuestionResult result;
     @DatabaseField(version = true, columnName = DBColumns.TIMESTAMP, dataType = DataType.DATE)
     private Date timestamp;

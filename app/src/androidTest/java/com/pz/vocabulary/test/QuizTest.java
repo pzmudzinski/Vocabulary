@@ -33,7 +33,6 @@ public class QuizTest extends VocabularyTest {
         words.add(polishKey);
         words.add(englishKey);
         words.add(polishImportant);
-
     }
 
     public void testQuizCreation()
@@ -248,5 +247,48 @@ public class QuizTest extends VocabularyTest {
         quiz.store();
 
         assertTrue(dbStore.quizAverageTimeSpent().getMillis() > 0);
+    }
+
+    public void testAcquaintancePerfect()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+        this.quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey));
+        quiz.answer(answerFor(quiz.takeNextQuestion()));
+        quiz.answer(answerFor(quiz.takeNextQuestion()));
+        quiz.store();
+        assertEquals((float)1.0, dbStore.getWordAcquaintance(polishKey.getId()));
+        assertEquals((float)1.0, dbStore.getWordAcquaintance(polishKey.getId()));
+    }
+
+    public void testHalfAcquaintance()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+        this.quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey));
+        quiz.answer(answerFor(quiz.takeNextQuestion()));
+        quiz.takeNextQuestion();
+        quiz.skipQuestion();
+        quiz.store();
+        float sumResult = dbStore.getWordAcquaintance(polishKey.getId()) + dbStore.getWordAcquaintance(englishKey.getId());
+        assertEquals((float)1.0, sumResult); // 100% + 0%
+    }
+
+    public void testTotallyWrongAcquaintance()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+        this.quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey));
+        quiz.takeNextQuestion();
+        quiz.answer("wrong");
+        quiz.skipQuestion();
+        quiz.takeNextQuestion();
+        quiz.skipQuestion();
+        quiz.store();
+        float sumResult = dbStore.getWordAcquaintance(polishKey.getId()) + dbStore.getWordAcquaintance(englishKey.getId());
+        assertEquals((float)0.0, sumResult); // 100% + 0%
+    }
+
+    private String answerFor(Question question)
+    {
+        Word answer = dbStore.findWord(dbStore.findMeanings(question.getWord().getId()).get(0).getWordTo());
+        return answer.getSpelling();
     }
 }

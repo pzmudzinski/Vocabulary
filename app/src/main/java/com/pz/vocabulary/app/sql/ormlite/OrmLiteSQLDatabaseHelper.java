@@ -103,6 +103,23 @@ public class OrmLiteSQLDatabaseHelper extends OrmLiteSqliteOpenHelper implements
         return (Dao<T, Long>) daos.get(clz);
     }
 
+    private WordDao wordDao;
+
+    @Override
+    public <D extends Dao<T, ?>, T> D getDao(Class<T> clazz) throws SQLException {
+        if (clazz.equals(Word.class))
+        {
+            if (this.wordDao == null)
+            {
+                Dao<Translation, Long> translations = getDao(Translation.class);
+                Dao<Memory, Long> memories = getDao(Memory.class);
+                this.wordDao = new WordDao(getConnectionSource(), translations, memories);
+            }
+            return (D) wordDao;
+        }
+        return super.getDao(clazz);
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
 

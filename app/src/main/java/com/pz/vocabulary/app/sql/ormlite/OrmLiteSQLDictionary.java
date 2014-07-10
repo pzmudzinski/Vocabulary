@@ -2,13 +2,11 @@ package com.pz.vocabulary.app.sql.ormlite;
 
 import android.content.Context;
 
-import com.j256.ormlite.android.AndroidConnectionSource;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
-import com.j256.ormlite.table.TableUtils;
 import com.pz.vocabulary.app.models.Quiz;
 import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.models.db.Memory;
@@ -108,6 +106,20 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     }
 
     @Override
+    public boolean deleteWord(long wordID) {
+        Dao<Word, Long> wordDao = getDao(Word.class);
+
+        try {
+            int rows = wordDao.deleteById(wordID);
+            return rows != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Logger.error("db", e.getMessage(), e);
+            return true;
+        }
+    }
+
+    @Override
     public void addMemoryToTranslation(long memoryId, long translationId) {
         Dao<Translation, Long> translations = getDao(Translation.class);
         try {
@@ -193,6 +205,7 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
                 translation.setTimestamp(theSameTranslation.getTimestamp());
             }
             translations.createOrUpdate(translation);
+
             return translation.getId();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -204,7 +217,11 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     @Override
     public Translation findTranslation(long wordFrom, long wordTo) {
         try {
-            return getDao(Translation.class).queryBuilder().where().eq(DBColumns.WORD_FROM, wordFrom).and().eq(DBColumns.WORD_TO, wordTo).queryForFirst();
+            return getDao(Translation.class).
+                    queryBuilder()
+                    .where().eq(DBColumns.WORD_FROM, wordFrom).
+                            and().eq(DBColumns.WORD_TO, wordTo).
+                            queryForFirst();
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -270,7 +287,11 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     @Override
     public List<Word> getAllWords() {
         try {
-            return helper.getDaoObject(Word.class).queryForAll();
+            Dao<Word,Long> words = helper.getDaoObject(Word.class);
+            QueryBuilder<Word, Long> queryBuilder = words.queryBuilder();
+            queryBuilder.selectColumns(DBColumns.ID, DBColumns.SPELLING, DBColumns.LANGUAGE_ID);
+            return words.query(queryBuilder.prepare());
+
         } catch (SQLException e) {
             e.printStackTrace();
             return new ArrayList<Word>();
@@ -303,7 +324,9 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     public List<Word> findWords(long languageId) {
         Dao<Word, Long> words = getDao(Word.class);
         try {
-            return words.queryForEq(DBColumns.LANGUAGE_ID, languageId);
+            return words.queryBuilder().selectColumns(DBColumns.ID, DBColumns.SPELLING).
+                    where()
+                    .eq(DBColumns.LANGUAGE_ID, languageId).query();
         } catch (SQLException e) {
             Logger.error(TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -407,6 +430,11 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     @Override
     public org.joda.time.Period quizAverageTimeSpent() {
         return quizHistory.quizAverageTimeSpent();
+    }
+
+    @Override
+    public float getWordAcquaintance(long wordID) {
+        return quizHistory.getWordAcquaintance(wordID);
     }
 
     @Override

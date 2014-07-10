@@ -125,7 +125,7 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
             Question nextQuestion = quiz.takeNextQuestion();
 
             String title = String.format(getString(R.string.question_number_of_total), quiz.currentQuestionNumber(), quiz.totalQuestionNumber());
-            title = title + " (" + nextQuestion.getWord().getLanguage().getName() + ")";
+//            title = title + " (" + nextQuestion.getWord().getLanguage().getName() + ")";
             getSupportActionBar().setTitle(title);
             display(nextQuestion);
 

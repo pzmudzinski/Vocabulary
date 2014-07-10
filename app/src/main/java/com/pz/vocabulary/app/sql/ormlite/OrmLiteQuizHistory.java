@@ -20,12 +20,12 @@ import java.util.List;
  * Created by piotr on 03/07/14.
  */
 public class OrmLiteQuizHistory implements QuizHistory {
-    Dao<QuizResponse,Long> dao;
+    Dao<QuizResponse,Long> responseDao;
     Dao<Quiz, Long> quizDao;
 
     public OrmLiteQuizHistory(Dao<QuizResponse, Long> dao, Dao<Quiz, Long> quizDao)
     {
-        this.dao = dao;
+        this.responseDao = dao;
         this.quizDao = quizDao;
     }
 
@@ -34,7 +34,7 @@ public class OrmLiteQuizHistory implements QuizHistory {
 
         QuizResponse quizResponse = new QuizResponse(wordFrom, response, result);
         try {
-            dao.create(quizResponse);
+            responseDao.create(quizResponse);
             return quizResponse.getId();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,7 +46,7 @@ public class OrmLiteQuizHistory implements QuizHistory {
     public List<QuizResponse> findResponsesWithResult(QuizQuestionResult result) {
 
         try {
-            return dao.queryForEq(DBColumns.RESULT, result);
+            return responseDao.queryForEq(DBColumns.RESULT, result);
         } catch (SQLException e) {
             e.printStackTrace();
             return Collections.EMPTY_LIST;
@@ -56,7 +56,7 @@ public class OrmLiteQuizHistory implements QuizHistory {
     @Override
     public List<QuizResponse> getAllResponses() {
         try {
-            return dao.queryForAll();
+            return responseDao.queryForAll();
         } catch (SQLException e) {
             return Collections.EMPTY_LIST;
         }
@@ -76,12 +76,12 @@ public class OrmLiteQuizHistory implements QuizHistory {
 
     @Override
     public void updateResponsesWithQuiz(List<Long> responsesID, long quizID) {
-        UpdateBuilder<QuizResponse, Long> update = dao.updateBuilder();
+        UpdateBuilder<QuizResponse, Long> update = responseDao.updateBuilder();
         try {
             for (Long responseID : responsesID)
             {
                 update.updateColumnValue(DBColumns.QUIZ_ID, quizID).where().idEq(responseID);
-                dao.update(update.prepare());
+                responseDao.update(update.prepare());
             }
 
         } catch (SQLException ex)
@@ -93,7 +93,7 @@ public class OrmLiteQuizHistory implements QuizHistory {
     @Override
     public long numberOfAllResponses() {
         try {
-            return dao.countOf();
+            return responseDao.countOf();
         } catch (SQLException e) {
             e.printStackTrace();
             return 0;
@@ -102,10 +102,10 @@ public class OrmLiteQuizHistory implements QuizHistory {
 
     @Override
     public long numberOfResponsesWithResult(QuizQuestionResult result) {
-        QueryBuilder<QuizResponse, Long> queryBuilder = dao.queryBuilder();
+        QueryBuilder<QuizResponse, Long> queryBuilder = responseDao.queryBuilder();
         try {
             queryBuilder.setCountOf(true).where().eq(DBColumns.RESULT, result);
-            return dao.countOf(queryBuilder.prepare());
+            return responseDao.countOf(queryBuilder.prepare());
         } catch (SQLException e) {
             e.printStackTrace();
             return 0;
@@ -173,6 +173,35 @@ public class OrmLiteQuizHistory implements QuizHistory {
             ex.printStackTrace();
             Logger.error("db", ex.getMessage(), ex);
             return null;
+        }
+    }
+
+    @Override
+    public float getWordAcquaintance(long wordID) {
+        /*
+        SELECT (
+        SUM(CASE WHEN result = 0 THEN 1 ELSE 0 END) / COUNT(*)
+        ) from responses
+        WHERE wordFrom_id=1*/
+        QueryBuilder<QuizResponse, Long> queryBuilder = responseDao.queryBuilder();
+
+        try {
+            queryBuilder.selectRaw("(" +
+                            "SUM(CASE WHEN " + DBColumns.RESULT + " = " +
+                            Integer.toString(QuizQuestionResult.ResponseCorrect.ordinal()) +
+                            " THEN 1 ELSE 0 END) / COUNT(*) " +
+                            ")"
+            ).where().eq(DBColumns.WORD_FROM, wordID);
+            GenericRawResults<String[]> strings = responseDao.queryRaw(queryBuilder.prepareStatementString());
+            String[] asStrings = strings.getFirstResult();
+            if (asStrings == null || asStrings[0] == null)
+                return 0;
+            return Float.parseFloat(asStrings[0]);
+        } catch (Exception ex)
+        {
+            ex.printStackTrace();
+            Logger.error("db", ex.getMessage(), ex);
+            return 0;
         }
     }
 }

@@ -4,7 +4,6 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.pz.vocabulary.app.models.db.BaseEntity;
-import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.models.db.Memory;
 import com.pz.vocabulary.app.models.db.Translation;
 import com.pz.vocabulary.app.models.db.Word;
@@ -28,7 +27,6 @@ public class Quiz extends BaseEntity{
     private Dictionary dictionary;
 
     private Word currentWord;
-    private Language currentLanguage;
     private List<Translation> currentMeanings;
     private List<Memory> currentTips;
     private Stack<Word> words = new Stack<Word>();
@@ -93,8 +91,7 @@ public class Quiz extends BaseEntity{
             return null;
         }
 
-        this.currentWord = words.pop();
-        this.currentLanguage = dictionary.findLanguage(currentWord.getLanguageID());
+        this.currentWord = dictionary.findWord(words.pop().getId());
         this.currentMeanings = dictionary.findMeanings(currentWord.getId());
         this.currentTips = new ArrayList<Memory>();
         for (Translation translation : currentMeanings)
@@ -120,7 +117,7 @@ public class Quiz extends BaseEntity{
 
         for (Translation translation : meanings)
         {
-            Word answerWord = new Word(translation.getTranslation().getLanguage(), answer);
+            Word answerWord = new Word(translation.getTranslation().getLanguageID(), answer);
             if (answerWord.equals(translation.getTranslation()))
             {
                 results.addCorrectAnswer();

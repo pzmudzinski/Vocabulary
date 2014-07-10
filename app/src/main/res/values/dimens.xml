@@ -5,5 +5,8 @@
     <dimen name="base_padding">20dp</dimen>
     <dimen name="base_font_size">15sp</dimen>
     <dimen name="base_font_big_size">25sp</dimen>
+    <dimen name="base_font_very_big_size">35sp</dimen>
     <dimen name="base_radius">4dp</dimen>
+    <dimen name="small_padding">5dp</dimen>
+    <dimen name="score_view_size">100dp</dimen>
     </resources>

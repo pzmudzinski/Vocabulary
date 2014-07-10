@@ -20,8 +20,8 @@ public class Word extends BaseEntity{
     @DatabaseField(columnName = DBColumns.NORMALIZED_SPELLING, canBeNull = false)
     private String normalizedSpelling;
 
-    @DatabaseField(foreign = true, foreignColumnName = DBColumns.ID, foreignAutoRefresh = true)
-    private Language language;
+    @DatabaseField(columnName = DBColumns.LANGUAGE_ID)
+    private long languageID;
 
     @Deprecated
     public static Word fromCursor(Cursor query, Language language)
@@ -30,7 +30,7 @@ public class Word extends BaseEntity{
 
         word.id = query.getLong(query.getColumnIndex(DBColumns.ID));
         word.spelling = query.getString(query.getColumnIndex(DBColumns.SPELLING));
-        word.language = language;
+        word.languageID = language.getId();
 
         return word;
     }
@@ -40,9 +40,17 @@ public class Word extends BaseEntity{
 
     }
 
+    public Word(long languageID, String spelling)
+    {
+        super();
+        this.languageID = languageID;
+        setSpelling(spelling);
+    }
+
+    @Deprecated
     public Word(Language language, String spelling) {
         super();
-        this.language = language;
+        this.languageID = language.getId();
         setSpelling(spelling);
     }
 
@@ -58,12 +66,7 @@ public class Word extends BaseEntity{
 
     public long getLanguageID()
     {
-        return language.getId();
-    }
-
-    public Language getLanguage()
-    {
-        return language;
+        return languageID;
     }
 
     @Override
@@ -87,4 +90,5 @@ public class Word extends BaseEntity{
                 .replaceAll("[^\\p{ASCII}]", "");
         this.normalizedSpelling = asciiName;
     }
+
 }
