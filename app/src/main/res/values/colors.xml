@@ -4,6 +4,7 @@
     <color name="good">#4C7513</color>
     <color name="bad">#E48080</color>
     <color name="neutral">#809EE4</color>
+    <color name="transparent_black">#80000000</color>
 
     <color name="theme_white">#FFF</color>
     <color name="theme_white_transparent">#66FFFFFF</color>

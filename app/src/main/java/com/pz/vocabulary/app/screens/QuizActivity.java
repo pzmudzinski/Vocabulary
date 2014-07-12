@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,15 +15,14 @@ import com.pz.vocabulary.app.models.Question;
 import com.pz.vocabulary.app.models.Quiz;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.utils.AlertUtils;
-import com.pz.vocabulary.app.utils.DictionaryUtils;
 
 import org.androidannotations.annotations.AfterTextChange;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -39,39 +39,27 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
     @ViewById(R.id.textViewTip)
     protected TextView textViewTip;
 
-    @Extra(ARG_QUIZ_WORDS_ALL)
-    public boolean showAllWords;
-    @Extra(ARG_QUIZ_WORDS_SINCE)
-    public int showWordsSince = -1;
-    @Extra(ARG_QUIZ_WORDS_TOUGH)
-    public boolean showToughWords;
-
     private Quiz quiz;
 
-    public static void open(Context context) {
+    public static void open(Context context, List<Word> words)
+    {
         Intent intent = QuizActivity_.intent(context).get();
+        Word[] wordsAsArray = words.toArray(new Word[words.size()]);
+        intent.putExtra(ARG_WORD_IDS, wordsAsArray);
+       // intent.getExtras().putParcelableArray(ARG_WORD_IDS, Word.CREATOR);
         context.startActivity(intent);
     }
 
     @AfterViews
     protected void init() {
-        List<Word> quizWords = null;
+        Parcelable[] parcelables = getIntent().getParcelableArrayExtra(ARG_WORD_IDS);
+        Word[] words;
+        words = Arrays.copyOf(parcelables, parcelables.length, Word[].class);
+
 
         getSupportActionBar().setTitle("");
 
-        if (showAllWords) {
-            quizWords = getDictionary().getAllWords();
-        }
-        else if (showWordsSince != -1) {
-
-            quizWords = DictionaryUtils.getWordSince(getDictionary(), showWordsSince);
-        }
-        else if (showToughWords) {
-
-        }
-
-
-        this.quiz = new Quiz(getDictionary(), quizWords);
+        this.quiz = new Quiz(getDictionary(), Arrays.asList(words));
         answerButton.setOnClickListener(buttonAnswerClick);
 
         takeNextQuestionOrGoToResults();

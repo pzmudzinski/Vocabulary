@@ -18,6 +18,8 @@ import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.sql.SQLStore;
 import com.pz.vocabulary.app.utils.Logger;
 
+import org.joda.time.DateTime;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -177,13 +179,13 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
         Dao<Memory, Long> memories = getDao(Memory.class);
 
         try {
-            Word word1SameSpelling = findWordWithSpelling(word1.getNormalizedSpelling());
-            Word word2SameSpelling = findWordWithSpelling(word2.getNormalizedSpelling());
+            long word1SameSpelling = findWord(word1.getLanguageID(), word1.getNormalizedSpelling());
+            long word2SameSpelling = findWord(word2.getLanguageID(), word2.getNormalizedSpelling());
 
-            if (word1SameSpelling != null)
-                word1.setId(word1SameSpelling.getId());
-            if (word2SameSpelling != null)
-                word2.setId(word2SameSpelling.getId());
+            if (word1SameSpelling != 0)
+                word1.setId(word1SameSpelling);
+            if (word2SameSpelling != 0)
+                word2.setId(word2SameSpelling);
 
             words.createOrUpdate(word1);
             words.createOrUpdate(word2);
@@ -373,7 +375,7 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
             from.selectColumns(DBColumns.WORD_FROM).where().gt(DBColumns.TIMESTAMP, date);
             to.selectColumns(DBColumns.WORD_TO).where().gt(DBColumns.TIMESTAMP, date);
 
-            return words.distinct().where().in(DBColumns.ID, to).or().in(DBColumns.ID, from).query();
+            return words.distinct().selectColumns(DBColumns.ID).where().in(DBColumns.ID, to).or().in(DBColumns.ID, from).query();
         } catch (SQLException e) {
             e.printStackTrace();
             Logger.error(TAG, e.getMessage(), e);
@@ -455,5 +457,27 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     @Override
     public void destroyEverything() {
         helper.destroyEverything();
+    }
+
+    @Override
+    public Date getInsertionDate(long wordID) {
+
+        Dao<Translation, Long> translations = getDao(Translation.class);
+
+        QueryBuilder<Translation, Long> queryBuilder = translations.queryBuilder();
+
+        try {
+            queryBuilder.
+                    limit(Long.valueOf(1)).
+                    selectColumns(DBColumns.TIMESTAMP).where().
+                    eq(DBColumns.WORD_FROM, wordID).
+                    or().
+                    eq(DBColumns.WORD_TO, wordID);
+
+            return translations.query(queryBuilder.prepare()).get(0).getTimestamp();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new Date();
+        }
     }
 }

@@ -264,12 +264,20 @@ public class QuizTest extends VocabularyTest {
     {
         dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
         this.quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey));
+
+        //correct
         quiz.answer(answerFor(quiz.takeNextQuestion()));
-        quiz.takeNextQuestion();
-        quiz.skipQuestion();
+
+        Question q = quiz.takeNextQuestion();
+        //wrong
+        quiz.answer("wronggg");
+        //correct
+        quiz.answer(answerFor(q));
         quiz.store();
-        float sumResult = dbStore.getWordAcquaintance(polishKey.getId()) + dbStore.getWordAcquaintance(englishKey.getId());
-        assertEquals((float)1.0, sumResult); // 100% + 0%
+        float a = dbStore.getWordAcquaintance(polishKey.getId());
+        float b = dbStore.getWordAcquaintance(englishKey.getId());
+
+        assertEquals((float)1.5, a + b ); // 100% + 0%
     }
 
     public void testTotallyWrongAcquaintance()

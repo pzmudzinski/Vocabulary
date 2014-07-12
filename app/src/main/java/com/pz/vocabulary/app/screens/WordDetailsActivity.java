@@ -9,11 +9,15 @@ import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.utils.Arguments;
+import com.pz.vocabulary.app.views.ScoreView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.ViewById;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by piotr on 06/06/14.
@@ -24,12 +28,17 @@ public class WordDetailsActivity extends VocabularyActivity {
     private Word word;
 
     @ViewById(R.id.spellingEditText)
-    protected TextView editTextSpelling;
-    @ViewById(R.id.languageEditText)
-    protected TextView editTextLanguage;
+    protected TextView textViewSpelling;
+    @ViewById(R.id.languageTextView)
+    protected TextView textViewLanguage;
+    @ViewById(R.id.insertionTextView)
+    protected TextView insertionDateTextView;
 
     @FragmentById(R.id.fragment)
     protected WordsListFragment wordsListFragment;
+
+    @ViewById(R.id.scoreView)
+    protected ScoreView scoreView;
 
     public static void open(Context context, long wordID)
     {
@@ -56,11 +65,17 @@ public class WordDetailsActivity extends VocabularyActivity {
         wordsListFragment.setEmptyText(getString(R.string.word_empty_meanings));
     }
 
+    SimpleDateFormat dateFormat =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
     protected void bindWord()
     {
-        editTextSpelling.setText(word.getSpelling());
+        textViewSpelling.setText(word.getSpelling());
         Language language = getDictionary().findLanguage(word.getLanguageID());
-        editTextLanguage.setText(language.getName());
+        textViewLanguage.setText(String.format(getString(R.string.language),language.getName().toUpperCase()));
+        float acquaintance = getDictionary().getWordAcquaintance(word.getId());
+        scoreView.display(acquaintance);
+        Date insertionDate = getDictionary().getInsertionDate(word.getId());
+        insertionDateTextView.setText(String.format(getString(R.string.word_insertion_date), dateFormat.format(insertionDate)));
     }
 
 }

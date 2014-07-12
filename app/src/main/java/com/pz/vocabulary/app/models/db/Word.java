@@ -1,6 +1,8 @@
 package com.pz.vocabulary.app.models.db;
 
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -13,7 +15,7 @@ import java.text.Normalizer;
  * Created by piotr on 04/06/14.
  */
 @DatabaseTable(tableName = DatabaseTables.TABLE_WORDS)
-public class Word extends BaseEntity{
+public class Word extends BaseEntity implements Parcelable {
     @DatabaseField(canBeNull = false)
     private String spelling;
 
@@ -91,4 +93,33 @@ public class Word extends BaseEntity{
         this.normalizedSpelling = asciiName;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+    }
+
+    private Word(Parcel in) {
+        this.id = in.readLong();
+    }
+
+    public static Parcelable.Creator<Word> CREATOR = new Parcelable.Creator<Word>() {
+        public Word createFromParcel(Parcel source) {
+            return new Word(source);
+        }
+
+        public Word[] newArray(int size) {
+            return new Word[size];
+        }
+    };
+
+    public static Word[] toWords(Parcelable[] parcelables) {
+        Word[] objects = new Word[parcelables.length];
+        System.arraycopy(parcelables, 0, objects, 0, parcelables.length);
+        return objects;
+    }
 }

@@ -49,7 +49,8 @@ public class NameValueRow extends RelativeLayout {
     public void displayFloat(Pair<String, Float> pair)
     {
         nameTextView.setText(pair.first +":");
-        valueTextView.setText(Float.toString(pair.second));
+
+        valueTextView.setText(String.format("%.2f", pair.second));
     }
 
     public void display(Pair<String, Object> pair)

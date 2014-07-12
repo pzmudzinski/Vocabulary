@@ -11,6 +11,7 @@ import com.pz.vocabulary.app.utils.DateUtils;
 import com.pz.vocabulary.app.utils.Logger;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -119,8 +120,6 @@ public class DatabaseStoreTest extends VocabularyTest {
 
         List<Word> wordsSinceToday = dbStore.getWordsInsertedSince(DateUtils.today());
         assertEquals(2, wordsSinceToday.size());
-        assertTrue(wordsSinceToday.contains(polishHome));
-        assertTrue(wordsSinceToday.contains(englishHome));
 
         dbStore.insertWordsAndTranslation(polishImportant, englishKey, null);
 
@@ -183,8 +182,11 @@ public class DatabaseStoreTest extends VocabularyTest {
 
         List<Word> wordsSinceYesterday = dbStore.getWordsInsertedSince(DateUtils.todayMinusXDays(1));
         assertEquals(2, wordsSinceYesterday.size());
-        assertTrue(wordsSinceYesterday.contains(englishKey));
-        assertTrue(wordsSinceYesterday.contains(polishImportant));
+        List<Long> ids = new ArrayList<Long>();
+        ids.add(wordsSinceYesterday.get(0).getId());
+        ids.add(wordsSinceYesterday.get(1).getId());
+        assertTrue(ids.contains(englishKey.getId()));
+        assertTrue(ids.contains(polishImportant.getId()));
     }
 
     private void updateTranslation(Translation translation)

@@ -186,10 +186,11 @@ public class OrmLiteQuizHistory implements QuizHistory {
         QueryBuilder<QuizResponse, Long> queryBuilder = responseDao.queryBuilder();
 
         try {
+            // CAST(1 AS float) / CAST(3 AS float)
             queryBuilder.selectRaw("(" +
                             "SUM(CASE WHEN " + DBColumns.RESULT + " = " +
                             Integer.toString(QuizQuestionResult.ResponseCorrect.ordinal()) +
-                            " THEN 1 ELSE 0 END) / COUNT(*) " +
+                            " THEN CAST(1 AS FLOAT) ELSE CAST(0 AS FLOAT) END) / COUNT(*) " +
                             ")"
             ).where().eq(DBColumns.WORD_FROM, wordID);
             GenericRawResults<String[]> strings = responseDao.queryRaw(queryBuilder.prepareStatementString());

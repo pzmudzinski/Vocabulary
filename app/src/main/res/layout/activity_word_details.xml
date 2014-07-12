@@ -13,32 +13,44 @@
         style="@style/TextViewTitle"
         android:text="TEST" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/small_padding"
-        android:gravity="center"
-        android:orientation="vertical"
         android:paddingTop="@dimen/small_padding">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/word_acquaintance" />
 
         <view
             android:id="@+id/scoreView"
             class="com.pz.vocabulary.app.views.ScoreView_"
             android:layout_width="@dimen/score_view_size"
-            android:layout_height="@dimen/score_view_size" />
+            android:layout_height="@dimen/score_view_size"
+            android:layout_alignParentStart="true" />
 
-        <TextView
-            android:id="@+id/languageEditText"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/language" />
+            android:layout_marginLeft="@dimen/small_padding"
+            android:layout_alignParentTop="true"
+            android:divider="?android:attr/dividerHorizontal"
+            android:showDividers="middle"
+            android:layout_toRightOf="@+id/scoreView">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/languageTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/language" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/word_insertion_date"
+                android:id="@+id/insertionTextView" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"

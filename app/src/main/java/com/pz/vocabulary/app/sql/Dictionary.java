@@ -5,6 +5,8 @@ import com.pz.vocabulary.app.models.db.Memory;
 import com.pz.vocabulary.app.models.db.Translation;
 import com.pz.vocabulary.app.models.db.Word;
 
+import org.joda.time.DateTime;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,4 +46,6 @@ public interface Dictionary extends QuizHistory{
     List<Memory> getAllMemories();
 
     public void destroyEverything();
+
+    public Date getInsertionDate(long wordID);
 }

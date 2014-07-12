@@ -21,24 +21,20 @@ import java.util.List;
 @EFragment(R.layout.fragment_start_test)
 public class StartTestFragment extends VocabularyFragment {
 
+
     @Click(R.id.buttonStartTest)
     protected void onStartTest()
     {
-        if (checkIfWordsDontExist(getDictionary().getAllWords()))
-        {
-
-        } else {
-            QuizActivity_.intent(getActivity()).showAllWords(true).start();
-        }
-
+        List<Word> words = getDictionary().getAllWords();
+        goToQuiz(words);
     }
-
+//
     @Click(R.id.buttonStartTestWordSince)
     protected void onStartTestWordsSinceDate()
     {
         showWordsSinceDialog();
     }
-
+//
     public void showWordsSinceDialog()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -54,14 +50,22 @@ public class StartTestFragment extends VocabularyFragment {
     public void goToWordsSinceQuiz(int option)
     {
         Logger.log("quiz", "Selected option " + option);
-        if (checkIfWordsDontExist(DictionaryUtils.getWordSince(getDictionary(), option)))
+
+        List<Word> words = DictionaryUtils.getWordSince(getDictionary(), option);
+        goToQuiz(words);
+    }
+
+    public void goToQuiz(List<Word> words)
+    {
+
+        if (checkIfWordsDontExist(words))
         {
 
         } else {
-            QuizActivity_.intent(getActivity()).showWordsSince(option).start();
+            QuizActivity.open(getActivity(), words);
         }
     }
-
+//
     public void goToToughWordsQuiz()
     {
 
