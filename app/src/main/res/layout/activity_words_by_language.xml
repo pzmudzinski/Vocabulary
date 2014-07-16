@@ -10,11 +10,6 @@
         android:layout_height="match_parent"
         tools:context="com.pz.vocabulary.app.MainActivity">
 
-    <android.support.v4.view.PagerTabStrip
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_gravity="top" />
     </android.support.v4.view.ViewPager>
 
 </LinearLayout>

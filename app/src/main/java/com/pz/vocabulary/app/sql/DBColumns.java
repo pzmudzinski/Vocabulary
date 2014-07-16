@@ -22,4 +22,6 @@ public interface DBColumns extends BaseColumns {
 
     public static final String TIMESTAMP_START ="ts_start";
     public static final String TIMESTAMP_END = "ts_end";
+
+    public static final String SCORE = "score";
 }

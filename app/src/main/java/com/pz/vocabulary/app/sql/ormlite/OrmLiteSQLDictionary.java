@@ -41,7 +41,7 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     public OrmLiteSQLDictionary(Context context, OrmLiteSQLDatabaseHelper helper) {
         super(context, helper);
         this.helper = helper;
-        this.quizHistory = new OrmLiteQuizHistory(getDao(QuizResponse.class), getDao(Quiz.class));
+        this.quizHistory = new OrmLiteQuizHistory(getDao(QuizResponse.class), getDao(Quiz.class), getDao(Word.class));
     }
 
     @Override
@@ -479,5 +479,15 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
             e.printStackTrace();
             return new Date();
         }
+    }
+
+    @Override
+    public List<Word> getTopScoredWords(int limit) {
+        return quizHistory.getTopScoredWords(limit);
+    }
+
+    @Override
+    public List<Word> getLeastScoredWords(int limit) {
+        return quizHistory.getLeastScoredWords(limit);
     }
 }

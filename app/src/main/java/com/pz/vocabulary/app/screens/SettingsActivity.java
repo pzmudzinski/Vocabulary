@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.view.ContextThemeWrapper;
 
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.utils.Arguments;
@@ -37,7 +38,7 @@ public class SettingsActivity extends PreferenceActivity {
     public void askToConfirmDelete()
     {
         AlertDialog alertDialog = new AlertDialog.Builder(
-                this).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+           this).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 setResult(Arguments.INTENT_RESULT_DELETE);

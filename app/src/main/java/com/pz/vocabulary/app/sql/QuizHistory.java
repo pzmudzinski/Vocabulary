@@ -2,6 +2,7 @@ package com.pz.vocabulary.app.sql;
 
 import com.pz.vocabulary.app.models.Quiz;
 import com.pz.vocabulary.app.models.db.QuizResponse;
+import com.pz.vocabulary.app.models.db.Word;
 
 import java.util.List;
 
@@ -26,6 +27,9 @@ public interface QuizHistory {
     public org.joda.time.Period quizAverageTimeSpent();
 
     public float getWordAcquaintance(long wordID);
+
+    public List<Word> getTopScoredWords(int limit);
+    public List<Word> getLeastScoredWords(int limit);
 
     public enum QuizQuestionResult
     {

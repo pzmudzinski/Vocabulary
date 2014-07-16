@@ -24,7 +24,7 @@ import org.androidannotations.annotations.ViewById;
 public class MainActivity extends VocabularyActionBarActivity implements ActionBar.TabListener, Arguments {
 
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * The {@link android.support.v4.view.PagerAdapter} that will prvide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it

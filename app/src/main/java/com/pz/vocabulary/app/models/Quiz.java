@@ -56,13 +56,19 @@ public class Quiz extends BaseEntity{
 
     }
 
-    public Quiz(Dictionary dictionary, List<Word> words) {
+    public Quiz(Dictionary dictionary, List<Word> words, boolean shuffle)
+    {
         this.dictionary = dictionary;
-        Collections.shuffle(words);
+        if (shuffle)
+            Collections.shuffle(words);
         this.words = new Stack<Word>();
         this.words.addAll(words);
         this.results = new QuizResults(words.size());
         this.questionsNumber = words.size();
+    }
+
+    public Quiz(Dictionary dictionary, List<Word> words) {
+        this(dictionary, words, true);
     }
 
     public boolean hasQuestionsLeft()
@@ -118,7 +124,7 @@ public class Quiz extends BaseEntity{
         for (Translation translation : meanings)
         {
             Word answerWord = new Word(translation.getTranslation().getLanguageID(), answer);
-            if (answerWord.equals(translation.getTranslation()))
+            if ( answerWord.equals(translation.getTranslation()))
             {
                 results.addCorrectAnswer();
                 insertedResponses.add(dictionary.insertResponse(currentWord.getId(), answer, Dictionary.QuizQuestionResult.ResponseCorrect));

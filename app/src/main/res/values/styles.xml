@@ -12,7 +12,6 @@
         <item name="android:textSelectHandleLeft">@drawable/myactionbar_text_select_handle_left</item>
         <item name="android:textSelectHandleRight">@drawable/myactionbar_text_select_handle_right</item>
         <item name="android:textSelectHandle">@drawable/myactionbar_text_select_handle_middle</item>
-
     </style>
 
     <style name="AutoCompleteTextViewMyActionBar" parent="android:Widget.AutoCompleteTextView">
@@ -56,4 +55,7 @@
         <item name="android:textColorHint">@color/theme_color_2</item>
         <item name="android:background">@drawable/myactionbar_edit_text_holo_dark</item>
     </style>
+
+
+
 </resources>

@@ -61,14 +61,14 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.pz.vocabulary.app.screens.WordsListFragment_"
+        android:name="com.pz.vocabulary.app.screens.lists.WordsListFragment_"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/deleteButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

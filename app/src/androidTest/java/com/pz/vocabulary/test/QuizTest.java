@@ -95,6 +95,32 @@ public class QuizTest extends VocabularyTest {
 
     }
 
+    private Question createBasicQuiz()
+    {
+        dbStore.insertWordsAndTranslation(polishHome, englishHome, null);
+
+        quiz = new Quiz(dbStore, Arrays.asList(polishHome, englishHome));
+        return quiz.takeNextQuestion();
+    }
+
+    public void testCaseInsensitiveAnswer()
+    {
+        Question question1 = createBasicQuiz();
+        String answer = answerFor(question1);
+        assertTrue(quiz.answer(answer.toUpperCase()));
+    }
+
+    public void testNotNormalizedAnswer()
+    {
+        dbStore.insertWordsAndTranslation(polishImportant, englishKey, null);
+        quiz = new Quiz(dbStore, Arrays.asList(polishImportant, englishKey));
+        Question question = quiz.takeNextQuestion();
+        while (question.getWord().getId() != englishKey.getId())
+            question = quiz.takeNextQuestion();
+
+        assertTrue(quiz.answer("wazny"));
+    }
+
     public void testMultipleMeanings()
     {
         dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
@@ -256,7 +282,7 @@ public class QuizTest extends VocabularyTest {
         quiz.answer(answerFor(quiz.takeNextQuestion()));
         quiz.answer(answerFor(quiz.takeNextQuestion()));
         quiz.store();
-        assertEquals((float)1.0, dbStore.getWordAcquaintance(polishKey.getId()));
+        assertEquals((float)1.0, dbStore.getWordAcquaintance(englishKey.getId()));
         assertEquals((float)1.0, dbStore.getWordAcquaintance(polishKey.getId()));
     }
 
@@ -272,12 +298,11 @@ public class QuizTest extends VocabularyTest {
         //wrong
         quiz.answer("wronggg");
         //correct
-        quiz.answer(answerFor(q));
         quiz.store();
         float a = dbStore.getWordAcquaintance(polishKey.getId());
         float b = dbStore.getWordAcquaintance(englishKey.getId());
 
-        assertEquals((float)1.5, a + b ); // 100% + 0%
+        assertEquals((float)1.0, a + b ); // 100% + 0%
     }
 
     public void testTotallyWrongAcquaintance()
@@ -298,5 +323,55 @@ public class QuizTest extends VocabularyTest {
     {
         Word answer = dbStore.findWord(dbStore.findMeanings(question.getWord().getId()).get(0).getWordTo());
         return answer.getSpelling();
+    }
+
+    public void testTopScores()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+        dbStore.insertWordsAndTranslation(polishHome, englishHome, null); //4
+        /*
+            pk: 1 1
+            ek: 1 1
+            ph: 0
+            eh: 1
+
+            0.0, 0.5, 1.0
+         */
+
+
+        quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey, polishHome, englishHome), false);
+
+        Question question = quiz.takeNextQuestion();
+        quiz.answer(answerFor(question));  // eh
+        question = quiz.takeNextQuestion();
+        quiz.answer("test"); // ph
+        question = quiz.takeNextQuestion();
+        quiz.answer(answerFor(question)); // ek
+        question = quiz.takeNextQuestion();
+        quiz.answer(answerFor(question)); // pk
+
+        quiz.store();
+
+        quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey), false);
+        question = quiz.takeNextQuestion();
+        quiz.answer(answerFor(question)); // ek
+
+        question = quiz.takeNextQuestion();
+        quiz.answer("wroong"); // pk
+
+        quiz.store();
+
+        List<Word> words = dbStore.getTopScoredWords(2);
+        assertEquals(2, words.size());
+
+        assertEquals((float)1.0, words.get(0).getScore());
+        assertEquals((float)1.0, words.get(1).getScore());
+
+        assertNotNull(words.get(0).getSpelling());
+
+        words = dbStore.getLeastScoredWords(2);
+
+        assertEquals((float)0.0, words.get(0).getScore());
+        assertEquals((float)0.5, words.get(1).getScore());
     }
 }

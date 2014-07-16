@@ -53,9 +53,7 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
     @AfterViews
     protected void init() {
         Parcelable[] parcelables = getIntent().getParcelableArrayExtra(ARG_WORD_IDS);
-        Word[] words;
-        words = Arrays.copyOf(parcelables, parcelables.length, Word[].class);
-
+        Word[] words = Arrays.copyOf(parcelables, parcelables.length, Word[].class);;
 
         getSupportActionBar().setTitle("");
 
@@ -111,7 +109,6 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
         answerButton.setEnabled(false);
         if (quiz.hasQuestionsLeft()) {
             Question nextQuestion = quiz.takeNextQuestion();
-
             String title = String.format(getString(R.string.question_number_of_total), quiz.currentQuestionNumber(), quiz.totalQuestionNumber());
 //            title = title + " (" + nextQuestion.getWord().getLanguage().getName() + ")";
             getSupportActionBar().setTitle(title);
@@ -138,6 +135,7 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
 
     public void onWrongAnswer() {
         AlertUtils.showToastWithText(this, R.string.answer_wrong, R.color.bad);
+        takeNextQuestionOrGoToResults();
     }
 
     @Override

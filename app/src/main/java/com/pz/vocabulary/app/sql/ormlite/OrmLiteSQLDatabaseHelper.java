@@ -113,7 +113,7 @@ public class OrmLiteSQLDatabaseHelper extends OrmLiteSqliteOpenHelper implements
             {
                 Dao<Translation, Long> translations = getDao(Translation.class);
                 Dao<Memory, Long> memories = getDao(Memory.class);
-                this.wordDao = new WordDao(getConnectionSource(), translations, memories);
+                this.wordDao = new WordDao(getConnectionSource(), translations, memories, getDaoObject(QuizResponse.class));
             }
             return (D) wordDao;
         }

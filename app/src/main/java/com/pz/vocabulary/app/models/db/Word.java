@@ -78,7 +78,7 @@ public class Word extends BaseEntity implements Parcelable {
 
         Word other = (Word) o;
 
-        return other.getLanguageID() == this.getLanguageID() && other.getNormalizedSpelling().equals(this.getNormalizedSpelling());
+        return other.getLanguageID() == this.getLanguageID() && other.getNormalizedSpelling().equalsIgnoreCase(this.getNormalizedSpelling());
     }
 
     @Override
@@ -101,10 +101,12 @@ public class Word extends BaseEntity implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.id);
+        dest.writeString(this.spelling);
     }
 
     private Word(Parcel in) {
         this.id = in.readLong();
+        this.spelling = in.readString();
     }
 
     public static Parcelable.Creator<Word> CREATOR = new Parcelable.Creator<Word>() {
@@ -122,4 +124,14 @@ public class Word extends BaseEntity implements Parcelable {
         System.arraycopy(parcelables, 0, objects, 0, parcelables.length);
         return objects;
     }
+
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
+    }
+
+    private float score;
 }

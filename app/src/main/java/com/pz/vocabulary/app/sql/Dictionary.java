@@ -48,4 +48,6 @@ public interface Dictionary extends QuizHistory{
     public void destroyEverything();
 
     public Date getInsertionDate(long wordID);
+
+
 }

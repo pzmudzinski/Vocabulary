@@ -81,4 +81,9 @@
     <string name="reset">Reset</string>
     <string name="delete_are_you_sure">Czy na pewno chcesz usunąć wszystkie dane? Wszystkie Twoje tłumaczenia i statysyki zostaną usunięte.</string>
     <string name="delete_all">Usuń wszystkie dane</string>
+    <string name="delete_word_are_you_sure">Czy na pewno chcesz usunąć to słowo?</string>
+
+    <string name="words_top">Najbardziej znane</string>
+    <string name="words_worst">Najgorzej znane</string>
+    <string name="words_rankings">Rankingi słow</string>
 </resources>

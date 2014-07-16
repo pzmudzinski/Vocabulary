@@ -16,9 +16,17 @@
     tools:listitem="@layout/row_key_value"></ListView>
 
     <Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/stats_show_all_words"
+    android:id="@+id/buttonShowAllWords"
+    android:layout_gravity="center_horizontal" />
+
+    <Button
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/base_padding"
         android:layout_height="wrap_content"
-        android:text="@string/stats_show_all_words"
-        android:id="@+id/buttonShowAllWords"
+        android:text="@string/words_rankings"
+        android:id="@+id/buttonShowRankings"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

@@ -8,7 +8,10 @@ import android.widget.ListView;
 
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.Quiz;
+import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.models.db.Word;
+import com.pz.vocabulary.app.screens.lists.TopWordsActivity_;
+import com.pz.vocabulary.app.screens.lists.WordsTwoTabsListActivity;
 import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.sql.QuizHistory;
 import com.pz.vocabulary.app.utils.Arguments;
@@ -63,7 +66,25 @@ public class StatisticsFragment extends VocabularyFragment implements Updatable,
     @Click(R.id.buttonShowAllWords)
     protected void showAllWords()
     {
-        WordsByLanguageActivity.open(getActivity());
+        List<Language> languages = getDictionary().getLanguages();
+        String[] titles = new String[] {
+                languages.get(0).getName().toUpperCase(),
+                languages.get(1).getName().toUpperCase()
+        };
+
+        WordsTwoTabsListActivity.open(getActivity(), titles, new String[]{
+                SHOW_WORDS_FROM_LANGUAGE,
+                SHOW_WORDS_FROM_LANGUAGE
+        }, new long[] {
+                languages.get(0).getId(),
+                languages.get(1).getId()
+        }); ;
+    }
+
+    @Click(R.id.buttonShowRankings)
+    protected void showRankings()
+    {
+        TopWordsActivity_.intent(getActivity()).start();
     }
 
     @Override
