@@ -189,23 +189,6 @@ public class DatabaseStoreTest extends VocabularyTest {
         assertTrue(ids.contains(polishImportant.getId()));
     }
 
-    private void updateTranslation(Translation translation)
-    {
-        Dao<Translation, Long> translations = null;
-        try {
-            translations = dbHelper.getDao(Translation.class);
-            UpdateBuilder<Translation, Long> updateBuilder = translations.updateBuilder();
-            updateBuilder.updateColumnValue(DBColumns.TIMESTAMP, translation.getTimestamp());
-            updateBuilder.where().eq(DBColumns.ID, translation.getId());
-
-            String query = updateBuilder.prepareStatementString();
-            translations.update(updateBuilder.prepare());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public void testHasItems()
     {
         assertFalse(dbStore.hasItems(Word.class));

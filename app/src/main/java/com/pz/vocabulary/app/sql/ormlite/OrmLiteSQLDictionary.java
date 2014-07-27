@@ -385,6 +385,11 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     }
 
     @Override
+    public List<Word> getToughWords(Date since, float maxScore) {
+        return quizHistory.getToughWords(since, maxScore);
+    }
+
+    @Override
     public long insertResponse(long wordFrom, String response, QuizQuestionResult result) {
         return quizHistory.insertResponse(wordFrom, response, result);
     }

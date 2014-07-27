@@ -32,6 +32,9 @@
         <item>W ostatnich 3 dniach</item>
         <item>W tym tygodniu</item>
         <item>W tym miesiącu</item>
+        <item>W ciągu ostatnich 3 miesięcy</item>
+        <item>W ciągu ostatniego półrocza</item>
+        <item>W ciągu ostatniego roku</item>
     </string-array>
 
     <string name="stats_all_tests">Liczba podjętych testow</string>

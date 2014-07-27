@@ -1,5 +1,7 @@
 package com.pz.vocabulary.app.utils;
 
+import com.pz.vocabulary.app.screens.IntentArguments;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -14,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by piotr on 03/07/14.
  */
-public class DateUtils {
+public class DateUtils implements IntentArguments{
     public static Date today()
     {
         Calendar c = new GregorianCalendar();
@@ -42,6 +44,14 @@ public class DateUtils {
         return cal.getTime();
     }
 
+    public static Date todayMinusXMonths(int months)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(today());
+        cal.add(Calendar.MONTH, -months);
+        return cal.getTime();
+    }
+
     public static Date startWeek()
     {
         Calendar cal=Calendar.getInstance();
@@ -52,24 +62,35 @@ public class DateUtils {
         return cal.getTime();
     }
 
-    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-        long diffInMillies = date2.getTime() - date1.getTime();
-        return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
-    }
-
-    public static Map<TimeUnit,Long> computeDiff(Date date1, Date date2) {
-        long diffInMillies = date2.getTime() - date1.getTime();
-        List<TimeUnit> units = new ArrayList<TimeUnit>(EnumSet.allOf(TimeUnit.class));
-        Collections.reverse(units);
-
-        Map<TimeUnit,Long> result = new LinkedHashMap<TimeUnit,Long>();
-        long milliesRest = diffInMillies;
-        for ( TimeUnit unit : units ) {
-            long diff = unit.convert(milliesRest,TimeUnit.MILLISECONDS);
-            long diffInMilliesForUnit = unit.toMillis(diff);
-            milliesRest = milliesRest - diffInMilliesForUnit;
-            result.put(unit,diff);
+    public static Date getDateFromBundleArg(int showWordsSince)
+    {
+        Date since = null;
+        switch (showWordsSince) {
+            case ARG_VALUE_WORDS_SINCE_TODAY:
+                since = DateUtils.today();
+                break;
+            case ARG_VALUE_WORDS_SINCE_YESTERDAY:
+                since = DateUtils.todayMinusXDays(1);
+                break;
+            case ARG_VALUE_WORDS_SINCE_3_DAYS:
+                since = DateUtils.todayMinusXDays(3);
+                break;
+            case ARG_VALUE_WORDS_SINCE_WEEK:
+                since = DateUtils.startWeek();
+                break;
+            case ARG_VALUE_WORDS_SINCE_MONTH:
+                since = DateUtils.startMonth();
+                break;
+            case ARG_VALUE_WORDS_SINCE_3_MONTHS:
+                since = DateUtils.todayMinusXMonths(3);
+                break;
+            case ARG_VALUE_WORDS_SINCE_6_MONTHS:
+                since = DateUtils.todayMinusXMonths(6);
+                break;
+            case ARG_VALUE_WORDS_SINCE_12_MONTHS:
+                since = DateUtils.todayMinusXMonths(12);
+                break;
         }
-        return result;
+        return since;
     }
 }

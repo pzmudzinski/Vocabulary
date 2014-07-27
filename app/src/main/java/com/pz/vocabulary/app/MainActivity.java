@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.crashlytics.android.Crashlytics;
 import com.pz.vocabulary.app.screens.SectionsPagerAdapter;
 import com.pz.vocabulary.app.screens.SettingsActivity_;
 import com.pz.vocabulary.app.screens.Updatable;
@@ -68,6 +69,7 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+        Crashlytics.start(this);
     }
 
     @Override

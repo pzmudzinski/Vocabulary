@@ -4,6 +4,7 @@ import com.pz.vocabulary.app.models.Quiz;
 import com.pz.vocabulary.app.models.db.QuizResponse;
 import com.pz.vocabulary.app.models.db.Word;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -30,6 +31,7 @@ public interface QuizHistory {
 
     public List<Word> getTopScoredWords(int limit);
     public List<Word> getLeastScoredWords(int limit);
+    public List<Word> getToughWords(Date since, float maxScore);
 
     public enum QuizQuestionResult
     {

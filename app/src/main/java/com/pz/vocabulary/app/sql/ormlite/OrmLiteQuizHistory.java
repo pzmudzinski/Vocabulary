@@ -17,6 +17,7 @@ import org.joda.time.Period;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -120,14 +121,6 @@ public class OrmLiteQuizHistory implements QuizHistory {
 
     @Override
     public float quizAverageScore() {
-        //quizDao.queryBuilder().sele
-        /*
-        // select 2 aggregate functions as the return
-            qb.selectRaw("MIN(orderCount)", "MAX(orderCount)");
-// the results will contain 2 string values for the min and max
-            results = accountDao.queryRaw(qb.prepareStatementString());
-            String[] values = results.getFirstResult();
-         */
         QueryBuilder<Quiz, Long> queryBuilder = quizDao.queryBuilder();
 
         queryBuilder.selectRaw("AVG("+ DBColumns.RESULT + ")");
@@ -183,12 +176,6 @@ public class OrmLiteQuizHistory implements QuizHistory {
 
     private QueryBuilder<QuizResponse, Long> getScoreQuery()
     {
-                /*
-        SELECT (
-        SUM(CASE WHEN result = 0 THEN 1 ELSE 0 END) / COUNT(*)
-        ) from responses
-        WHERE wordFrom_id=1*/
-
         QueryBuilder<QuizResponse, Long> queryBuilder = responseDao.queryBuilder();
         queryBuilder.selectRaw(
                 DBColumns.WORD_FROM + "," +  "SUM(CASE WHEN " + DBColumns.RESULT + " = " +
@@ -211,23 +198,14 @@ public class OrmLiteQuizHistory implements QuizHistory {
             DatabaseTables.TABLE_WORDS + "." + DBColumns.ID + "=" +
             DatabaseTables.TABLE_RESPONSES + "." + DBColumns.WORD_FROM +
             " GROUP BY " + DBColumns.WORD_FROM +
+            " %s " +
             " ORDER BY " + DBColumns.SCORE +
             " %s " +
             " LIMIT %d ";
-    /*
-    SELECT
-        wordFrom_id,
-        (SUM(CASE WHEN result = 0 THEN 1 ELSE 0 END) / COUNT(*)) AS score,
-        spelling
-    FROM responses
-    INNER JOIN words ON words.id=responses.wordFrom_id
-    GROUP BY `wordFrom_id`
-    ORDER BY score DESC LIMIT 2
-     */
 
-    private String getScoreQueryWithLimit(int limit, boolean ascending)
+    private String getScoreQueryWithLimit(int limit, boolean ascending, String havingClause)
     {
-        String query = String.format(scoreQuery, ascending? "ASC" : "DESC", limit);
+        String query = String.format(scoreQuery, havingClause, ascending? "ASC" : "DESC", limit);
         return query;
     }
 
@@ -279,11 +257,17 @@ public class OrmLiteQuizHistory implements QuizHistory {
 
     @Override
     public List<Word> getTopScoredWords(int limit) {
-        return getWordsFromScoreQuery(getScoreQueryWithLimit(limit, false));
+        return getWordsFromScoreQuery(getScoreQueryWithLimit(limit, false, ""));
     }
 
     @Override
     public List<Word> getLeastScoredWords(int limit) {
-        return getWordsFromScoreQuery(getScoreQueryWithLimit(limit, true));
+        return getWordsFromScoreQuery(getScoreQueryWithLimit(limit, true, ""));
+    }
+
+    @Override
+    public List<Word> getToughWords(Date since, float maxScore) {
+        String scoreQuery = getScoreQueryWithLimit(Integer.MAX_VALUE, true, " HAVING " + DBColumns.SCORE + " <= " + Float.toString(maxScore));
+        return getWordsFromScoreQuery(scoreQuery);
     }
 }

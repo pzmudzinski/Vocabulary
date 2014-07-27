@@ -319,11 +319,7 @@ public class QuizTest extends VocabularyTest {
         assertEquals((float)0.0, sumResult); // 100% + 0%
     }
 
-    private String answerFor(Question question)
-    {
-        Word answer = dbStore.findWord(dbStore.findMeanings(question.getWord().getId()).get(0).getWordTo());
-        return answer.getSpelling();
-    }
+
 
     public void testTopScores()
     {

@@ -20,27 +20,16 @@ public class DictionaryUtils implements IntentArguments, Arguments {
         List<Word> quizWords = null;
 
         if (showWordsSince != -1) {
-            Date since = null;
-            switch (showWordsSince) {
-                case ARG_VALUE_WORDS_SINCE_TODAY:
-                    since = DateUtils.today();
-                    break;
-                case ARG_VALUE_WORDS_SINCE_YESTERDAY:
-                    since = DateUtils.todayMinusXDays(1);
-                    break;
-                case ARG_VALUE_WORDS_SINCE_3_DAYS:
-                    since = DateUtils.todayMinusXDays(3);
-                    break;
-                case ARG_VALUE_WORDS_SINCE_WEEK:
-                    since = DateUtils.startWeek();
-                    break;
-                case ARG_VALUE_WORDS_SINCE_MONTH:
-                    since = DateUtils.startMonth();
-                    break;
-            }
-
+            Date since = DateUtils.getDateFromBundleArg(showWordsSince);
             quizWords = dictionary.getWordsInsertedSince(since);
         }
+        return quizWords;
+    }
+
+    public static List<Word> getToughWords(Dictionary dictionary, int showWordsSince)
+    {
+        List<Word> quizWords = null;
+
         return quizWords;
     }
 

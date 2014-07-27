@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/white_rounder_border"
+    android:padding="@dimen/small_padding"
+    >
+
+    <com.pz.vocabulary.app.views.OutlineTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="99%"
+        android:textSize="@dimen/base_font_very_big_size"
+        android:textStyle="bold"
+        android:id="@+id/textView"
+        android:gravity="center"
+        android:shadowColor="@android:color/black"
+        android:shadowRadius="2"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/word_acquaintance"
+        android:gravity="center"
+        android:background="@color/transparent_black"
+        android:textSize="10sp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
