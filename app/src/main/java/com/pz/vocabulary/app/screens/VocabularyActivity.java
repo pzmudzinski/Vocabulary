@@ -1,7 +1,10 @@
 package com.pz.vocabulary.app.screens;
 
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.pz.vocabulary.app.App;
@@ -12,13 +15,18 @@ import com.pz.vocabulary.app.sql.ormlite.OrmLiteSQLDictionary;
 /**
  * Created by piotr on 06/06/14.
  */
-public class VocabularyActivity extends FragmentActivity implements DictionaryProvider {
+public class VocabularyActivity extends ActionBarActivity implements DictionaryProvider {
 
     private Dictionary dictionary;
 
     protected App getApp()
     {
         return (App)getApplicationContext();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override

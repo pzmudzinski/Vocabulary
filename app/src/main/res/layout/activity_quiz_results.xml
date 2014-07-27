@@ -27,7 +27,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-
+        android:divider="?android:attr/dividerHorizontal"
+        android:showDividers="middle"
+        android:padding="@dimen/small_padding"
+        android:stretchColumns="*"
         android:layout_weight="1">
 
         <TableRow
@@ -83,6 +86,25 @@
                 android:text=""
                 android:textColor="@color/bad"
                 android:id="@+id/textViewQuestionsWrong" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/results_questions_skipped"
+                android:id="@+id/textView6" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/theme_white"
+                android:id="@+id/textViewQuestionsSkipped" />
 
         </TableRow>
     </TableLayout>

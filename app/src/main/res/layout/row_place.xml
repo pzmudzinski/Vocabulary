@@ -9,17 +9,21 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:text="1."
-        android:background="#55000000"
+        android:background="#AA000000"
+        android:paddingLeft="@dimen/small_padding"
+        android:gravity="center_vertical"
         android:textStyle="bold"
         android:id="@+id/placeTextView" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingRight="@dimen/small_padding"
         android:text="New Text"
-        android:background="#55000000"
+        android:gravity="center_vertical"
+        android:background="#AA000000"
         android:id="@+id/wordTextView" />
 
 </LinearLayout>

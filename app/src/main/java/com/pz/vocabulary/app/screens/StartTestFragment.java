@@ -34,6 +34,12 @@ public class StartTestFragment extends VocabularyFragment {
     {
         showWordsSinceDialog();
     }
+
+    @Click(R.id.buttonStartTestToughWords)
+    protected void onToughWords()
+    {
+        goToToughWordsQuiz();
+    }
 //
     public void showWordsSinceDialog()
     {
@@ -65,10 +71,22 @@ public class StartTestFragment extends VocabularyFragment {
             QuizActivity.open(getActivity(), words);
         }
     }
+    private static final float MAX_SCORE_TO_BE_CLASSIFIED_AS_TOUGH = 0.8f;
 //
     public void goToToughWordsQuiz()
     {
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.start_test_words_tough)
+                .setItems(R.array.start_test_words_since_options, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        goToQuiz(DictionaryUtils.getToughWords(
+                                getDictionary(),
+                                which,
+                                MAX_SCORE_TO_BE_CLASSIFIED_AS_TOUGH
+                        ));
+                    }
+                });
+        builder.show();
     }
 
     private boolean checkIfWordsDontExist(List<Word> words)

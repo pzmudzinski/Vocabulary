@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.db.Word;
+import com.pz.vocabulary.app.screens.WordDetailsActivity;
 import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.utils.ColorUtils;
 
@@ -26,6 +28,7 @@ import java.util.List;
 public class TopWordsActivity extends VocabularyListActivity {
 
     private static final int WORDS_PER_RANKINGS = 10;
+    private TopWordsAdapter topWordsAdapter;
 
     @AfterViews
     protected void init()
@@ -40,7 +43,13 @@ public class TopWordsActivity extends VocabularyListActivity {
         allWords.addAll(top);
         allWords.addAll(worst);
 
-        getListView().setAdapter(new TopWordsAdapter(this, topWordsCount, worstWordsCount, allWords));
+        this.topWordsAdapter = new TopWordsAdapter(this, topWordsCount, worstWordsCount, allWords);
+        getListView().setAdapter(topWordsAdapter);
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        WordDetailsActivity.open(this, id);
     }
 
     private class TopWordsAdapter extends BaseAdapter
@@ -65,6 +74,16 @@ public class TopWordsActivity extends VocabularyListActivity {
         }
 
         @Override
+        public boolean areAllItemsEnabled() {
+            return false;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return position != topWordsSectionPos && position != worstWordsSectionPos;
+        }
+
+        @Override
         public int getCount() {
             return topWordsCount + worstWordsCount + 2;
         }
@@ -76,7 +95,7 @@ public class TopWordsActivity extends VocabularyListActivity {
 
         @Override
         public long getItemId(int i) {
-            return i;
+            return allWords.get(i).getId();
         }
 
         @Override
@@ -113,6 +132,7 @@ public class TopWordsActivity extends VocabularyListActivity {
             {
                 TextView textView = (TextView) view.findViewById(R.id.textView);
                 textView.setText(position == topWordsSectionPos? context.getString(R.string.words_top) : context.getString(R.string.words_worst));
+                view.setClickable(false);
             } else{
                 TextView placeTextView = (TextView) view.findViewById(R.id.placeTextView);
                 TextView wordTextView = (TextView) view.findViewById(R.id.wordTextView);

@@ -1,5 +1,6 @@
 package com.pz.vocabulary.app.screens;
 
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -17,6 +18,11 @@ public class VocabularyActionBarActivity extends ActionBarActivity implements Di
     protected App getApp()
     {
         return (App)getApplicationContext();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override

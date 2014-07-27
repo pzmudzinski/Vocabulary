@@ -26,11 +26,12 @@ public class DictionaryUtils implements IntentArguments, Arguments {
         return quizWords;
     }
 
-    public static List<Word> getToughWords(Dictionary dictionary, int showWordsSince)
+    public static List<Word> getToughWords(Dictionary dictionary, int showWordsSince, float maxScore)
     {
         List<Word> quizWords = null;
+        Date since = DateUtils.getDateFromBundleArg(showWordsSince);
 
-        return quizWords;
+        return dictionary.getToughWords(since, maxScore);
     }
 
     public static List<Word> getWordsFromBundle(Dictionary dictionary, Bundle bundle)

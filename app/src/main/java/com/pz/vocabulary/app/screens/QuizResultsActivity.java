@@ -28,6 +28,8 @@ public class QuizResultsActivity extends VocabularyActivity {
     protected TextView wrongQuestions;
     @ViewById(R.id.resultsPercent)
     protected TextView percentResult;
+    @ViewById(R.id.textViewQuestionsSkipped)
+    protected TextView skippedQuestions;
 
     public static final String ARG_RESULTS = "results";
 
@@ -52,6 +54,7 @@ public class QuizResultsActivity extends VocabularyActivity {
         this.correctQuestions.setText(String.valueOf(results.getCorrectAnswers()));
         this.allQuestions.setText(String.valueOf(results.getQuestionsCount()));
         this.wrongQuestions.setText(String.valueOf(results.getWrongAnswers()));
+        this.skippedQuestions.setText(String.valueOf(results.getSkippedAnswers()));
 
         String perText = String.format("%.2f",results.getScore()*100);
         this.percentResult.setText(perText+"%");

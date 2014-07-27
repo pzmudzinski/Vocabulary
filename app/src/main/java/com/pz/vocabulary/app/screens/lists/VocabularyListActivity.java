@@ -1,6 +1,7 @@
 package com.pz.vocabulary.app.screens.lists;
 
 import android.app.ListActivity;
+import android.os.Bundle;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.pz.vocabulary.app.App;
@@ -19,6 +20,11 @@ public class VocabularyListActivity extends ListActivity implements DictionaryPr
     protected App getApp()
     {
         return (App)getApplicationContext();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override

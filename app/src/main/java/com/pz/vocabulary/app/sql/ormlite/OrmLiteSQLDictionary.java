@@ -41,7 +41,7 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     public OrmLiteSQLDictionary(Context context, OrmLiteSQLDatabaseHelper helper) {
         super(context, helper);
         this.helper = helper;
-        this.quizHistory = new OrmLiteQuizHistory(getDao(QuizResponse.class), getDao(Quiz.class), getDao(Word.class));
+        this.quizHistory = new OrmLiteQuizHistory(getDao(QuizResponse.class), getDao(Quiz.class), getDao(Word.class), getDao(Translation.class));
     }
 
     @Override

@@ -2,10 +2,12 @@ package com.pz.vocabulary.app.sql.ormlite;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.pz.vocabulary.app.models.Quiz;
 import com.pz.vocabulary.app.models.db.QuizResponse;
+import com.pz.vocabulary.app.models.db.Translation;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.sql.DBColumns;
 import com.pz.vocabulary.app.sql.DatabaseTables;
@@ -27,12 +29,14 @@ public class OrmLiteQuizHistory implements QuizHistory {
     Dao<QuizResponse,Long> responseDao;
     Dao<Quiz, Long> quizDao;
     Dao<Word, Long> wordDao;
+    Dao<Translation, Long> translationDao;
 
-    public OrmLiteQuizHistory(Dao<QuizResponse, Long> dao, Dao<Quiz, Long> quizDao, Dao<Word,Long> wordDao)
+    public OrmLiteQuizHistory(Dao<QuizResponse, Long> dao, Dao<Quiz, Long> quizDao, Dao<Word,Long> wordDao, Dao<Translation, Long> translationsDao)
     {
         this.responseDao = dao;
         this.quizDao = quizDao;
         this.wordDao = wordDao;
+        this.translationDao = translationsDao;
     }
 
     @Override
@@ -203,10 +207,50 @@ public class OrmLiteQuizHistory implements QuizHistory {
             " %s " +
             " LIMIT %d ";
 
-    private String getScoreQueryWithLimit(int limit, boolean ascending, String havingClause)
+    private final String scoreTSQuery =    "SELECT " +
+            DBColumns.WORD_FROM + "," +
+            "(SUM(CASE WHEN " + DBColumns.RESULT + " = " +
+            Integer.toString(QuizQuestionResult.ResponseCorrect.ordinal()) +
+            " THEN CAST(1 AS FLOAT) ELSE CAST(0 AS FLOAT) END) / COUNT(*)) AS "
+            + DBColumns.SCORE + "," +
+            DBColumns.SPELLING +
+            " FROM " + "%s " + DatabaseTables.TABLE_RESPONSES +
+            " INNER JOIN " + DatabaseTables.TABLE_WORDS + " ON " +
+            DatabaseTables.TABLE_WORDS + "." + DBColumns.ID + "=" +
+            DatabaseTables.TABLE_RESPONSES + "." + DBColumns.WORD_FROM +
+            " GROUP BY " + DBColumns.WORD_FROM +
+            " %s " +
+            " ORDER BY " + DBColumns.SCORE +
+            " %s " +
+            " LIMIT %d ";
+
+    private final String innerJoinWordsResponses = "(SELECT * FROM " + DatabaseTables.TABLE_RESPONSES + " WHERE " + DBColumns.WORD_FROM + " IN " + "(%s))";
+
+    private String getScoreQueryWithLimit(int limit, boolean ascending, String havingClause, Date date)
     {
-        String query = String.format(scoreQuery, havingClause, ascending? "ASC" : "DESC", limit);
-        return query;
+            try {
+
+                Dao<Translation, Long> dao =  translationDao;
+
+                QueryBuilder<Translation, Long> translations = dao.queryBuilder();
+
+                QueryBuilder<Word, Long> words = wordDao.queryBuilder();
+
+                QueryBuilder<Translation, Long> from = dao.queryBuilder();
+                QueryBuilder<Translation, Long> to = dao.queryBuilder();
+
+                to.selectColumns(DBColumns.WORD_TO).where().gt(DBColumns.TIMESTAMP, date);
+
+                translations.selectColumns(DBColumns.WORD_FROM, DBColumns.WORD_TO).where().gt(DBColumns.TIMESTAMP, date);
+                from.selectColumns(DBColumns.WORD_FROM).where().gt(DBColumns.TIMESTAMP, date);
+                PreparedQuery<Word> preparedQuery =  words.distinct().selectColumns(DBColumns.ID).where().in(DBColumns.ID, to).or().in(DBColumns.ID, from).prepare();
+                String responsesTS = String.format(innerJoinWordsResponses, preparedQuery.getStatement());
+                String query = String.format(scoreTSQuery, responsesTS, havingClause, ascending? "ASC" : "DESC", limit);
+                return query;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return "";
     }
 
     public List<Word> getWordsFromScoreQuery(String query)
@@ -257,17 +301,17 @@ public class OrmLiteQuizHistory implements QuizHistory {
 
     @Override
     public List<Word> getTopScoredWords(int limit) {
-        return getWordsFromScoreQuery(getScoreQueryWithLimit(limit, false, ""));
+        return getWordsFromScoreQuery(getScoreQueryWithLimit(limit, false, "", new Date(0)));
     }
 
     @Override
     public List<Word> getLeastScoredWords(int limit) {
-        return getWordsFromScoreQuery(getScoreQueryWithLimit(limit, true, ""));
+        return getWordsFromScoreQuery(getScoreQueryWithLimit(limit, true, "", new Date(0)));
     }
 
     @Override
     public List<Word> getToughWords(Date since, float maxScore) {
-        String scoreQuery = getScoreQueryWithLimit(Integer.MAX_VALUE, true, " HAVING " + DBColumns.SCORE + " <= " + Float.toString(maxScore));
+        String scoreQuery = getScoreQueryWithLimit(Integer.MAX_VALUE, true, " HAVING " + DBColumns.SCORE + " <= " + Float.toString(maxScore), since);
         return getWordsFromScoreQuery(scoreQuery);
     }
 }

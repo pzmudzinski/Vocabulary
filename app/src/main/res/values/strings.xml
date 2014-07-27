@@ -26,6 +26,7 @@
     <string name="test_empty">Nie znaleziono żadnych słów do testu!</string>
 
     <string name="start_test_words_since_title">Sprawdź słowa, które zostały dodane:</string>
+    <string name="start_test_words_tough">Sprawdź słowa, które ciężko Ci idą dodane:</string>
     <string-array name="start_test_words_since_options">
         <item>Dzisiaj</item>
         <item>Od wczoraj</item>
