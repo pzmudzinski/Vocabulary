@@ -7,7 +7,7 @@
         <item name="android:buttonStyle">@style/ButtonText</item>
         <item name="android:editTextStyle">@style/EditTextStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
-        <item name="android:windowBackground">@color/theme_color_1</item>
+        <item name="android:windowBackground">@android:color/white</item>
         <item name="android:textColorHighlight">#996db1ac</item>
         <item name="android:textSelectHandleLeft">@drawable/myactionbar_text_select_handle_left</item>
         <item name="android:textSelectHandleRight">@drawable/myactionbar_text_select_handle_right</item>
@@ -20,8 +20,14 @@
         <item name="android:textColor">#ffffff</item>
     </style>
 
+    <style name="CustomProgressBarHorizontal" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progressbar</item>
+        <item name="android:minHeight">@dimen/row_height</item>
+        <item name="android:maxHeight">@dimen/row_height</item>
+    </style>
+
     <style name="TextViewStyle" parent="@android:style/Widget.TextView">
-        <item name="android:textColor">@color/theme_white</item>
+        <item name="android:textColor">@color/theme_color_4</item>
     </style>
 
     <style name="TextViewTitle" parent="@style/TextViewStyle">
@@ -42,17 +48,13 @@
         <item name="android:layout_margin">3dp</item>
         <item name="android:textSize">@dimen/base_font_size</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:shadowColor">@color/theme_color_5</item>
         <item name="android:background">@drawable/button_background</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">2</item>
     </style>
 
     <style name="EditTextStyle" parent="@android:style/Widget.EditText">
         <item name="android:textSize">@dimen/base_font_size</item>
-        <item name="android:textColor">@color/theme_white</item>
-        <item name="android:textColorHint">@color/theme_color_2</item>
+        <item name="android:textColor">@color/theme_color_4</item>
+        <item name="android:textColorHint">@color/gray</item>
         <item name="android:background">@drawable/myactionbar_edit_text_holo_dark</item>
     </style>
 

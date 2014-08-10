@@ -3,11 +3,14 @@ package com.pz.vocabulary.app.screens;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.QuizResults;
 import com.pz.vocabulary.app.utils.ColorUtils;
+import com.pz.vocabulary.app.views.ScoreView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -30,6 +33,8 @@ public class QuizResultsActivity extends VocabularyActivity {
     protected TextView percentResult;
     @ViewById(R.id.textViewQuestionsSkipped)
     protected TextView skippedQuestions;
+    @ViewById(R.id.viewScore)
+    protected FrameLayout scoreView;
 
     public static final String ARG_RESULTS = "results";
 
@@ -56,9 +61,9 @@ public class QuizResultsActivity extends VocabularyActivity {
         this.wrongQuestions.setText(String.valueOf(results.getWrongAnswers()));
         this.skippedQuestions.setText(String.valueOf(results.getSkippedAnswers()));
 
-        String perText = String.format("%.2f",results.getScore()*100);
-        this.percentResult.setText(perText+"%");
-        this.percentResult.setTextColor(ColorUtils.getColor(1.0f - results.getScore()));
+        String perText = ScoreView.percentText(results.getScore());
+        this.percentResult.setText(perText);
+        this.scoreView.setBackgroundColor(ColorUtils.getColor(1.0f - results.getScore()));
     }
 
     @Click(R.id.buttonQuit)

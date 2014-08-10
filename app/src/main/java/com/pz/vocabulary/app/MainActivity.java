@@ -1,5 +1,6 @@
 package com.pz.vocabulary.app;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -8,9 +9,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 
 import com.crashlytics.android.Crashlytics;
+import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.screens.SectionsPagerAdapter;
+import com.pz.vocabulary.app.screens.SelectLanguageActivity_;
 import com.pz.vocabulary.app.screens.SettingsActivity_;
 import com.pz.vocabulary.app.screens.Updatable;
 import com.pz.vocabulary.app.screens.VocabularyActionBarActivity;
@@ -24,25 +28,21 @@ import org.androidannotations.annotations.ViewById;
 @EActivity(R.layout.activity_main)
 public class MainActivity extends VocabularyActionBarActivity implements ActionBar.TabListener, Arguments {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will prvide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     @ViewById(R.id.pager)
     ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Crashlytics.start(this);
+
+        if (!getDictionary().hasItems(Language.class))
+        {
+            SelectLanguageActivity_.intent(this).start();
+            finish();
+        }
     }
 
     @AfterViews
@@ -69,7 +69,6 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-        Crashlytics.start(this);
     }
 
     @Override
@@ -114,6 +113,8 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         mViewPager.setCurrentItem(tab.getPosition());
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mViewPager.getApplicationWindowToken(), 0);
     }
 
     @Override
@@ -123,5 +124,7 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
+
+
 
 }

@@ -50,4 +50,5 @@ public interface Dictionary extends QuizHistory{
     public Date getInsertionDate(long wordID);
 
 
+    public void addLanguages(String language, String language1);
 }

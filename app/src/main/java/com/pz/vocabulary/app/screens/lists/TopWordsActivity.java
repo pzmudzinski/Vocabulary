@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pz.vocabulary.app.R;
@@ -14,6 +15,7 @@ import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.screens.WordDetailsActivity;
 import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.utils.ColorUtils;
+import com.pz.vocabulary.app.views.ScoreView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -95,7 +97,10 @@ public class TopWordsActivity extends VocabularyListActivity {
 
         @Override
         public long getItemId(int i) {
-            return allWords.get(i).getId();
+            if (allWords == null || allWords.get(i) == null)
+                return i;
+            else
+                return allWords.get(i).getId();
         }
 
         @Override
@@ -140,9 +145,11 @@ public class TopWordsActivity extends VocabularyListActivity {
                 int place = (position % (topWordsCount + 1));
                 placeTextView.setText(Integer.toString(place) + ". ");
 
-                String percent = Float.toString(allWords.get(position).getScore()*100) + "%";
-                wordTextView.setText(allWords.get(position).getSpelling() + " (" + percent + ")");
-                view.setBackgroundColor(ColorUtils.getColor(1.0f - allWords.get(position).getScore()));
+                String perText = ScoreView.percentText(allWords.get(position).getScore());
+                wordTextView.setText(allWords.get(position).getSpelling() + " (" + perText + ")");
+
+                ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+                progressBar.setProgress((int) (allWords.get(position).getScore() * 100));
             }
 
             return view;

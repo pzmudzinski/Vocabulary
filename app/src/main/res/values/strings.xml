@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Vocabulary</string>
+    <string name="app_name">Słówka</string>
 
     <string-array name="tab_titles">
         <item>Dodaj</item>
@@ -9,24 +9,29 @@
         <item>Statystyki</item>
     </string-array>
     <string name="add_translation">Dodaj słówko</string>
+    <string name="translation_added">Dodano słówko!</string>
 
     <string name="find_online">Znajdz tłumaczenie online</string>
     <string name="title_from">Po polsku</string>
     <string name="title_to">Po angielsku</string>
     <string name="association">Skojarzenie</string>
     <string name="pronunciation">Wymowa</string>
-    <string name="start_tough_words_test">Sprawdz slowa ktorych nie znasz</string>
-    <string name="start_test">Sprawdz wszystkie slowa</string>
-    <string name="start_test_word_since">Sprawdz ostatnio dodane słowa</string>
-    <string name="delete_word">Usuń słowo</string>
+    <string name="start_tough_words_test">Sprawdź słówka które słabo Ci idą</string>
+    <string name="start_test">Sprawdź wszystkie slowa</string>
+    <string name="start_test_word_since">Sprawdź ostatnio dodane słówka</string>
+    <string name="delete_word">Usuń słówko</string>
     <string name="word_acquaintance">Znajomość</string>
     <string name="language">Język: %s</string>
     <string name="word_insertion_date">Data wstawienia:\n%s</string>
 
-    <string name="test_empty">Nie znaleziono żadnych słów do testu!</string>
+    <string name="choose_languages">Wybierz język obcy</string>
+    <string name="your_language">Twój język</string>
+    <string name="foreign_language">Język obcy</string>
 
-    <string name="start_test_words_since_title">Sprawdź słowa, które zostały dodane:</string>
-    <string name="start_test_words_tough">Sprawdź słowa, które ciężko Ci idą dodane:</string>
+    <string name="test_empty">Nie znaleziono żadnych słówek do testu!</string>
+
+    <string name="start_test_words_since_title">Słówka dodane:</string>
+    <string name="start_test_words_tough">Słówka dodane:</string>
     <string-array name="start_test_words_since_options">
         <item>Dzisiaj</item>
         <item>Od wczoraj</item>
@@ -38,7 +43,7 @@
         <item>W ciągu ostatniego roku</item>
     </string-array>
 
-    <string name="stats_all_tests">Liczba podjętych testow</string>
+    <string name="stats_all_tests">Liczba podjętych testów</string>
     <string name="stats_tests_duration">Czas spędzony na testach</string>
     <string name="stats_tests_average_duration">Średni czas trwania testu</string>
     <string name="stats_tests_average_result">Średni wynik testu</string>
@@ -48,7 +53,7 @@
     <string name="stats_responses_correct">Liczba poprawnych odpowiedzi</string>
     <string name="stats_responses_skipped">Liczba pominiętych pytań</string>
 
-    <string name="stats_show_all_words">Pokaz wszystkie slowa</string>
+    <string name="stats_show_all_words">Pokaż wszystkie słówka</string>
 
     <string name="word_empty_meanings">Brak znaczeń</string>
     <string name="word_title_meanings">Znaczenia</string>
@@ -75,7 +80,7 @@
     <string name="results_questions_skipped">Pominięte pytania</string>
 
     <string name="quit">Koniec</string>
-    <string name="empty_words_database">Brak dodanych słów</string>
+    <string name="empty_words_database">Brak dodanych słówek</string>
 
     <string name="quit_are_you_sure_title">Czy na pewno chcesz zakończyć test?</string>
     <string name="test_lost_progress">Utracisz cały postęp.</string>
@@ -85,9 +90,10 @@
     <string name="reset">Reset</string>
     <string name="delete_are_you_sure">Czy na pewno chcesz usunąć wszystkie dane? Wszystkie Twoje tłumaczenia i statysyki zostaną usunięte.</string>
     <string name="delete_all">Usuń wszystkie dane</string>
-    <string name="delete_word_are_you_sure">Czy na pewno chcesz usunąć to słowo?</string>
+    <string name="delete_word_are_you_sure">Czy na pewno chcesz usunąć to słówko?</string>
 
-    <string name="words_top">Najbardziej znane</string>
-    <string name="words_worst">Najgorzej znane</string>
-    <string name="words_rankings">Rankingi słow</string>
+    <string name="words_top">Najlepiej znane</string>
+    <string name="words_worst">Najsłabiej znane</string>
+    <string name="words_rankings">Rankingi słówek</string>
+    <string name="add">Dodaj</string>
 </resources>

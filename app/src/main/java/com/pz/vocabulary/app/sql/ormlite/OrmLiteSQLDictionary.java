@@ -487,6 +487,17 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     }
 
     @Override
+    public void addLanguages(String language, String language1) {
+        Dao<Language, Long> langsDao = getDao(Language.class);
+        try {
+            langsDao.create(new Language(language));
+            langsDao.create(new Language(language1));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public List<Word> getTopScoredWords(int limit) {
         return quizHistory.getTopScoredWords(limit);
     }

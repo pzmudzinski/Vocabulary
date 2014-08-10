@@ -170,21 +170,21 @@ public class OrmLiteSQLDatabaseHelper extends OrmLiteSqliteOpenHelper implements
             }
         }
 
-        String[] langFromValues = resources.getStringArray(R.array.lang_from);
-        String[] langToValues = resources.getStringArray(R.array.lang_to);
-
-        Language langFrom = new Language(langFromValues[0]);
-        Language langTo = new Language(langToValues[0]);
-
-        Dao<Language, Long> languages = getDaoObject(Language.class);
-
-        try {
-            languages.create(langFrom);
-            languages.create(langTo);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Logger.error("db", e.getMessage(), e);
-            throw new RuntimeException("Cannot initialize languages!");
-        }
+//        String[] langFromValues = resources.getStringArray(R.array.lang_from);
+//        String[] langToValues = resources.getStringArray(R.array.lang_to);
+//
+//        Language langFrom = new Language(langFromValues[0]);
+//        Language langTo = new Language(langToValues[0]);
+//
+//        Dao<Language, Long> languages = getDaoObject(Language.class);
+//
+//        try {
+//            languages.create(langFrom);
+//            languages.create(langTo);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            Logger.error("db", e.getMessage(), e);
+//            throw new RuntimeException("Cannot initialize languages!");
+//        }
     }
 }

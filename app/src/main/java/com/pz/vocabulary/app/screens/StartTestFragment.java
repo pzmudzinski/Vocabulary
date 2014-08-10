@@ -2,15 +2,21 @@ package com.pz.vocabulary.app.screens;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.view.View;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.utils.AlertUtils;
 import com.pz.vocabulary.app.utils.DictionaryUtils;
 import com.pz.vocabulary.app.utils.Logger;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
@@ -21,6 +27,29 @@ import java.util.List;
 @EFragment(R.layout.fragment_start_test)
 public class StartTestFragment extends VocabularyFragment {
 
+    @ViewById(R.id.adView)
+    protected AdView adView;
+
+    @AfterViews
+    protected void initAd()
+    {
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("63BD1A227D1E30162D77F0F2F520F503").build();
+
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                adView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                super.onAdFailedToLoad(errorCode);
+            }
+        });
+
+        adView.loadAd(adRequest);
+    }
 
     @Click(R.id.buttonStartTest)
     protected void onStartTest()

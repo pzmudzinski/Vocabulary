@@ -15,6 +15,7 @@ import com.pz.vocabulary.app.screens.lists.WordsTwoTabsListActivity;
 import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.sql.QuizHistory;
 import com.pz.vocabulary.app.utils.Arguments;
+import com.pz.vocabulary.app.views.ScoreView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -148,10 +149,15 @@ public class StatisticsFragment extends VocabularyFragment implements Updatable,
 
         @Override
         protected List<Pair<String,Object>> doInBackground(Void... params) {
-            PeriodFormatter minutesAndSeconds = new PeriodFormatterBuilder()
-                    .printZeroAlways()
+            PeriodFormatter minutesAndSeconds = new PeriodFormatterBuilder().
+                    minimumPrintedDigits(2).
+                    appendHours()
+                    .printZeroAlways().
+                            minimumPrintedDigits(2)
                     .appendMinutes()
-                    .appendSeparator(":")
+                    .appendSeparator(":").
+                            printZeroAlways().
+                            minimumPrintedDigits(2)
                     .appendSeconds()
                     .toFormatter();
 
@@ -194,9 +200,10 @@ public class StatisticsFragment extends VocabularyFragment implements Updatable,
                     (Object)dictionary.quizAverageTimeSpent().toString(minutesAndSeconds)
             ));
 
+            String score = ScoreView.percentText(dictionary.quizAverageScore());
             stats.add(Pair.create(
                     resources.getString(R.string.stats_tests_average_result),
-                    (Object)dictionary.quizAverageScore()
+                    (Object)score
             ));
             // Your code here
             return stats;

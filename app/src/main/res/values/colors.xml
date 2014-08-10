@@ -16,9 +16,8 @@
     <color name="theme_color_4">#164D49</color>
     <color name="theme_color_5">#082F2D</color>
 
-    <color name="theme_color_1_transparent">#01286864</color>
     <color name="theme_color_2_transparent">#016DB1AC</color>
-    <color name="theme_color_3_transparent">#01488B86</color>
-    <color name="theme_color_4_transparent">#01164D49</color>
-    <color name="theme_color_5_transparent">#01082F2D</color>
+    <color name="theme_color_4_transparent">#66164D49</color>
+
+    <color name="gray">#CCC</color>
 </resources>

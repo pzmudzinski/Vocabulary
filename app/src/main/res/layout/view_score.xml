@@ -7,7 +7,7 @@
     android:padding="@dimen/small_padding"
     >
 
-    <com.pz.vocabulary.app.views.OutlineTextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="99%"
@@ -15,8 +15,6 @@
         android:textStyle="bold"
         android:id="@+id/textView"
         android:gravity="center"
-        android:shadowColor="@android:color/black"
-        android:shadowRadius="2"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -26,6 +24,7 @@
         android:layout_height="wrap_content"
         android:text="@string/word_acquaintance"
         android:gravity="center"
+        android:textColor="@android:color/white"
         android:background="@color/transparent_black"
         android:textSize="10sp"
         android:layout_alignParentBottom="true"

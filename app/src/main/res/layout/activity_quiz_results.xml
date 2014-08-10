@@ -7,21 +7,32 @@
     android:paddingRight="@dimen/base_padding"
     android:paddingBottom="@dimen/base_padding">
 
-    <TextView
-        style="@style/TextViewTitle"
-        android:text="@string/results_title"
-        android:id="@+id/textView2"
-        />
+    <FrameLayout
+        android:layout_width="@dimen/score_view_size"
+        android:layout_marginTop="@dimen/small_padding"
+        android:layout_marginBottom="@dimen/small_padding"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/viewScore"
+        android:layout_height="@dimen/score_view_size">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="0%"
-        android:id="@+id/resultsPercent"
-        android:layout_gravity="center_horizontal" />
+      <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="50sp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0%"
+            android:id="@+id/resultsPercent"
+           />
+
+        </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/theme_color_4"
+        ></View>
 
     <TableLayout
         android:layout_width="match_parent"
@@ -103,7 +114,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textColor="@color/theme_white"
                 android:id="@+id/textViewQuestionsSkipped" />
 
         </TableRow>

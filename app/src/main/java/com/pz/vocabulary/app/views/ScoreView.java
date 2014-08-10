@@ -34,12 +34,17 @@ public class ScoreView extends RelativeLayout {
 
     public void display(float score)
     {
-        String scoreString = Integer.toString(roundUp(Math.round(score*100)));
-        textView.setText(scoreString+"%");
+        textView.setText(percentText(score));
         textView.setBackgroundColor(ColorUtils.getColor(1.0f - score));
     }
 
-    int roundUp(int n) {
+    public static int roundUp(int n) {
         return (n + 4) / 5 * 5;
+    }
+
+    public static String percentText(float score)
+    {
+        String scoreString = Integer.toString(roundUp(Math.round(score*100)));
+        return scoreString + "%";
     }
 }

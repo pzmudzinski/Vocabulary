@@ -12,6 +12,7 @@ import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.models.db.Memory;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.sql.Dictionary;
+import com.pz.vocabulary.app.utils.AlertUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -59,8 +60,10 @@ public class AddTranslationFragment extends VocabularyFragment {
         Word polishWord = polish.newWord(textFrom);
         Word englishWord = english.newWord(textTo);
         dictionary.insertWordsAndTranslation(polishWord, englishWord, memory1);
+        AlertUtils.showToastWithText(this.getActivity(), R.string.translation_added);
         clearFocus();
         setSelectMemoryButtonState();
+
     }
 
     @AfterViews
