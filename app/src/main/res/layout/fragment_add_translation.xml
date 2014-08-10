@@ -42,11 +42,10 @@
             android:layout_weight="10" />
 
         <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:id="@+id/selectMemory"
-            android:background="@android:drawable/ic_input_add"
-            android:layout_weight="1"
+            android:background="@drawable/plus"
             android:focusableInTouchMode="true" />
     </LinearLayout>
 

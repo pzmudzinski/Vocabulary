@@ -52,13 +52,15 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"
 
-    </RelativeLayout>
+        >
 
+    </View>
     <fragment
         android:id="@+id/fragment"
         android:name="com.pz.vocabulary.app.screens.lists.WordsListFragment_"

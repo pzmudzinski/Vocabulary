@@ -12,8 +12,8 @@
     <string name="translation_added">Dodano słówko!</string>
 
     <string name="find_online">Znajdz tłumaczenie online</string>
-    <string name="title_from">Po polsku</string>
-    <string name="title_to">Po angielsku</string>
+    <string name="title_from">Słówko</string>
+    <string name="title_to">Tłumaczenie</string>
     <string name="association">Skojarzenie</string>
     <string name="pronunciation">Wymowa</string>
     <string name="start_tough_words_test">Sprawdź słówka które słabo Ci idą</string>
