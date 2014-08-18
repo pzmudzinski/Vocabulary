@@ -42,14 +42,12 @@ public class StatisticsFragment extends VocabularyFragment implements Updatable,
     @AfterViews
     protected void init()
     {
-        /*
-            <string name="stats_translation_number">Liczba wpisanych tlumaczen</string>
-            <string name="stats_responses_all">Liczba wszystkich odpowiedzi</string>
-            <string name="stats_respones_wrong">Liczba błędnych odpowiedzi</string>
-             <string name="stats_responses_correct">Liczba poprawnych odpowiedzi</string>
-            <string name="stats_responses_skipped">Liczba pominiętych pytań</string>
-            <string name="stats_responses_ratio">Ogólny wynik</string>
-         */
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         if (getUserVisibleHint() && this.dataProcessor != null)
             refresh();
     }

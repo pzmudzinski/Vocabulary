@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 
 import com.crashlytics.android.Crashlytics;
+import com.pz.vocabulary.app.export.ExportActivity_;
+import com.pz.vocabulary.app.export.ImportActivity_;
 import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.screens.SectionsPagerAdapter;
 import com.pz.vocabulary.app.screens.SelectLanguageActivity_;
@@ -43,6 +45,9 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
             SelectLanguageActivity_.intent(this).start();
             finish();
         }
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
     }
 
     @AfterViews
@@ -94,6 +99,12 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
         if (id == R.id.action_settings) {
             SettingsActivity_.intent(this).startForResult(Arguments.ARG_REQUEST_SETTIGNS);
             return true;
+        } else if (id == R.id.action_export)
+        {
+            ExportActivity_.intent(this).start();
+        } else if (id == R.id.action_import)
+        {
+            ImportActivity_.intent(this).start();
         }
         return super.onOptionsItemSelected(item);
     }

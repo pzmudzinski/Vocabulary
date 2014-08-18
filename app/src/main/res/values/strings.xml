@@ -96,4 +96,39 @@
     <string name="words_worst">Najsłabiej znane</string>
     <string name="words_rankings">Rankingi słówek</string>
     <string name="add">Dodaj</string>
+
+    <string name="export_words">Eksport słówek</string>
+    <string name="import_words">Import słówek</string>
+
+    <string name="choose_import_file">Wybierz plik ze słówkami</string>
+    <string name="files">Pliki</string>
+
+    <string name="error_while_reading_file">Błąd odczytu pliku.</string>
+    <string name="error_translations_not_found">W pliku nie znaleziono żadnych tłumaczeń. \n Czy na pewno jest w odpowiednim formacie?</string>
+
+    <string name="import_description">Wybierz plik .txt w formacie: \n
+        słówko;tłumaczenie;skojarzenie \n (skojarzenie jest opcjonalne)
+    </string>
+
+    <plurals name="import_parsed_n_translations">
+        <item quantity="one">Odczytano jedno tłumaczenie.</item>
+        <item quantity="other">Odczytano %d tłumaczeń.</item>
+    </plurals>
+
+    <string name="import_failed">Import zakończony błędem.</string>
+
+    <string name="import_start_adding_to_db">Rozpoczęto dodawanie słówek...</string>
+    <string name="import_adding_translation" formatted="false">Dodawanie: %s (%s)</string>
+    <string name="import_adding_to_db_finished">Dodawanie słówek zakończone</string>
+
+    <string name="export_description">Eksport do pliku txt: \n
+        słówko;tłumaczenie;skojarzenie \n
+        (skojarzenie jest opcjonalne)
+    </string>
+
+    <string name="export_start">Rozpocznij eksport słówek</string>
+
+    <string name="export_failed">Błąd podczas eksportowania słówek. Spróbuj ponownie. </string>
+    <string name="export_succedd">Eksport zakończony. \n Zapisano słówko w pliku o ścieżce: %s </string>
+    <string name="send">Wyślij</string>
 </resources>

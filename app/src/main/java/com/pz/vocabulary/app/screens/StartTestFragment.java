@@ -51,6 +51,27 @@ public class StartTestFragment extends VocabularyFragment {
         adView.loadAd(adRequest);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (adView != null)
+            adView.pause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adView != null)
+            adView.resume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (adView != null)
+            adView.destroy();
+    }
+
     @Click(R.id.buttonStartTest)
     protected void onStartTest()
     {

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.support.v7.app.ActionBar;
 import android.view.ContextThemeWrapper;
 
 import com.pz.vocabulary.app.R;
@@ -32,7 +33,6 @@ public class SettingsActivity extends PreferenceActivity {
                 }
             });
         }
-
     }
 
     public void askToConfirmDelete()

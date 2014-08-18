@@ -18,7 +18,7 @@ apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    buildToolsVersion '19.1.0'
 
     defaultConfig {
         minSdkVersion 9
@@ -35,6 +35,7 @@ android {
         }
 
         debug {
+
         }
     }
 }
@@ -52,6 +53,7 @@ apt {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':aFileChooser')
     apt "org.androidannotations:androidannotations:3.0+"
     compile 'com.android.support:support-v4:19.0.1'
     compile 'com.android.support:appcompat-v7:19.0.1'

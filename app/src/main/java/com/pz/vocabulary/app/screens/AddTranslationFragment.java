@@ -54,8 +54,10 @@ public class AddTranslationFragment extends VocabularyFragment {
         }
 
         Dictionary dictionary = getDictionary();
-        Language polish = dictionary.findLanguage(Language.POLISH);
-        Language english = dictionary.findLanguage(Language.ENGLISH);
+        List<Language> languages = dictionary.getLanguages();
+
+        Language polish = languages.get(0);
+        Language english = languages.get(1);
 
         Word polishWord = polish.newWord(textFrom);
         Word englishWord = english.newWord(textTo);

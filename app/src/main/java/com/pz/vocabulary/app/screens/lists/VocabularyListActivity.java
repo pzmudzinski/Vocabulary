@@ -2,6 +2,7 @@ package com.pz.vocabulary.app.screens.lists;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.pz.vocabulary.app.App;

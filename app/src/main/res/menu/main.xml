@@ -7,4 +7,14 @@
         android:title="@string/settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
+
+    <item android:id="@+id/action_import"
+        android:title="@string/import_words"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_export"
+        android:title="@string/export_words"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>
