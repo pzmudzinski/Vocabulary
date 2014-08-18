@@ -73,14 +73,14 @@ public class ExportTranslationsToFileTask extends AsyncTask<String, Translation,
             if (!root.exists()) {
                 root.mkdirs();
             }
-            File gpxfile = new File(root, fileName);
+            File exportFile = new File(root, fileName);
 
-            FileWriter writer = new FileWriter(gpxfile);
+            FileWriter writer = new FileWriter(exportFile);
             writer.append(stringBuilder.toString());
             writer.flush();
             writer.close();
 
-            Uri uri = Uri.fromFile(gpxfile);
+            Uri uri = Uri.fromFile(exportFile);
 
             outputStreamWriter.close();
             return uri;

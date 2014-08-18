@@ -40,6 +40,8 @@ public class VocabularyTest extends AndroidTestCase {
         this.dbHelper = new OrmLiteSQLDatabaseHelper(getContext(), null);
 
         this.dbStore = new OrmLiteSQLDictionary(getContext(), (OrmLiteSQLDatabaseHelper) dbHelper);
+
+        dbStore.addLanguages("pl", "eng");
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQuery;
+import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -33,13 +34,10 @@ import java.util.Map;
  */
 public class OrmLiteSQLDatabaseHelper extends OrmLiteSqliteOpenHelper implements DatabaseTables {
 
-    private Resources resources;
-
     private Map<Class, Dao<Class, Long>> daos = new HashMap<Class, Dao<Class, Long>>();
 
     public OrmLiteSQLDatabaseHelper(Context context){
         super(context,context.getString(R.string.database_name), null, DATABASE_VERSION );
-        this.resources = context.getResources();
         daos.put(Memory.class, null);
         daos.put(Language.class, null);
         daos.put(Word.class, null);
@@ -47,7 +45,6 @@ public class OrmLiteSQLDatabaseHelper extends OrmLiteSqliteOpenHelper implements
         daos.put(QuizResponse.class, null);
         daos.put(Quiz.class, null);
         getWritableDatabase();
-
     }
 
     public OrmLiteSQLDatabaseHelper(Context context, String dbName)
@@ -59,7 +56,6 @@ public class OrmLiteSQLDatabaseHelper extends OrmLiteSqliteOpenHelper implements
                 return new SQLiteCursor(sqLiteDatabase, sqLiteCursorDriver, s, sqLiteQuery);
             }
         }, DATABASE_VERSION);
-        this.resources = context.getResources();
         daos.put(Memory.class, null);
         daos.put(Language.class, null);
         daos.put(Word.class, null);
@@ -120,11 +116,6 @@ public class OrmLiteSQLDatabaseHelper extends OrmLiteSqliteOpenHelper implements
         return super.getDao(clazz);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
-
-    }
-
     public void destroyEverything() {
         for (Map.Entry<Class, Dao<Class, Long>> entry : daos.entrySet())
         {
@@ -138,8 +129,6 @@ public class OrmLiteSQLDatabaseHelper extends OrmLiteSqliteOpenHelper implements
                 e.printStackTrace();
             }
         }
-
-       // recreate(getConnectionSource());
     }
 
     private void recreate(ConnectionSource connectionSource)
@@ -169,22 +158,47 @@ public class OrmLiteSQLDatabaseHelper extends OrmLiteSqliteOpenHelper implements
                 e.printStackTrace();
             }
         }
-
-//        String[] langFromValues = resources.getStringArray(R.array.lang_from);
-//        String[] langToValues = resources.getStringArray(R.array.lang_to);
-//
-//        Language langFrom = new Language(langFromValues[0]);
-//        Language langTo = new Language(langToValues[0]);
-//
-//        Dao<Language, Long> languages = getDaoObject(Language.class);
-//
-//        try {
-//            languages.create(langFrom);
-//            languages.create(langTo);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            Logger.error("db", e.getMessage(), e);
-//            throw new RuntimeException("Cannot initialize languages!");
-//        }
     }
+
+    /**
+     * http://www.greenmoonsoftware.com/2012/02/sqlite-schema-migration-in-android/
+     */
+    @Override
+    public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
+        Log.d("db", String.format("onUpgrade: %d => %d", oldVersion, newVersion));
+        if (REVISIONS.length < 1) {
+            return;
+        }
+        for (int i = oldVersion; i < newVersion; i++) {
+            try {
+                Revision revision = REVISIONS[i - 1];
+                revision.execute(this, connectionSource);
+            } catch (Exception e) {
+                Log.d("db", "Version up error", e);
+                throw new RuntimeException(e);
+            }
+        }
+        onCreate(database, connectionSource);
+    }
+
+    private static interface Revision {
+        public void execute(OrmLiteSQLDatabaseHelper openHelper, ConnectionSource connectionSource)
+                throws SQLException;
+    }
+
+    /**
+     * Don't include "CREATE TABLE" here
+     */
+    private static final Revision[] REVISIONS = new Revision[]{
+// Example
+//            new Revision() {
+//                @Override
+//                public void execute(DatabaseOpenHelper openHelper, ConnectionSource connectionSource)
+//                        throws SQLException {
+//                    openHelper.getDao(Card.class).executeRaw(String.format(
+//                            "ALTER TABLE card ADD COLUMN %s VARCHAR",
+//                            Card.Column.DICTIONARY));
+//                }
+//            }
+    };
 }
