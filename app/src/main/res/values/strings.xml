@@ -137,9 +137,8 @@
     <string name="export_succedd">Eksport zakończony. \n Zapisano słówko w pliku o ścieżce: %s </string>
     <string name="send">Wyślij</string>
 
-    <string name="about_text">
-        W przypadku jakichkolwiek pytań, opinii bądź wątpliwości proszę skontaktować się mailowo: \n
-            wordzapp@gmail.com
+    <string name="about_text">W przypadku jakichkolwiek pytań, opinii bądź wątpliwości proszę skontaktować się mailowo: \n
+            <a href="mailto:wordzapp@gmail.com">wordzapp@gmail.com</a>
     </string>
 
     <string name="support">Wspomóż</string>
@@ -147,4 +146,5 @@
     <string name="click_on_ad_please">Naciśnij na reklamę, proszę :)</string>
 
     <string name="next">Dalej</string>
+    <string name="version">Wersja : %s</string>
 </resources>

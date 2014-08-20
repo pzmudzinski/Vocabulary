@@ -2,6 +2,7 @@ package com.pz.vocabulary.app;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,8 +53,7 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
         super.onCreate(savedInstanceState);
         Crashlytics.start(this);
 
-        if (!getDictionary().hasItems(Language.class))
-        {
+        if (!getDictionary().hasItems(Language.class)) {
             SelectLanguageActivity_.intent(this).start();
             finish();
         }
@@ -75,17 +76,16 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
                 interstitial.loadAd(adRequest);
             }
         });
-       // actionBar.setHomeButtonEnabled(false);
+        // actionBar.setHomeButtonEnabled(false);
     }
 
     @AfterViews
-    protected void init()
-    {
+    protected void init() {
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         String[] titles = getResources().getStringArray(R.array.tab_titles);
-        mSectionsPagerAdapter = new SectionsPagerAdapter( titles, getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(titles, getSupportFragmentManager());
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -116,7 +116,7 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -127,24 +127,26 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
         if (id == R.id.action_settings) {
             SettingsActivity_.intent(this).startForResult(Arguments.ARG_REQUEST_SETTIGNS);
             return true;
-        } else if (id == R.id.action_export)
-        {
+        } else if (id == R.id.action_export) {
             ExportActivity_.intent(this).start();
-        } else if (id == R.id.action_import)
-        {
+        } else if (id == R.id.action_import) {
             ImportActivity_.intent(this).start();
-        } else if (id == android.R.id.home)
-        {
+        } else if (id == android.R.id.home) {
             return true;
-        } else if (id == R.id.action_about)
-        {
-            final SpannableString s = new SpannableString(getString(R.string.about_text));
-            Linkify.addLinks(s, Linkify.ALL);
-            AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.about).setMessage(s).create();
-            dialog.show();
-        } else if (id == R.id.action_support)
-        {
+        } else if (id == R.id.action_about) {
+            final TextView textView = new TextView(this);
 
+            textView.setText(R.string.about_text);
+            textView.setTextSize(16);
+            textView.setTextColor(getResources().getColor(android.R.color.white));
+            int padding = getResources().getDimensionPixelSize(R.dimen.base_padding);
+            textView.setPadding(padding, padding, padding, padding);
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.about).setView(textView).create();
+            dialog.show();
+
+
+        } else if (id == R.id.action_support) {
             displayInterstitial();
         }
         return super.onOptionsItemSelected(item);
@@ -159,10 +161,8 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
     }
 
     @OnActivityResult(Arguments.ARG_REQUEST_SETTIGNS)
-    protected void onDestroyIntent(int resultCode)
-    {
-        if (resultCode == INTENT_RESULT_DELETE)
-        {
+    protected void onDestroyIntent(int resultCode) {
+        if (resultCode == INTENT_RESULT_DELETE) {
             getDictionary().destroyEverything();
             Fragment currentFragment = mSectionsPagerAdapter.getCurrentFragment();
             if (currentFragment instanceof Updatable)
@@ -184,7 +184,6 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
-
 
 
 }
