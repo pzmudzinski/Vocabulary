@@ -6,17 +6,26 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.pz.vocabulary.app.R;
+import com.pz.vocabulary.app.export.ExportActivity_;
+import com.pz.vocabulary.app.export.ImportActivity_;
 import com.pz.vocabulary.app.models.Question;
 import com.pz.vocabulary.app.models.Quiz;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.utils.AlertUtils;
+import com.pz.vocabulary.app.utils.Arguments;
 
 import org.androidannotations.annotations.AfterTextChange;
 import org.androidannotations.annotations.AfterViews;
@@ -30,121 +39,70 @@ import java.util.List;
 /**
  * Created by piotr on 06/06/14.
  */
-@EActivity(R.layout.activity_quiz)
-public class QuizActivity extends VocabularyActionBarActivity implements IntentArguments {
-    @ViewById(R.id.editTextAnswer)
-    protected EditText editTextAnswer;
-    @ViewById(R.id.textViewQuestion)
-    protected TextView textViewQuestion;
-    @ViewById(R.id.buttonAnswer)
-    protected Button answerButton;
-    @ViewById(R.id.textViewTip)
-    protected TextView textViewTip;
+@EActivity
+public class QuizActivity extends VocabularyActionBarActivity implements IntentArguments, QuestionFragment.QuestionFragmentCallback {
 
     private Quiz quiz;
+
+    MyAdapter mAdapter;
+
+    ViewPager mPager;
 
     public static void open(Context context, List<Word> words)
     {
         Intent intent = QuizActivity_.intent(context).get();
         Word[] wordsAsArray = words.toArray(new Word[words.size()]);
         intent.putExtra(ARG_WORD_IDS, wordsAsArray);
-       // intent.getExtras().putParcelableArray(ARG_WORD_IDS, Word.CREATOR);
         context.startActivity(intent);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_quiz);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
-    }
+        actionBar.setHomeButtonEnabled(false);
 
-    @AfterViews
-    protected void init() {
         Parcelable[] parcelables = getIntent().getParcelableArrayExtra(ARG_WORD_IDS);
         Word[] words = Arrays.copyOf(parcelables, parcelables.length, Word[].class);;
 
         getSupportActionBar().setTitle("");
 
         this.quiz = new Quiz(getDictionary(), Arrays.asList(words));
-        answerButton.setOnClickListener(buttonAnswerClick);
 
-        takeNextQuestionOrGoToResults();
-    }
-    private Question currentQuestion;
-
-    private void display(Question question) {
-        this.currentQuestion = question;
-        Word word = question.getWord();
-        textViewQuestion.setText(word.getSpelling());
-        editTextAnswer.setText("");
-
-        if (question.getMemory() == null) {
-            textViewTip.setText(getString(R.string.answer_no_tip));
-        } else {
-            textViewTip.setText(String.format(getString(R.string.answer_tip), question.getMemory().getDescription()));
-        }
+        mAdapter = new MyAdapter(getSupportFragmentManager(), words.length);
+        mPager = (ViewPager)findViewById(R.id.pager);
+        mPager.setAdapter(mAdapter);
+        setActionBarTitleForQuestion(0);
+        mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                setActionBarTitleForQuestion(position);
+            }
+        });
+        mPager.setCurrentItem(0);
     }
 
-    final View.OnClickListener buttonAnswerClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            onAnswerClicked();
-        }
-    };
-
-    protected synchronized void onAnswerClicked() {
-        boolean correct = quiz.answer(editTextAnswer.getText().toString());
-        if (correct)
-            onCorrectAnswer();
-        else
-            onWrongAnswer();
-    }
-
-    @Click(R.id.buttonTakeNext)
-    protected void onTakeNextQuestion() {
-        quiz.skipQuestion();
-        takeNextQuestionOrGoToResults();
-    }
-
-    @AfterTextChange(R.id.editTextAnswer)
-    protected void onTextChanged()
-    {
-        answerButton.setEnabled(editTextAnswer.getText().length() > 0);
-    }
-
-    private synchronized void takeNextQuestionOrGoToResults() {
-        answerButton.setOnClickListener(null);
-        answerButton.setEnabled(false);
-        if (quiz.hasQuestionsLeft()) {
-            Question nextQuestion = quiz.takeNextQuestion();
-            String title = String.format(getString(R.string.question_number_of_total), quiz.currentQuestionNumber(), quiz.totalQuestionNumber());
-//            title = title + " (" + nextQuestion.getWord().getLanguage().getName() + ")";
-            getSupportActionBar().setTitle(title);
-            display(nextQuestion);
-
+    private synchronized void takeNextQuestionOrGoToResults(int questionNumber) {
+        if (questionNumber < quiz.totalQuestionNumber()) {
+            setActionBarTitleForQuestion(questionNumber);
         }
         else {
             goToResults();
         }
-
-        answerButton.setOnClickListener(buttonAnswerClick);
     }
 
-    public void onCorrectAnswer() {
-        AlertUtils.showToastWithText(this, R.string.answer_correct, R.color.good);
-        takeNextQuestionOrGoToResults();
+    private void setActionBarTitleForQuestion(int questionNumber)
+    {
+        String title = String.format(getString(R.string.question_number_of_total), questionNumber+1, quiz.totalQuestionNumber());
+        getSupportActionBar().setTitle(title);
     }
 
     public void goToResults() {
         quiz.store();
         QuizResultsActivity.open(this, quiz.getResults());
         finish();
-    }
-
-    public void onWrongAnswer() {
-        AlertUtils.showToastWithText(this, R.string.answer_wrong, R.color.bad);
-        takeNextQuestionOrGoToResults();
     }
 
     @Override
@@ -156,14 +114,64 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
                 finish();
             }
         }).setNegativeButton(android.R.string.cancel, null).create();
-
-        // Setting Dialog Title
         alertDialog.setTitle(getString(R.string.quit_are_you_sure_title));
-
-        // Setting Dialog Message
         alertDialog.setMessage(getString(R.string.test_lost_progress));
-
-        // Showing Alert Message
         alertDialog.show();
     }
+
+    @Override
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    @Override
+    public void onCorrectAnswer(int questionNumber) {
+        takeNextQuestionOrGoToResults(questionNumber);
+    }
+
+    @Override
+    public void onWrongAnswer(int questionNumber) {
+        takeNextQuestionOrGoToResults(questionNumber);
+    }
+
+    @Override
+    public void onSkipQuestion(int questionNumber) {
+        takeNextQuestionOrGoToResults(questionNumber);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.quiz, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_finish_test) {
+            goToResults();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public static class MyAdapter extends FragmentStatePagerAdapter {
+        private int questionsCount;
+        public MyAdapter(FragmentManager fm, int questionsCount) {
+            super(fm);
+            this.questionsCount = questionsCount;
+        }
+
+        @Override
+        public int getCount() {
+            return questionsCount;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return QuestionFragment.newInstance(position);
+        }
+    }
+
 }

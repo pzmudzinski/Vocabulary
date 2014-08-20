@@ -48,6 +48,7 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
+       // actionBar.setHomeButtonEnabled(false);
     }
 
     @AfterViews
@@ -105,6 +106,9 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
         } else if (id == R.id.action_import)
         {
             ImportActivity_.intent(this).start();
+        } else if (id == android.R.id.home)
+        {
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

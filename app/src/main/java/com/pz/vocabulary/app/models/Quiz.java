@@ -17,25 +17,29 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.Stack;
 
 /**
  * Created by piotr on 07/06/14.
  */
 @DatabaseTable(tableName = DatabaseTables.TABLE_QUIZZES)
 public class Quiz extends BaseEntity{
-    private Dictionary dictionary;
-
-    private Word currentWord;
-    private List<Translation> currentMeanings;
-    private List<Memory> currentTips;
-    private Stack<Word> words = new Stack<Word>();
-    private QuizResults results = new QuizResults();
-    private int questionsNumber;
-    private List<Long> insertedResponses = new LinkedList<Long>();
 
     @DatabaseField(columnName = DBColumns.RESULT)
     private float result;
+
+    @DatabaseField(columnName = DBColumns.TIMESTAMP_START, dataType = DataType.DATE_LONG)
+    private Date tsStart;
+
+    @DatabaseField(columnName = DBColumns.TIMESTAMP_END, dataType = DataType.DATE_LONG)
+    private Date tsEnd;
+
+    private List<Word> words = new ArrayList<Word>();
+    private QuizResults results = new QuizResults();
+    private int totalNumberOfQuestions;
+    private List<Long> insertedResponses = new LinkedList<Long>();
+    private Dictionary dictionary;
+
+    private List<Question> questions;
 
     public Date getTsStart() {
         return tsStart;
@@ -44,12 +48,6 @@ public class Quiz extends BaseEntity{
     public Date getTsEnd() {
         return tsEnd;
     }
-
-    @DatabaseField(columnName = DBColumns.TIMESTAMP_START, dataType = DataType.DATE_LONG)
-    private Date tsStart;
-
-    @DatabaseField(columnName = DBColumns.TIMESTAMP_END, dataType = DataType.DATE_LONG)
-    private Date tsEnd;
 
     public Quiz()
     {
@@ -61,99 +59,27 @@ public class Quiz extends BaseEntity{
         this.dictionary = dictionary;
         if (shuffle)
             Collections.shuffle(words);
-        this.words = new Stack<Word>();
-        this.words.addAll(words);
-        this.results = new QuizResults(words.size());
-        this.questionsNumber = words.size();
+        this.words = words;
+        this.results = new QuizResults();
+        this.totalNumberOfQuestions = words.size();
+        this.questions = new ArrayList<Question>(words.size());
+        for ( int i = 0 ; i < words.size() ; i++)
+            questions.add(i, null);
+        this.tsStart = new Date();
     }
 
     public Quiz(Dictionary dictionary, List<Word> words) {
         this(dictionary, words, true);
     }
 
-    public boolean hasQuestionsLeft()
-    {
-        return words.size() > 0;
-    }
-
-    public int currentQuestionNumber()
-    {
-        return questionsNumber - words.size() ;
-    }
-
     public int totalQuestionNumber()
     {
-        return questionsNumber;
-    }
-
-    public Question takeNextQuestion()
-    {
-        if (currentWord == null && hasQuestionsLeft())
-        {
-            this.tsStart = new Date();
-        }
-
-        if (!hasQuestionsLeft()) {
-            return null;
-        }
-
-        this.currentWord = dictionary.findWord(words.pop().getId());
-        this.currentMeanings = dictionary.findMeanings(currentWord.getId());
-        this.currentTips = new ArrayList<Memory>();
-        for (Translation translation : currentMeanings)
-        {
-            if (translation.getMemory() != null)
-                currentTips.add(translation.getMemory());
-        }
-        return createQuestion(currentWord);
-    }
-
-    public void skipQuestion()
-    {
-        results.addSkippedAnswer();
-        insertedResponses.add(dictionary.insertResponse(currentWord.getId(), null, Dictionary.QuizQuestionResult.ResponseSkipped));
-    }
-
-    public boolean answer(String answer)
-    {
-        List<Translation> meanings = dictionary.findMeanings(currentWord.getId());
-
-        if (!hasQuestionsLeft())
-            this.tsEnd = new Date();
-
-        for (Translation translation : meanings)
-        {
-            Word answerWord = new Word(translation.getTranslation().getLanguageID(), answer);
-            if ( answerWord.equals(translation.getTranslation()))
-            {
-                results.addCorrectAnswer();
-                insertedResponses.add(dictionary.insertResponse(currentWord.getId(), answer, Dictionary.QuizQuestionResult.ResponseCorrect));
-                return true;
-            }
-        }
-
-        results.addWrongAnswer();
-        insertedResponses.add(dictionary.insertResponse(currentWord.getId(), answer, Dictionary.QuizQuestionResult.ResponseWrong));
-        return false;
+        return totalNumberOfQuestions;
     }
 
     public QuizResults getResults()
     {
         return results;
-    }
-
-    private Question createQuestion(Word word)
-    {
-        if (currentTips.size() == 0)
-        {
-            return new Question(word);
-        }
-        else
-        {
-            Random random = new Random();
-            Memory memory = currentTips.get(random.nextInt(currentTips.size()));
-            return new Question(word, memory);
-        }
     }
 
     public void store()
@@ -170,5 +96,65 @@ public class Quiz extends BaseEntity{
     public float getScore()
     {
         return this.result;
+    }
+
+    public Question takeQuestion(int questionNumber) 
+    {
+        if (questionNumber > totalNumberOfQuestions) {
+            return null;
+        }
+
+        if (questions.get(questionNumber) == null || questionNumber > questions.size())
+        {
+            Word word = dictionary.findWord(words.get(questionNumber).getId());
+            List<Translation> meanings = dictionary.findMeanings(word.getId());
+            List<Memory> tips = new ArrayList<Memory>();
+            for (Translation translation : meanings)
+            {
+                if (translation.getMemory() != null)
+                  tips.add(translation.getMemory());
+            }
+
+            if (tips.size() == 0)
+                questions.add(questionNumber, new Question(word));
+            else {
+                Random random = new Random();
+                Memory memory = tips.get(random.nextInt(tips.size()));
+                questions.add(questionNumber, new Question(word, memory));
+            }
+        }
+
+        return questions.get(questionNumber);
+    }
+
+    private long getIdForWord(int questionsNumber)
+    {
+        return words.get(questionsNumber).getId();
+    }
+
+    public void skipQuestion(int questionNumber) {
+        results.addSkippedAnswer();
+        insertedResponses.add(dictionary.insertResponse(getIdForWord(questionNumber), null, Dictionary.QuizQuestionResult.ResponseSkipped));
+    }
+
+    public boolean answer(int questionNumber, String answer)
+    {
+        long id = getIdForWord(questionNumber);
+        List<Translation> meanings = dictionary.findMeanings(id);
+
+        for (Translation translation : meanings)
+        {
+            Word answerWord = new Word(translation.getTranslation().getLanguageID(), answer);
+            if ( answerWord.equals(translation.getTranslation()))
+            {
+                results.addCorrectAnswer();
+                insertedResponses.add(dictionary.insertResponse(id, answer, Dictionary.QuizQuestionResult.ResponseCorrect));
+                return true;
+            }
+        }
+
+        results.addWrongAnswer();
+        insertedResponses.add(dictionary.insertResponse(id, answer, Dictionary.QuizQuestionResult.ResponseWrong));
+        return false;
     }
 }

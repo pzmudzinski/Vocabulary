@@ -4,7 +4,7 @@
     <item android:state_pressed="true" >
         <shape>
             <solid
-                android:color="@color/theme_color_2" />
+                android:color="@color/button_pressed" />
             <stroke
                 android:width="1dp"
                 android:color="@color/theme_white" />
@@ -23,7 +23,7 @@
     <item android:state_enabled="false">
         <shape >
             <solid
-                android:color="@color/theme_color_4_transparent"
+                android:color="@color/button_disabled"
 
                 ></solid>
             <stroke
@@ -42,7 +42,7 @@
     <!-- NORMAL -->
     <item>
         <shape>
-            <solid android:color="@color/theme_color_4"></solid>
+            <solid android:color="@color/button_normal"></solid>
             <stroke
                 android:width="1dp"
                 android:color="@color/theme_white" />

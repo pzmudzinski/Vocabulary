@@ -8,17 +8,12 @@ import android.os.Parcelable;
 */
 public class QuizResults implements Parcelable
 {
-    private int questionsCount;
     private int correctAnswers;
     private int wrongAnswers;
     private int skippedAnswers;
 
     public int getSkippedAnswers() {
         return skippedAnswers;
-    }
-
-    public int getQuestionsCount() {
-        return questionsCount;
     }
 
     public int getCorrectAnswers() {
@@ -34,9 +29,9 @@ public class QuizResults implements Parcelable
 
     }
 
-    public QuizResults(int questionsCount)
+    public int getQuestionsCount()
     {
-        this.questionsCount = questionsCount;
+        return correctAnswers + wrongAnswers + skippedAnswers;
     }
 
     public void addCorrectAnswer()
@@ -66,14 +61,12 @@ public class QuizResults implements Parcelable
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.questionsCount);
         dest.writeInt(this.correctAnswers);
         dest.writeInt(this.wrongAnswers);
         dest.writeInt(this.skippedAnswers);
     }
 
     QuizResults(Parcel in) {
-        this.questionsCount = in.readInt();
         this.correctAnswers = in.readInt();
         this.wrongAnswers = in.readInt();
         this.skippedAnswers = in.readInt();

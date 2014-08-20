@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main_theme">#80DAE4</color>
+    <color name="main_theme">@color/theme_color_5</color>
     <color name="good">#4C7513</color>
     <color name="bad">#E48080</color>
     <color name="neutral">#809EE4</color>
@@ -10,14 +10,19 @@
     <color name="theme_white_transparent">#66FFFFFF</color>
     <color name="theme_white_full_transparent">#FFFFFFFF</color>
 
-    <color name="theme_color_1">#286864</color>
-    <color name="theme_color_2">#6DB1AC</color>
-    <color name="theme_color_3">#488B86</color>
-    <color name="theme_color_4">#164D49</color>
-    <color name="theme_color_5">#082F2D</color>
+    <color name="theme_color_1">#78BC3F</color>
+    <color name="theme_color_2">#BDEC97</color>
+    <color name="theme_color_3">#9BDA67</color>
+    <color name="theme_color_4">#5CA122</color>
+    <color name="theme_color_5">#40800B</color>
 
-    <color name="theme_color_2_transparent">#016DB1AC</color>
-    <color name="theme_color_4_transparent">#66164D49</color>
+    <color name="theme_color_4_transparent">#665CA122</color>
 
     <color name="gray">#CCC</color>
+
+    <color name="text_color">#1F4004</color>
+
+    <color name="button_disabled">@color/theme_color_4_transparent</color>
+    <color name="button_normal">@color/theme_color_4</color>
+    <color name="button_pressed">@color/theme_color_2</color>
 </resources>

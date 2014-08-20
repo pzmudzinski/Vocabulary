@@ -1,7 +1,10 @@
 package com.pz.vocabulary.app.screens;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.Handler;
 import android.view.View;
 
 import com.google.android.gms.ads.AdListener;
@@ -10,6 +13,7 @@ import com.google.android.gms.ads.AdView;
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.utils.AlertUtils;
+import com.pz.vocabulary.app.utils.Arguments;
 import com.pz.vocabulary.app.utils.DictionaryUtils;
 import com.pz.vocabulary.app.utils.Logger;
 
@@ -30,8 +34,29 @@ public class StartTestFragment extends VocabularyFragment {
     @ViewById(R.id.adView)
     protected AdView adView;
 
+    private Handler handler = new Handler();
+
+
     @AfterViews
     protected void initAd()
+    {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Arguments.AD_PREFS, Context.MODE_PRIVATE);
+
+        if (!sharedPreferences.contains(Arguments.AD_FIRST_TIME))
+        {
+            sharedPreferences.edit().putBoolean(Arguments.AD_FIRST_TIME, true).commit();
+            return;
+        }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadAd();
+            }
+        }, Arguments.AD_SHOW_DELAY);
+    }
+
+    private void loadAd()
     {
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("63BD1A227D1E30162D77F0F2F520F503").build();
 

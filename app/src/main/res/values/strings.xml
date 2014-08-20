@@ -16,8 +16,8 @@
     <string name="title_to">Tłumaczenie</string>
     <string name="association">Skojarzenie</string>
     <string name="pronunciation">Wymowa</string>
-    <string name="start_tough_words_test">Sprawdź słówka które słabo Ci idą</string>
-    <string name="start_test">Sprawdź wszystkie slowa</string>
+    <string name="start_tough_words_test">Sprawdź słówka, które słabo Ci idą</string>
+    <string name="start_test">Sprawdź wszystkie słówka</string>
     <string name="start_test_word_since">Sprawdź ostatnio dodane słówka</string>
     <string name="delete_word">Usuń słówko</string>
     <string name="word_acquaintance">Znajomość</string>
@@ -84,6 +84,7 @@
 
     <string name="quit_are_you_sure_title">Czy na pewno chcesz zakończyć test?</string>
     <string name="test_lost_progress">Utracisz cały postęp.</string>
+    <string name="finish_test">Zakończ i przejdź do wyników</string>
 
     <string name="refresh">Odśwież</string>
     <string name="settings">Ustawienia</string>
@@ -107,7 +108,8 @@
     <string name="error_translations_not_found">W pliku nie znaleziono żadnych tłumaczeń. \n Czy na pewno jest w odpowiednim formacie?</string>
 
     <string name="import_description">Wybierz plik .txt w formacie: \n
-        słówko;tłumaczenie;skojarzenie \n (skojarzenie jest opcjonalne)
+        słówko;tłumaczenie w języku obcym;skojarzenie \n
+        (skojarzenie jest opcjonalne)
     </string>
 
     <plurals name="import_parsed_n_translations">
@@ -122,7 +124,7 @@
     <string name="import_adding_to_db_finished">Dodawanie słówek zakończone</string>
 
     <string name="export_description">Eksport do pliku txt: \n
-        słówko;tłumaczenie;skojarzenie \n
+        słówko;tłumaczenie w języku obcym;skojarzenie \n
         (skojarzenie jest opcjonalne)
     </string>
 
@@ -131,4 +133,9 @@
     <string name="export_failed">Błąd podczas eksportowania słówek. Spróbuj ponownie. </string>
     <string name="export_succedd">Eksport zakończony. \n Zapisano słówko w pliku o ścieżce: %s </string>
     <string name="send">Wyślij</string>
+
+    <string name="about">
+        W przypadku jakichkolwiek pytań, opinii albo wątpliwości proszę skontaktować się mailowo: \n
+            @string/email
+    </string>
 </resources>

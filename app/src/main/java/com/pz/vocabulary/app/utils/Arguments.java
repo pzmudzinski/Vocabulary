@@ -20,4 +20,8 @@ public interface Arguments {
     public static final String SHOW_WORD_MEANINGS = "show_word_meanings";
     public static final String SHOW_TOP_WORDS = "show_top_words";
     public static final String SHOW_LEAST_WORDS = "show_least_words";
+
+    public static final int AD_SHOW_DELAY = 5000;
+    public static final String AD_PREFS = "ad_prefs";
+    public static final String AD_FIRST_TIME = "ad_first_time";
 }
