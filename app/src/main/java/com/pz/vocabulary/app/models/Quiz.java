@@ -5,17 +5,21 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.pz.vocabulary.app.models.db.BaseEntity;
 import com.pz.vocabulary.app.models.db.Memory;
+import com.pz.vocabulary.app.models.db.QuizResponse;
 import com.pz.vocabulary.app.models.db.Translation;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.sql.DBColumns;
 import com.pz.vocabulary.app.sql.DatabaseTables;
 import com.pz.vocabulary.app.sql.Dictionary;
+import com.pz.vocabulary.app.sql.QuizHistory;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -40,6 +44,8 @@ public class Quiz extends BaseEntity{
     private Dictionary dictionary;
 
     private List<Question> questions;
+
+    private Map<Integer, QuizResponse> responses = new HashMap<Integer, QuizResponse>();
 
     public Date getTsStart() {
         return tsStart;
@@ -135,6 +141,13 @@ public class Quiz extends BaseEntity{
     public void skipQuestion(int questionNumber) {
         results.addSkippedAnswer();
         insertedResponses.add(dictionary.insertResponse(getIdForWord(questionNumber), null, Dictionary.QuizQuestionResult.ResponseSkipped));
+        QuizResponse response = new QuizResponse(id, "",  QuizHistory.QuizQuestionResult.ResponseSkipped);
+        responses.put(questionNumber, response);
+    }
+
+    public QuizResponse getResponseFor(int questionNumber)
+    {
+        return responses.get(questionNumber);
     }
 
     public boolean answer(int questionNumber, String answer)
@@ -149,12 +162,16 @@ public class Quiz extends BaseEntity{
             {
                 results.addCorrectAnswer();
                 insertedResponses.add(dictionary.insertResponse(id, answer, Dictionary.QuizQuestionResult.ResponseCorrect));
+                QuizResponse response = new QuizResponse(id, answer,  QuizHistory.QuizQuestionResult.ResponseCorrect);
+                responses.put(questionNumber, response);
                 return true;
             }
         }
 
         results.addWrongAnswer();
         insertedResponses.add(dictionary.insertResponse(id, answer, Dictionary.QuizQuestionResult.ResponseWrong));
+        QuizResponse response = new QuizResponse(id, answer,  QuizHistory.QuizQuestionResult.ResponseWrong);
+        responses.put(questionNumber, response);
         return false;
     }
 }

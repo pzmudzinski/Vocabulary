@@ -11,7 +11,6 @@
     <string name="add_translation">Dodaj słówko</string>
     <string name="translation_added">Dodano słówko!</string>
 
-    <string name="find_online">Znajdz tłumaczenie online</string>
     <string name="title_from">Słówko</string>
     <string name="title_to">Tłumaczenie</string>
     <string name="association">Skojarzenie</string>
@@ -27,7 +26,7 @@
     <string name="choose_languages">Wybierz język obcy</string>
     <string name="your_language">Twój język</string>
     <string name="foreign_language">Język obcy</string>
-
+    <string name="choose_foreign_language">Którego języka obcego chcesz się uczyć?</string>
     <string name="test_empty">Nie znaleziono żadnych słówek do testu!</string>
 
     <string name="start_test_words_since_title">Słówka dodane:</string>
@@ -84,7 +83,7 @@
 
     <string name="quit_are_you_sure_title">Czy na pewno chcesz zakończyć test?</string>
     <string name="test_lost_progress">Utracisz cały postęp.</string>
-    <string name="finish_test">Zakończ i przejdź do wyników</string>
+    <string name="finish_test">Przejdź do wyników</string>
 
     <string name="refresh">Odśwież</string>
     <string name="settings">Ustawienia</string>
@@ -110,6 +109,10 @@
     <string name="import_description">Wybierz plik .txt w formacie: \n
         słówko;tłumaczenie w języku obcym;skojarzenie \n
         (skojarzenie jest opcjonalne)
+        \n Przykład: \n
+        dom;house \n
+        chłopiec;boy;moje skojarzenie \n
+        ...
     </string>
 
     <plurals name="import_parsed_n_translations">
@@ -134,8 +137,14 @@
     <string name="export_succedd">Eksport zakończony. \n Zapisano słówko w pliku o ścieżce: %s </string>
     <string name="send">Wyślij</string>
 
-    <string name="about">
-        W przypadku jakichkolwiek pytań, opinii albo wątpliwości proszę skontaktować się mailowo: \n
-            @string/email
+    <string name="about_text">
+        W przypadku jakichkolwiek pytań, opinii bądź wątpliwości proszę skontaktować się mailowo: \n
+            wordzapp@gmail.com
     </string>
+
+    <string name="support">Wspomóż</string>
+    <string name="about">O aplikacji</string>
+    <string name="click_on_ad_please">Naciśnij na reklamę, proszę :)</string>
+
+    <string name="next">Dalej</string>
 </resources>

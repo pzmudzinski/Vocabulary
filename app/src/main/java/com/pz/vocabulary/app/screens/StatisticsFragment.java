@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Pair;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.Quiz;
@@ -36,6 +38,9 @@ public class StatisticsFragment extends VocabularyFragment implements Updatable,
 
     @ViewById(R.id.listView)
     protected ListView listView;
+
+    @ViewById(R.id.progressBar)
+    protected ProgressBar progressBar;
 
     private DataProcessor dataProcessor;
 
@@ -143,6 +148,8 @@ public class StatisticsFragment extends VocabularyFragment implements Updatable,
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            if (progressBar != null)
+                progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -210,6 +217,8 @@ public class StatisticsFragment extends VocabularyFragment implements Updatable,
         @Override
         protected void onPostExecute(List<Pair<String,Object>> stats) {
             showStats(stats);
+            if (progressBar != null)
+                progressBar.setVisibility(View.INVISIBLE);
         }
     }
 

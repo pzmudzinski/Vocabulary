@@ -1,32 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/base_padding"
-    >
-
-    <ListView
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:id="@+id/listView"
+    android:layout_height="match_parent">
 
-    tools:listitem="@layout/row_key_value"></ListView>
+    <LinearLayout
 
-    <Button
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/stats_show_all_words"
-    android:id="@+id/buttonShowAllWords"
-    android:layout_gravity="center_horizontal" />
-
-    <Button
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/base_padding"
-        android:layout_height="wrap_content"
-        android:text="@string/words_rankings"
-        android:id="@+id/buttonShowRankings"
-        android:layout_gravity="center_horizontal" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/base_padding">
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+
+            tools:listitem="@layout/row_key_value"></ListView>
+
+        <Button
+            android:id="@+id/buttonShowAllWords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/stats_show_all_words" />
+
+        <Button
+            android:id="@+id/buttonShowRankings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/base_padding"
+            android:text="@string/words_rankings" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/progressBar"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

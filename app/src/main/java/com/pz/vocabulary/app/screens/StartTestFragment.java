@@ -48,12 +48,12 @@ public class StartTestFragment extends VocabularyFragment {
             return;
         }
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadAd();
-            }
-        }, Arguments.AD_SHOW_DELAY);
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                loadAd();
+//            }
+//        }, Arguments.AD_SHOW_DELAY);
     }
 
     private void loadAd()

@@ -3,6 +3,7 @@ package com.pz.vocabulary.app.screens;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -10,7 +11,9 @@ import android.widget.TextView;
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.Question;
 import com.pz.vocabulary.app.models.Quiz;
+import com.pz.vocabulary.app.models.db.QuizResponse;
 import com.pz.vocabulary.app.models.db.Word;
+import com.pz.vocabulary.app.sql.QuizHistory;
 import com.pz.vocabulary.app.utils.AlertUtils;
 
 import org.androidannotations.annotations.AfterTextChange;
@@ -31,6 +34,8 @@ public class QuestionFragment extends VocabularyFragment{
     protected TextView textViewQuestion;
     @ViewById(R.id.buttonAnswer)
     protected Button answerButton;
+    @ViewById(R.id.buttonTakeNext)
+    protected Button skipButton;
     @ViewById(R.id.textViewTip)
     protected TextView textViewTip;
     public static final String ARG_QUESTION_NUMBER = "arg_question_number";
@@ -99,6 +104,17 @@ public class QuestionFragment extends VocabularyFragment{
         } else {
             textViewTip.setText(String.format(getString(R.string.answer_tip), question.getMemory().getDescription()));
         }
+
+        QuizResponse response = callback.getQuiz().getResponseFor(questionNumber);
+        if (response != null)
+        {
+            showState(response);
+        }
+    }
+
+    private void refresh()
+    {
+        display(question);
     }
 
     @Click(R.id.buttonAnswer)
@@ -115,16 +131,19 @@ public class QuestionFragment extends VocabularyFragment{
     protected void onTakeNextQuestion() {
         callback.getQuiz().skipQuestion(questionNumber);
         callback.onSkipQuestion(questionNumber);
+        showState(callback.getQuiz().getResponseFor(questionNumber));
     }
 
     public void onCorrectAnswer() {
         AlertUtils.showToastWithText(getActivity(), R.string.answer_correct, R.color.good);
         callback.onCorrectAnswer(questionNumber);
+        showState(callback.getQuiz().getResponseFor(questionNumber));
     }
 
     public void onWrongAnswer() {
         AlertUtils.showToastWithText(getActivity(), R.string.answer_wrong, R.color.bad);
         callback.onWrongAnswer(questionNumber);
+        showState(callback.getQuiz().getResponseFor(questionNumber));
     }
 
     @AfterTextChange(R.id.editTextAnswer)
@@ -133,4 +152,28 @@ public class QuestionFragment extends VocabularyFragment{
         answerButton.setEnabled(editTextAnswer.getText().length() > 0);
     }
 
+    public void showState(QuizResponse result)
+    {
+        int colorID = 0;
+        switch (result.getResult())
+        {
+            case ResponseCorrect:
+                colorID = R.color.theme_color_1;
+                break;
+            case ResponseSkipped:
+                colorID = R.color.neutral;
+                break;
+            case ResponseWrong:
+                colorID = R.color.bad;
+                break;
+        }
+
+        int color = getResources().getColor(colorID);
+        getView().setBackgroundColor(color);
+
+        editTextAnswer.setEnabled(false);
+        answerButton.setVisibility(View.INVISIBLE);
+        skipButton.setVisibility(View.INVISIBLE);
+        editTextAnswer.setText(result.getResponse());
+    }
 }

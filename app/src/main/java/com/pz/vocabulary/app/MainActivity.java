@@ -1,5 +1,6 @@
 package com.pz.vocabulary.app;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,11 +8,18 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.text.SpannableString;
+import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.pz.vocabulary.app.export.ExportActivity_;
 import com.pz.vocabulary.app.export.ImportActivity_;
 import com.pz.vocabulary.app.models.db.Language;
@@ -35,6 +43,9 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
     @ViewById(R.id.pager)
     ViewPager mViewPager;
 
+    private InterstitialAd interstitial;
+    private static final String AD_ID = "ca-app-pub-8907084247556169/8134071136";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +59,22 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
+
+        // Create the interstitial.
+        interstitial = new InterstitialAd(this);
+        interstitial.setAdUnitId(AD_ID);
+
+        // Create ad request.
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        interstitial.loadAd(adRequest);
+        interstitial.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                AdRequest adRequest = new AdRequest.Builder().addTestDevice(AD_ID).build();
+                interstitial.loadAd(adRequest);
+            }
+        });
        // actionBar.setHomeButtonEnabled(false);
     }
 
@@ -109,8 +136,26 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
         } else if (id == android.R.id.home)
         {
             return true;
+        } else if (id == R.id.action_about)
+        {
+            final SpannableString s = new SpannableString(getString(R.string.about_text));
+            Linkify.addLinks(s, Linkify.ALL);
+            AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.about).setMessage(s).create();
+            dialog.show();
+        } else if (id == R.id.action_support)
+        {
+
+            displayInterstitial();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Invoke displayInterstitial() when you are ready to display an interstitial.
+    public void displayInterstitial() {
+        if (interstitial.isLoaded()) {
+            Toast.makeText(this, R.string.click_on_ad_please, Toast.LENGTH_LONG).show();
+            interstitial.show();
+        }
     }
 
     @OnActivityResult(Arguments.ARG_REQUEST_SETTIGNS)

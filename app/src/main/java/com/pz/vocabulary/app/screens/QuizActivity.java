@@ -14,8 +14,12 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.pz.vocabulary.app.R;
@@ -33,6 +37,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,7 +76,7 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
 
         this.quiz = new Quiz(getDictionary(), Arrays.asList(words));
 
-        mAdapter = new MyAdapter(getSupportFragmentManager(), words.length);
+        mAdapter = new MyAdapter(getSupportFragmentManager());
         mPager = (ViewPager)findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
         setActionBarTitleForQuestion(0);
@@ -81,12 +86,25 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
                 setActionBarTitleForQuestion(position);
             }
         });
-        mPager.setCurrentItem(0);
+        try {
+            Field mScroller;
+            mScroller = ViewPager.class.getDeclaredField("mScroller");
+            mScroller.setAccessible(true);
+            Interpolator sInterpolator = new DecelerateInterpolator();
+            FixedSpeedScroller scroller = new FixedSpeedScroller(mPager.getContext(), sInterpolator);
+            // scroller.setFixedDuration(5000);
+            mScroller.set(mPager, scroller);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
+        }
     }
 
     private synchronized void takeNextQuestionOrGoToResults(int questionNumber) {
-        if (questionNumber < quiz.totalQuestionNumber()) {
+        if (questionNumber < quiz.totalQuestionNumber() - 1) {
             setActionBarTitleForQuestion(questionNumber);
+            mAdapter.increaseStage();
+            mPager.setCurrentItem(mAdapter.getStage());
         }
         else {
             goToResults();
@@ -157,21 +175,61 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
     }
 
     public static class MyAdapter extends FragmentStatePagerAdapter {
-        private int questionsCount;
-        public MyAdapter(FragmentManager fm, int questionsCount) {
+        private int stage = 1;
+        public MyAdapter(FragmentManager fm) {
             super(fm);
-            this.questionsCount = questionsCount;
         }
 
         @Override
         public int getCount() {
-            return questionsCount;
+            return stage;
         }
 
         @Override
         public Fragment getItem(int position) {
             return QuestionFragment.newInstance(position);
         }
+
+        public void increaseStage()
+        {
+            stage++;
+            notifyDataSetChanged();
+        }
+
+        public int getStage()
+        {
+            return stage;
+        }
+
+
     }
 
+    public class FixedSpeedScroller extends Scroller {
+
+        private int mDuration = 600;
+
+        public FixedSpeedScroller(Context context) {
+            super(context);
+        }
+
+        public FixedSpeedScroller(Context context, Interpolator interpolator) {
+            super(context, interpolator);
+        }
+
+        public FixedSpeedScroller(Context context, Interpolator interpolator, boolean flywheel) {
+            super(context, interpolator, flywheel);
+        }
+
+        @Override
+        public void startScroll(int startX, int startY, int dx, int dy, int duration) {
+            // Ignore received duration, use fixed one instead
+            super.startScroll(startX, startY, dx, dy, mDuration);
+        }
+
+        @Override
+        public void startScroll(int startX, int startY, int dx, int dy) {
+            // Ignore received duration, use fixed one instead
+            super.startScroll(startX, startY, dx, dy, mDuration);
+        }
+    }
 }

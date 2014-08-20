@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/foreign_language"
+        android:text="@string/choose_foreign_language"
         style="@style/TextViewTitle"
         android:id="@+id/textView2" />
 
@@ -25,6 +25,6 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add"
+        android:text="@string/next"
         android:id="@+id/addButton" />
 </LinearLayout>
