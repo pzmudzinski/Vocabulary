@@ -38,6 +38,7 @@
         <item name="backgroundSplit">@drawable/ab_bottom_solid_myactionbar</item>
         <item name="progressBarStyle">@style/ProgressBar.Myactionbar</item>
         <item name="titleTextStyle">@style/ActionBar.TitleTextStyle</item>
+        <item name="logo">@drawable/ab_ic_launcher</item>
     </style>
 
     <style name="ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
