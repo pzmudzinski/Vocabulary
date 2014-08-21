@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.pz.vocabulary.app.sql.ormlite.OrmLiteSQLDatabaseHelper;
+import com.pz.vocabulary.app.utils.ColorUtils;
 import com.pz.vocabulary.app.utils.Logger;
 
 import org.androidannotations.annotations.EApplication;
@@ -24,6 +25,7 @@ public class App extends Application {
         Locale.setDefault(new Locale("pl"));
         //getApplicationContext().deleteDatabase(getString(R.string.database_name));
         OpenHelperManager.getHelper(this, OrmLiteSQLDatabaseHelper.class);
+        ColorUtils.init(getApplicationContext());
     }
 
 }

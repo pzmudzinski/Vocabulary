@@ -1,6 +1,10 @@
 package com.pz.vocabulary.app.utils;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
+
+import com.pz.vocabulary.app.R;
 
 /**
  * Created by piotr on 07/06/14.
@@ -9,6 +13,13 @@ public class ColorUtils {
         private static int FIRST_COLOR = Color.GREEN;
         private static int SECOND_COLOR = Color.YELLOW;
         private static int THIRD_COLOR = Color.RED;
+
+        public static void init(Context context)
+        {
+            Resources resources = context.getResources();
+            FIRST_COLOR = resources.getColor(R.color.theme_color_2);
+            THIRD_COLOR = resources.getColor(R.color.bad);
+        }
 
         public static int getColor(float p) {
             int c0;

@@ -1,6 +1,7 @@
 package com.pz.vocabulary.app.screens.lists;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class TopWordsActivity extends VocabularyListActivity {
     @AfterViews
     protected void init()
     {
+
         Dictionary dictionary = getDictionary();
         List<Word> top = dictionary.getTopScoredWords(WORDS_PER_RANKINGS);
         List <Word> worst = dictionary.getLeastScoredWords(WORDS_PER_RANKINGS);
@@ -47,6 +49,7 @@ public class TopWordsActivity extends VocabularyListActivity {
 
         this.topWordsAdapter = new TopWordsAdapter(this, topWordsCount, worstWordsCount, allWords);
         getListView().setAdapter(topWordsAdapter);
+        getListView().setCacheColorHint(Color.TRANSPARENT);
     }
 
     @Override

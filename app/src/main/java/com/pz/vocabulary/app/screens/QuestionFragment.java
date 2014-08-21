@@ -2,6 +2,7 @@ package com.pz.vocabulary.app.screens;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -43,6 +44,7 @@ public class QuestionFragment extends VocabularyFragment{
     private QuestionFragmentCallback callback;
     private int questionNumber;
     private Question question;
+    private Handler handler = new Handler();
 
     public interface QuestionFragmentCallback
     {
@@ -131,19 +133,30 @@ public class QuestionFragment extends VocabularyFragment{
     protected void onTakeNextQuestion() {
         callback.getQuiz().skipQuestion(questionNumber);
         callback.onSkipQuestion(questionNumber);
-        showState(callback.getQuiz().getResponseFor(questionNumber));
+        showStateDelayed();
     }
 
     public void onCorrectAnswer() {
         AlertUtils.showToastWithText(getActivity(), R.string.answer_correct, R.color.good);
         callback.onCorrectAnswer(questionNumber);
-        showState(callback.getQuiz().getResponseFor(questionNumber));
+        showStateDelayed();
     }
 
     public void onWrongAnswer() {
         AlertUtils.showToastWithText(getActivity(), R.string.answer_wrong, R.color.bad);
         callback.onWrongAnswer(questionNumber);
-        showState(callback.getQuiz().getResponseFor(questionNumber));
+        showStateDelayed();
+    }
+
+    private void showStateDelayed()
+    {
+        final QuizResponse response = callback.getQuiz().getResponseFor(questionNumber);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showState(response);
+            }
+        }, QuizActivity.ANIMATION_DURATION + 1);
     }
 
     @AfterTextChange(R.id.editTextAnswer)
@@ -154,6 +167,9 @@ public class QuestionFragment extends VocabularyFragment{
 
     public void showState(QuizResponse result)
     {
+        if (!isAdded())
+            return;
+
         int colorID = 0;
         switch (result.getResult())
         {

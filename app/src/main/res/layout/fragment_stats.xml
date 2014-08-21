@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-
+            android:cacheColorHint="@android:color/transparent"
             tools:listitem="@layout/row_key_value"></ListView>
 
         <Button

@@ -32,7 +32,7 @@
         android:text="@string/answer_no_tip"
         android:layout_marginTop="@dimen/base_padding" />
 
-    <Space
+    <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

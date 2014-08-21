@@ -53,6 +53,8 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
 
     ViewPager mPager;
 
+    public static final int ANIMATION_DURATION = 600;
+
     public static void open(Context context, List<Word> words)
     {
         Intent intent = QuizActivity_.intent(context).get();
@@ -66,8 +68,8 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
 
         Parcelable[] parcelables = getIntent().getParcelableArrayExtra(ARG_WORD_IDS);
         Word[] words = Arrays.copyOf(parcelables, parcelables.length, Word[].class);;
@@ -170,6 +172,10 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
         if (id == R.id.action_finish_test) {
             goToResults();
             return true;
+        } else if ( id == android.R.id.home)
+        {
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -206,7 +212,7 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
 
     public class FixedSpeedScroller extends Scroller {
 
-        private int mDuration = 600;
+        private int mDuration = ANIMATION_DURATION;
 
         public FixedSpeedScroller(Context context) {
             super(context);

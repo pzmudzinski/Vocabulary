@@ -106,10 +106,10 @@
     <string name="error_while_reading_file">Błąd odczytu pliku.</string>
     <string name="error_translations_not_found">W pliku nie znaleziono żadnych tłumaczeń. \n Czy na pewno jest w odpowiednim formacie?</string>
 
-    <string name="import_description">Wybierz plik .txt w formacie: \n
+    <string name="import_description"><b>Wybierz plik .txt w formacie: </b>\n
         słówko;tłumaczenie w języku obcym;skojarzenie \n
         (skojarzenie jest opcjonalne)
-        \n Przykład: \n
+        \n <b>Przykład: </b>\n
         dom;house \n
         chłopiec;boy;moje skojarzenie \n
         ...
@@ -126,7 +126,8 @@
     <string name="import_adding_translation" formatted="false">Dodawanie: %s (%s)</string>
     <string name="import_adding_to_db_finished">Dodawanie słówek zakończone</string>
 
-    <string name="export_description">Eksport do pliku txt: \n
+    <string name="export_description">
+        <b>Eksport do pliku txt: </b>\n
         słówko;tłumaczenie w języku obcym;skojarzenie \n
         (skojarzenie jest opcjonalne)
     </string>
