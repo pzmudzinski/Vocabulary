@@ -63,3 +63,15 @@ dependencies {
     compile 'com.crashlytics.android:crashlytics:1.+'
     compile 'com.google.android.gms:play-services:5.0.77'
 }
+
+/*
+training
+bobzon
+
+keytool -genkey -v -keystore training.keystore -alias training -keyalg RSA -keysize 2048 -validity 10000
+——
+keytool -genkey -v -keystore vocabulary.keystore -alias vocabulary -keyalg RSA -keysize 2048 -validity 10000
+
+vocabulary
+ikarus
+ */
