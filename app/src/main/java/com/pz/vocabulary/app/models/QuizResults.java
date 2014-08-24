@@ -44,6 +44,16 @@ public class QuizResults implements Parcelable
         skippedAnswers++;
     }
 
+    public void removeSkippedAnswer()
+    {
+        skippedAnswers--;
+    }
+
+    public void removeWrongAnswer()
+    {
+        wrongAnswers--;
+    }
+
     public void addWrongAnswer()
     {
         wrongAnswers++;

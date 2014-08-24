@@ -105,12 +105,12 @@ public class ToughWordTest extends VocabularyTest {
 
     private void correctAnswer()
     {
-        quiz.answer(answerFor(quiz.takeNextQuestion()));
+        //quiz.answer(answerFor(quiz.takeNextQuestion()));
     }
 
     private void wrongAnswer()
     {
-        quiz.takeNextQuestion();
-        quiz.skipQuestion();
+        //quiz.takeNextQuestion();
+        //quiz.skipQuestion();
     }
 }

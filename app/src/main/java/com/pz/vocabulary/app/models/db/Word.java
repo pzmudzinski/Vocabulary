@@ -90,7 +90,7 @@ public class Word extends BaseEntity implements Parcelable {
         this.spelling = spelling;
         String asciiName = Normalizer.normalize(spelling, Normalizer.Form.NFD)
                 .replaceAll("[^\\p{ASCII}]", "");
-        this.normalizedSpelling = asciiName;
+        this.normalizedSpelling = asciiName.toLowerCase();
     }
 
     @Override

@@ -13,7 +13,8 @@ import java.util.List;
  * Created by piotr on 03/07/14.
  */
 public interface QuizHistory {
-    public long insertResponse(long wordFrom, String response, QuizQuestionResult result);
+    public void deleteResponse(long responseID);
+    public QuizResponse insertResponse(long wordFrom, String response, QuizQuestionResult result);
     public List<QuizResponse> findResponsesWithResult(QuizQuestionResult result);
     public List<QuizResponse> getAllResponses();
 

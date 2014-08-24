@@ -148,4 +148,9 @@
 
     <string name="next">Dalej</string>
     <string name="version">Wersja : %s</string>
+    <string name="error_not_local_file">Ten plik musi znajdować się na Twoim telefonie.</string>
+
+    <string name="accept_answer">Zalicz odpowiedź</string>
+    <string name="accept_answer_add_meaning">Zalicz odpowiedź i dodaj to znaczenie</string>
+    <string name="answers">Odpowiedzi</string>
 </resources>

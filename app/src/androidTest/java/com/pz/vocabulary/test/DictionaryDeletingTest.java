@@ -94,47 +94,47 @@ public class DictionaryDeletingTest extends VocabularyTest {
         assertEquals(meanings.get(0).getMemory().getId(), memory.getId());
     }
 
-    public void testDeletingWordWithQuizHistory()
-    {
-        dbStore.insertWordsAndTranslation(polishHome, englishHome, memory);
-
-        Quiz quiz = new Quiz(dbStore, Arrays.asList(polishHome, englishHome), false);
-        quiz.takeNextQuestion();
-        quiz.skipQuestion();
-        quiz.takeNextQuestion();
-        quiz.skipQuestion();
-        quiz.store();
-
-        dbStore.deleteWord(polishHome.getId());
-
-        assertFalse(dbStore.hasItems(QuizResponse.class));
-    }
-
-    public void testDeletingWordWithQuizHistoryAndTwoMeanings() throws SQLException {
-        dbStore.insertWordsAndTranslation(polishKey, englishKey, memory);
-        dbStore.insertWordsAndTranslation(polishImportant, englishKey, memory);
-
-        Quiz quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey, polishImportant, englishKey), false);
-        quiz.takeNextQuestion();
-        quiz.skipQuestion();
-        quiz.takeNextQuestion();
-        quiz.skipQuestion();
-        quiz.takeNextQuestion();
-        quiz.skipQuestion();
-        quiz.takeNextQuestion();
-        quiz.skipQuestion();
-        quiz.store();
-
-        dbStore.deleteWord(polishKey.getId());
-
-        assertEquals(3, dbStore.numberOfItems(QuizResponse.class));
-        List<QuizResponse> responses = dbHelper.getDao(QuizResponse.class).queryForAll();
-
-        for (QuizResponse response : responses)
-        {
-            assertTrue(response.getWordFrom().getId() == polishImportant.getId() || response.getWordFrom().getId() == englishKey.getId());
-        }
-    }
+//    public void testDeletingWordWithQuizHistory()
+//    {
+//        dbStore.insertWordsAndTranslation(polishHome, englishHome, memory);
+//
+//        Quiz quiz = new Quiz(dbStore, Arrays.asList(polishHome, englishHome), false);
+//        quiz.takeNextQuestion();
+//        quiz.skipQuestion();
+//        quiz.takeNextQuestion();
+//        quiz.skipQuestion();
+//        quiz.store();
+//
+//        dbStore.deleteWord(polishHome.getId());
+//
+//        assertFalse(dbStore.hasItems(QuizResponse.class));
+//    }
+//
+//    public void testDeletingWordWithQuizHistoryAndTwoMeanings() throws SQLException {
+//        dbStore.insertWordsAndTranslation(polishKey, englishKey, memory);
+//        dbStore.insertWordsAndTranslation(polishImportant, englishKey, memory);
+//
+//        Quiz quiz = new Quiz(dbStore, Arrays.asList(polishKey, englishKey, polishImportant, englishKey), false);
+//        quiz.takeNextQuestion();
+//        quiz.skipQuestion();
+//        quiz.takeNextQuestion();
+//        quiz.skipQuestion();
+//        quiz.takeNextQuestion();
+//        quiz.skipQuestion();
+//        quiz.takeNextQuestion();
+//        quiz.skipQuestion();
+//        quiz.store();
+//
+//        dbStore.deleteWord(polishKey.getId());
+//
+//        assertEquals(3, dbStore.numberOfItems(QuizResponse.class));
+//        List<QuizResponse> responses = dbHelper.getDao(QuizResponse.class).queryForAll();
+//
+//        for (QuizResponse response : responses)
+//        {
+//            assertTrue(response.getWordFrom().getId() == polishImportant.getId() || response.getWordFrom().getId() == englishKey.getId());
+//        }
+//    }
 
     public void testDeletingNotExistingWord()
     {

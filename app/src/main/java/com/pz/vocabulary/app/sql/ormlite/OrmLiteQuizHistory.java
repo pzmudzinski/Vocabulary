@@ -40,15 +40,24 @@ public class OrmLiteQuizHistory implements QuizHistory {
     }
 
     @Override
-    public long insertResponse(long wordFrom, String response, QuizQuestionResult result) {
+    public void deleteResponse(long responseID) {
+        try {
+            responseDao.deleteById(responseID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public QuizResponse insertResponse(long wordFrom, String response, QuizQuestionResult result) {
 
         QuizResponse quizResponse = new QuizResponse(wordFrom, response, result);
         try {
             responseDao.create(quizResponse);
-            return quizResponse.getId();
+            return quizResponse;
         } catch (SQLException e) {
             e.printStackTrace();
-            return -1;
+            return null;
         }
     }
 

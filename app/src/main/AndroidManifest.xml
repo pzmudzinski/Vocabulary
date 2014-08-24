@@ -97,7 +97,7 @@
         <activity
             android:name="com.ipaulpro.afilechooser.FileChooserActivity"
             android:icon="@drawable/ic_launcher"
-            android:enabled="true"
+            android:enabled="@bool/use_activity"
             android:exported="true"
             android:label="@string/files" >
             <intent-filter>
@@ -114,6 +114,18 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <meta-data android:name="com.crashlytics.ApiKey" android:value="a82cf23b8a476e2053a331e9c34f521be16af4a4"/>
+
+        <provider
+            android:name="com.ianhanniballake.localstorage.LocalStorageProvider"
+            android:authorities="com.ianhanniballake.localstorage.documents"
+            android:enabled="@bool/use_provider"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:permission="android.permission.MANAGE_DOCUMENTS" >
+            <intent-filter>
+                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+            </intent-filter>
+        </provider>
     </application>
 
 

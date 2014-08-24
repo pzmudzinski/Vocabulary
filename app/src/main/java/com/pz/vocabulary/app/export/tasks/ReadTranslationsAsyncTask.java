@@ -20,6 +20,7 @@ import java.util.List;
 public class ReadTranslationsAsyncTask extends AsyncTask<Uri, Integer, List<ReadTranslationsAsyncTask.RawTranslation>>
 {
 
+
     private Context context;
 
     public static class RawTranslation
@@ -37,7 +38,7 @@ public class ReadTranslationsAsyncTask extends AsyncTask<Uri, Integer, List<Read
         public RawTranslation(String f, String t, String m)
         {
             this(f,t);
-            this.memory = memory;
+            this.memory = m;
         }
     }
 
@@ -51,6 +52,7 @@ public class ReadTranslationsAsyncTask extends AsyncTask<Uri, Integer, List<Read
 
     public static final int ERROR_CANNOT_READ_FILE = 1;
     public static final int ERROR_HAVENT_FOUND_ANY_TRANSLATIONS = 2;
+    public static final int ERROR_NOT_LOCAL_FILE = 3;
 
     private int errorCode = -1;
 
@@ -64,7 +66,18 @@ public class ReadTranslationsAsyncTask extends AsyncTask<Uri, Integer, List<Read
     @Override
     protected List<RawTranslation> doInBackground(Uri... uris) {
         Uri uri = uris[0];
-        File file = FileUtils.getFile(context, uri);
+
+        // Get the File path from the Uri
+        String path = FileUtils.getPath(context, uri);
+        File file = null;
+        // Alternatively, use FileUtils.getFile(Context, Uri)
+        if (path != null && FileUtils.isLocal(path)) {
+            file = new File(path);
+        } else {
+            listener.onError(ERROR_NOT_LOCAL_FILE);
+            this.errorCode = ERROR_NOT_LOCAL_FILE;
+            return null;
+        }
 
         try {
             FileInputStream fileInputStream = null;

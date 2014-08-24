@@ -5,6 +5,7 @@ import android.content.Context;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.SelectArg;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.pz.vocabulary.app.models.Quiz;
@@ -78,7 +79,8 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
         QueryBuilder<Word, Long> queryBuilder = words.queryBuilder();
         Where<Word, Long> where = queryBuilder.where();
         try {
-            where.like(DBColumns.NORMALIZED_SPELLING, spelling);
+            SelectArg selectArg = new SelectArg(spelling);
+            where.like(DBColumns.NORMALIZED_SPELLING, selectArg);
             where.and();
             where.eq(DBColumns.LANGUAGE_ID, langID);
 
@@ -193,7 +195,12 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
             if (memory != null)
             {
                 // @TODO SQL?
-                List<Memory> memoryList = memories.queryForEq(DBColumns.DESCRIPTION, memory.getDescription());
+                SelectArg selectArg = new SelectArg(memory.getDescription());
+
+                //TestDao.queryForFirst(
+                //        TestDao.queryBuilder().where().like("stats", selectArg).prepare());""
+
+                List<Memory> memoryList = memories.queryForEq(DBColumns.DESCRIPTION, selectArg);
                 Memory memoryWithSameDescription = memoryList.size() == 0? null : memoryList.get(0);
                 if (memoryWithSameDescription != null)
                     memory.setId(memoryWithSameDescription.getId());
@@ -390,7 +397,12 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     }
 
     @Override
-    public long insertResponse(long wordFrom, String response, QuizQuestionResult result) {
+    public void deleteResponse(long responseID) {
+        quizHistory.deleteResponse(responseID);
+    }
+
+    @Override
+    public QuizResponse insertResponse(long wordFrom, String response, QuizQuestionResult result) {
         return quizHistory.insertResponse(wordFrom, response, result);
     }
 

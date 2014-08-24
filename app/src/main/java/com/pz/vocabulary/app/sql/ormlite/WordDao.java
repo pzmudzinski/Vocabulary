@@ -39,6 +39,8 @@ public class WordDao extends BaseDaoImpl<Word,Long> {
         // find related translation
         DeleteBuilder<Translation, Long> translationDeleteBuilder = translationDao.deleteBuilder();
         translationDeleteBuilder.where().eq(DBColumns.WORD_TO, aLong).or().eq(DBColumns.WORD_FROM, aLong);
+
+        // delete translations where word_to = id or word_from = id
         translationDao.delete(translationDeleteBuilder.prepare());
 
         DeleteBuilder<Word, Long> wordDeleteBuilder = this.deleteBuilder();

@@ -35,6 +35,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:id="@+id/spaceView"
         android:layout_weight="1" />
 
     <Button
@@ -52,4 +53,14 @@
         android:text="@string/answer_take_next"
         android:id="@+id/buttonTakeNext"
         android:layout_gravity="center_horizontal" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/postAnswerView"
+        layout="@layout/post_answer_view"
+        android:layout_gravity="center_horizontal" />
+
+
 </LinearLayout>

@@ -1,9 +1,13 @@
 package com.pz.vocabulary.app.models;
 
+import android.widget.ListView;
+
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.db.BaseEntity;
+import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.models.db.Memory;
 import com.pz.vocabulary.app.models.db.QuizResponse;
 import com.pz.vocabulary.app.models.db.Translation;
@@ -12,6 +16,8 @@ import com.pz.vocabulary.app.sql.DBColumns;
 import com.pz.vocabulary.app.sql.DatabaseTables;
 import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.sql.QuizHistory;
+
+import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -140,8 +146,8 @@ public class Quiz extends BaseEntity{
 
     public void skipQuestion(int questionNumber) {
         results.addSkippedAnswer();
-        insertedResponses.add(dictionary.insertResponse(getIdForWord(questionNumber), null, Dictionary.QuizQuestionResult.ResponseSkipped));
-        QuizResponse response = new QuizResponse(id, "",  QuizHistory.QuizQuestionResult.ResponseSkipped);
+        QuizResponse response = dictionary.insertResponse(getIdForWord(questionNumber), null, Dictionary.QuizQuestionResult.ResponseSkipped);
+        insertedResponses.add(response.getId());
         responses.put(questionNumber, response);
     }
 
@@ -155,23 +161,76 @@ public class Quiz extends BaseEntity{
         long id = getIdForWord(questionNumber);
         List<Translation> meanings = dictionary.findMeanings(id);
 
+        QuizResponse response = null;
+        boolean isCorrect = false;
         for (Translation translation : meanings)
         {
             Word answerWord = new Word(translation.getTranslation().getLanguageID(), answer);
             if ( answerWord.equals(translation.getTranslation()))
             {
                 results.addCorrectAnswer();
-                insertedResponses.add(dictionary.insertResponse(id, answer, Dictionary.QuizQuestionResult.ResponseCorrect));
-                QuizResponse response = new QuizResponse(id, answer,  QuizHistory.QuizQuestionResult.ResponseCorrect);
-                responses.put(questionNumber, response);
-                return true;
+                response = dictionary.insertResponse(id, answer, Dictionary.QuizQuestionResult.ResponseCorrect);
+                isCorrect = true;
             }
         }
 
-        results.addWrongAnswer();
-        insertedResponses.add(dictionary.insertResponse(id, answer, Dictionary.QuizQuestionResult.ResponseWrong));
-        QuizResponse response = new QuizResponse(id, answer,  QuizHistory.QuizQuestionResult.ResponseWrong);
+        if (!isCorrect)
+        {
+            results.addWrongAnswer();
+            response = dictionary.insertResponse(id, answer, Dictionary.QuizQuestionResult.ResponseWrong);
+        }
+
+        insertedResponses.add(response.getId());
         responses.put(questionNumber, response);
-        return false;
+        return isCorrect;
+    }
+
+    public QuizResponse acceptAnswer(int questionNumber)
+    {
+        QuizResponse currentResponse = responses.get(questionNumber);
+        if (currentResponse == null)
+            return null; // wtf
+
+        insertedResponses.remove(currentResponse.getId());
+        responses.remove(questionNumber);
+        dictionary.deleteResponse(currentResponse.getId());
+
+        if (currentResponse.getResult() == QuizHistory.QuizQuestionResult.ResponseSkipped)
+            results.removeSkippedAnswer();
+        else if (currentResponse.getResult() == QuizHistory.QuizQuestionResult.ResponseWrong)
+            results.removeWrongAnswer();
+
+        QuizResponse newResponse = dictionary.insertResponse(currentResponse.getWordFrom().getId(), currentResponse.getResponse(), QuizHistory.QuizQuestionResult.ResponseCorrect);
+        insertedResponses.add(newResponse.getId());
+        responses.put(questionNumber, newResponse);
+
+        results.addCorrectAnswer();
+
+        return newResponse;
+    }
+
+    public QuizResponse acceptAnswerAndAddMeaning(int questionNumber)
+    {
+        String usersAnswer = responses.get(questionNumber).getResponse();
+        QuizResponse correctResponse = acceptAnswer(questionNumber);
+        Word wordFrom = dictionary.findWord(correctResponse.getWordFrom().getId());
+
+        List<Language> languages = dictionary.getLanguages();
+        Language otherLanguage = null;
+        for ( Language language : languages)
+        {
+            if (language.getId() != wordFrom.getLanguageID()) {
+                otherLanguage = language;
+                break;
+            }
+        }
+
+        if (otherLanguage == null)
+            return null;
+
+        Word wordTo = otherLanguage.newWord(usersAnswer);
+
+        dictionary.insertWordsAndTranslation(wordFrom, wordTo, null);
+        return correctResponse;
     }
 }

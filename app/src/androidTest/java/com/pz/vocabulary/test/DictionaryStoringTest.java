@@ -168,5 +168,37 @@ public class DictionaryStoringTest extends VocabularyTest {
         assertEquals(memory1.getId(), translation.getMemory().getId());
     }
 
+    public void testApostropheInWord()
+    {
+        Word apostrophe = english.newWord("mike's");
+
+        dbStore.insertWordsAndTranslation(polishHome, apostrophe, null);
+
+        assertTrue(dbStore.hasItems(Translation.class));
+
+        List<Translation> translations = dbStore.findMeanings(apostrophe.getId());
+        assertEquals(1, translations.size());
+
+       dbStore.insertWordsAndTranslation(polishKey, apostrophe, null);
+
+        assertEquals(3, dbStore.numberOfItems(Word.class));
+
+        List<Word> w = dbStore.findWords(Language.ENGLISH);
+        assertEquals("mike's", w.get(0).getSpelling());
+    }
+
+    public void testApostropheInMemory()
+    {
+        Word apostrophe = english.newWord("mike's");
+
+        dbStore.insertWordsAndTranslation(polishHome, apostrophe, new Memory("piotr's"));
+
+        assertTrue(dbStore.hasItems(Translation.class));
+
+        List<Translation> translations = dbStore.findMeanings(apostrophe.getId());
+        assertEquals(1, translations.size());
+
+        assertEquals("piotr's", translations.get(0).getMemory().getDescription());
+    }
 
 }

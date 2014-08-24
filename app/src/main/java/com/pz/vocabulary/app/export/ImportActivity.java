@@ -79,6 +79,8 @@ public class ImportActivity extends ShareVocabularyActivity implements ReadTrans
             appendToConsole(R.string.error_while_reading_file);
         else if (errorCode == ReadTranslationsAsyncTask.ERROR_HAVENT_FOUND_ANY_TRANSLATIONS)
             appendToConsole(R.string.error_translations_not_found);
+        else if (errorCode == ReadTranslationsAsyncTask.ERROR_NOT_LOCAL_FILE)
+            appendToConsole(R.string.error_not_local_file);
     }
 
     private void startAddingToDB(List<ReadTranslationsAsyncTask.RawTranslation> translations)

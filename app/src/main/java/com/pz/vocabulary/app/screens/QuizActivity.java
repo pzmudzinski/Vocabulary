@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -27,7 +28,9 @@ import com.pz.vocabulary.app.export.ExportActivity_;
 import com.pz.vocabulary.app.export.ImportActivity_;
 import com.pz.vocabulary.app.models.Question;
 import com.pz.vocabulary.app.models.Quiz;
+import com.pz.vocabulary.app.models.db.QuizResponse;
 import com.pz.vocabulary.app.models.db.Word;
+import com.pz.vocabulary.app.sql.QuizHistory;
 import com.pz.vocabulary.app.utils.AlertUtils;
 import com.pz.vocabulary.app.utils.Arguments;
 
@@ -117,7 +120,34 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
     {
         String title = String.format(getString(R.string.question_number_of_total), questionNumber+1, quiz.totalQuestionNumber());
         getSupportActionBar().setTitle(title);
+
+        QuizResponse response = quiz.getResponseFor(questionNumber);
+        int colorID = getColorForResult(response);
+        int color = getResources().getColor(colorID);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
     }
+
+    private int getColorForResult(QuizResponse result)
+    {
+        if (result == null)
+            return R.color.gray;
+
+        int colorID = 0;
+        switch (result.getResult())
+        {
+            case ResponseCorrect:
+                colorID = R.color.theme_color_1;
+                break;
+            case ResponseSkipped:
+                colorID = R.color.neutral;
+                break;
+            case ResponseWrong:
+                colorID = R.color.bad;
+                break;
+        }
+        return colorID;
+    }
+
 
     public void goToResults() {
         quiz.store();

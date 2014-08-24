@@ -5,17 +5,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.models.Question;
 import com.pz.vocabulary.app.models.Quiz;
 import com.pz.vocabulary.app.models.db.QuizResponse;
+import com.pz.vocabulary.app.models.db.Translation;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.sql.QuizHistory;
 import com.pz.vocabulary.app.utils.AlertUtils;
+import com.pz.vocabulary.app.utils.Arguments;
+import com.pz.vocabulary.app.utils.DictionaryUtils;
 
 import org.androidannotations.annotations.AfterTextChange;
 import org.androidannotations.annotations.AfterViews;
@@ -23,11 +28,13 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.List;
+
 /**
  * Created by piotr on 19/08/14.
  */
 @EFragment(R.layout.fragment_question)
-public class QuestionFragment extends VocabularyFragment{
+public class QuestionFragment extends VocabularyFragment implements Arguments{
 
     @ViewById(R.id.editTextAnswer)
     protected EditText editTextAnswer;
@@ -39,6 +46,13 @@ public class QuestionFragment extends VocabularyFragment{
     protected Button skipButton;
     @ViewById(R.id.textViewTip)
     protected TextView textViewTip;
+    @ViewById(R.id.spaceView)
+    protected View spaceView;
+    @ViewById(R.id.postAnswerView)
+    protected ViewGroup postAnswerView;
+    @ViewById(R.id.listView)
+    protected ListView meaningsListView;
+
     public static final String ARG_QUESTION_NUMBER = "arg_question_number";
 
     private QuestionFragmentCallback callback;
@@ -170,26 +184,45 @@ public class QuestionFragment extends VocabularyFragment{
         if (!isAdded())
             return;
 
-        int colorID = 0;
-        switch (result.getResult())
-        {
-            case ResponseCorrect:
-                colorID = R.color.theme_color_1;
-                break;
-            case ResponseSkipped:
-                colorID = R.color.neutral;
-                break;
-            case ResponseWrong:
-                colorID = R.color.bad;
-                break;
-        }
-
-        int color = getResources().getColor(colorID);
-        getView().setBackgroundColor(color);
+        boolean isCorrectAnswer = result.getResult() == QuizHistory.QuizQuestionResult.ResponseCorrect;
 
         editTextAnswer.setEnabled(false);
-        answerButton.setVisibility(View.INVISIBLE);
-        skipButton.setVisibility(View.INVISIBLE);
+        answerButton.setVisibility(View.GONE);
+        skipButton.setVisibility(View.GONE);
+
         editTextAnswer.setText(result.getResponse());
+
+        if (!isCorrectAnswer)
+        {
+            spaceView.setVisibility(View.GONE);
+            postAnswerView.setVisibility(View.VISIBLE);
+
+            Bundle bundle = new Bundle();
+            bundle.putLong(SHOW_WORD_MEANINGS, question.getWord().getId());
+            List<Word> words  = DictionaryUtils.getWordsFromBundle(getDictionary(), bundle);
+
+            ArrayAdapter<Word> adapter = new ArrayAdapter<Word>(getActivity(),
+                    android.R.layout.simple_list_item_1,
+                    android.R.id.text1,
+                    words);
+
+            meaningsListView.setAdapter(adapter);
+        } else {
+            spaceView.setVisibility(View.VISIBLE);
+            postAnswerView.setVisibility(View.GONE);
+        }
+    }
+
+
+    @Click(R.id.acceptAnswerButton)
+    protected void acceptAnswer()
+    {
+        showState( callback.getQuiz().acceptAnswer(questionNumber));
+    }
+
+    @Click(R.id.acceptAnswerAddMeaningButton)
+    protected void acceptAnswerAndAddMeaning()
+    {
+        showState(callback.getQuiz().acceptAnswerAndAddMeaning(questionNumber));
     }
 }
