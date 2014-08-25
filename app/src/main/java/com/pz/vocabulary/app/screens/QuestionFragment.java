@@ -53,6 +53,9 @@ public class QuestionFragment extends VocabularyFragment implements Arguments{
     @ViewById(R.id.listView)
     protected ListView meaningsListView;
 
+    @ViewById(R.id.acceptAnswerAddMeaningButton)
+    protected Button acceptAnswerAddMeaningButton;
+
     public static final String ARG_QUESTION_NUMBER = "arg_question_number";
 
     private QuestionFragmentCallback callback;
@@ -197,6 +200,8 @@ public class QuestionFragment extends VocabularyFragment implements Arguments{
             spaceView.setVisibility(View.GONE);
             postAnswerView.setVisibility(View.VISIBLE);
 
+
+            acceptAnswerAddMeaningButton.setEnabled(result.getResult() == QuizHistory.QuizQuestionResult.ResponseWrong);
             Bundle bundle = new Bundle();
             bundle.putLong(SHOW_WORD_MEANINGS, question.getWord().getId());
             List<Word> words  = DictionaryUtils.getWordsFromBundle(getDictionary(), bundle);
