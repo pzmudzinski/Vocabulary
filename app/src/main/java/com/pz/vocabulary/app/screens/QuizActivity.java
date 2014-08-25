@@ -33,6 +33,7 @@ import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.sql.QuizHistory;
 import com.pz.vocabulary.app.utils.AlertUtils;
 import com.pz.vocabulary.app.utils.Arguments;
+import com.pz.vocabulary.app.utils.CustomAlertDialogBuilder;
 
 import org.androidannotations.annotations.AfterTextChange;
 import org.androidannotations.annotations.AfterViews;
@@ -157,7 +158,7 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
 
     @Override
     public void onBackPressed() {
-        AlertDialog alertDialog = new AlertDialog.Builder(
+        AlertDialog alertDialog = new CustomAlertDialogBuilder(
                 this).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -204,7 +205,11 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
             return true;
         } else if ( id == android.R.id.home)
         {
-            onBackPressed();
+            if (mPager.getCurrentItem() == 0)
+                onBackPressed();
+            else {
+                mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

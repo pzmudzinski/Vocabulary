@@ -13,6 +13,7 @@ import com.pz.vocabulary.app.models.db.Memory;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.utils.AlertUtils;
+import com.pz.vocabulary.app.utils.CustomAlertDialogBuilder;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -78,7 +79,7 @@ public class AddTranslationFragment extends VocabularyFragment {
     @Click(R.id.selectMemory)
     protected void selectMemoryClicked()
     {
-        AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder b = new CustomAlertDialogBuilder(getActivity());
         b.setTitle(R.string.select_memory);
         List<Memory> memories = getDictionary().getAllMemories();
         final List<String> titles = new ArrayList<String>(memories.size());

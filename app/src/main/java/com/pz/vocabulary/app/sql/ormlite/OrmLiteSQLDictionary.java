@@ -164,14 +164,16 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
         return translation.getId();
     }
 
-    private Word findWordWithSpelling(String spelling)
-    {
-        try {
-            return getDao(Word.class).queryBuilder().selectColumns(DBColumns.ID).where().eq(DBColumns.NORMALIZED_SPELLING, spelling).queryForFirst();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+    @Override
+    public void deleteTranslation(long wordFrom, long wordTo) {
+        try{
+            WordDao wordDao = (WordDao) getDao(Word.class);
+            wordDao.deleteTranslation(wordFrom, wordTo);
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
         }
+
     }
 
     @Override
@@ -194,12 +196,7 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
 
             if (memory != null)
             {
-                // @TODO SQL?
                 SelectArg selectArg = new SelectArg(memory.getDescription());
-
-                //TestDao.queryForFirst(
-                //        TestDao.queryBuilder().where().like("stats", selectArg).prepare());""
-
                 List<Memory> memoryList = memories.queryForEq(DBColumns.DESCRIPTION, selectArg);
                 Memory memoryWithSameDescription = memoryList.size() == 0? null : memoryList.get(0);
                 if (memoryWithSameDescription != null)
@@ -333,9 +330,11 @@ public class OrmLiteSQLDictionary extends SQLStore implements Dictionary {
     public List<Word> findWords(long languageId) {
         Dao<Word, Long> words = getDao(Word.class);
         try {
-            return words.queryBuilder().selectColumns(DBColumns.ID, DBColumns.SPELLING).
+            return words.queryBuilder().orderBy(DBColumns.SPELLING, true).
+                    selectColumns(DBColumns.ID, DBColumns.SPELLING).
                     where()
-                    .eq(DBColumns.LANGUAGE_ID, languageId).query();
+                    .eq(DBColumns.LANGUAGE_ID, languageId).
+                            query();
         } catch (SQLException e) {
             Logger.error(TAG, e.getMessage(), e);
             e.printStackTrace();

@@ -140,4 +140,35 @@ public class DictionaryDeletingTest extends VocabularyTest {
     {
         assertFalse(dbStore.deleteWord(255));
     }
+
+    public void testDeletingSimpleTranslation()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+
+        dbStore.deleteTranslation(polishKey.getId(), englishKey.getId());
+
+        assertEquals(0, dbStore.numberOfItems(Word.class));
+    }
+
+    public void testDeletingSimpleTranslationInverted()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+
+        dbStore.deleteTranslation(englishKey.getId(), polishKey.getId());
+
+        assertEquals(0, dbStore.numberOfItems(Word.class));
+    }
+
+    public void testDeletingTranslationWithMultipleMeanings()
+    {
+        dbStore.insertWordsAndTranslation(polishKey, englishKey, null);
+        dbStore.insertWordsAndTranslation(polishImportant, englishKey, null);
+
+        dbStore.deleteTranslation(polishImportant.getId(), englishKey.getId());
+
+        assertEquals(2, dbStore.numberOfItems(Word.class));
+
+        assertEquals(1 ,dbStore.findMeanings(englishKey.getId()).size());
+
+    }
 }

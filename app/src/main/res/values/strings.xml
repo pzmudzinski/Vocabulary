@@ -153,4 +153,11 @@
     <string name="accept_answer">Zalicz odpowiedź</string>
     <string name="accept_answer_add_meaning">Zalicz odpowiedź i dodaj to znaczenie</string>
     <string name="answers">Odpowiedzi</string>
+
+    <string name="add_meaning">Dodaj znaczenie</string>
+    <string name="remove_meaning">Usuń znaczenie</string>
+    <string name="press_longer_to_delete_meaning">Przytrzymaj dłużej wybrane znaczenie aby je usunąć</string>
+    <string name="delete_meaning_are_you_sure">Czy na pewno chcesz usunąć to znaczenie?</string>
+    <string name="delete_meaning">Usuń znaczenie</string>
+
 </resources>

@@ -31,6 +31,7 @@ public interface Dictionary extends QuizHistory{
     public void addMemoryToTranslation(long memoryId, long translationId);
     public long insertTranslation(long wordFrom, long wordTo);
     public long insertTranslation(long wordFrom, long wordTo, Long memoryId);
+    public void deleteTranslation(long wordFrom, long wordTo);
     public long insertWordsAndTranslation(Word word1, Word word2, Memory memory);
     public Translation findTranslation(long wordFrom, long wordTo);
     public List<Translation> findMeanings(long wordId);

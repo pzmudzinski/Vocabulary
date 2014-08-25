@@ -2,6 +2,7 @@ package com.pz.vocabulary.app.utils;
 
 import android.os.Bundle;
 
+import com.pz.vocabulary.app.models.db.Language;
 import com.pz.vocabulary.app.models.db.Translation;
 import com.pz.vocabulary.app.models.db.Word;
 import com.pz.vocabulary.app.screens.IntentArguments;
@@ -74,5 +75,19 @@ public class DictionaryUtils implements IntentArguments, Arguments {
             return dictionary.findWords(value);
         }
         return null;
+    }
+
+    public static Language otherLanguage(Dictionary dictionary, long languageID)
+    {
+        List<Language> languages = dictionary.getLanguages();
+        Language otherLanguage = null;
+        for ( Language language : languages)
+        {
+            if (language.getId() != languageID) {
+                otherLanguage = language;
+                break;
+            }
+        }
+        return otherLanguage;
     }
 }

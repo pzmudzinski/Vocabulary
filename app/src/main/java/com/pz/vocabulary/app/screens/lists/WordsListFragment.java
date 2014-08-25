@@ -35,6 +35,8 @@ public class WordsListFragment extends VocabularyFragment implements AbsListView
 
     private ListAdapter mAdapter;
 
+    private List<Word> words;
+
     public WordsListFragment()
     {
 
@@ -50,15 +52,20 @@ public class WordsListFragment extends VocabularyFragment implements AbsListView
         }
     }
 
+    public List<Word> getWords() {
+        return words;
+    }
+
     public void setWordsFromBundle(Bundle bundle)
     {
-        List<Word> words  = DictionaryUtils.getWordsFromBundle(getDictionary(), bundle);
+        this.words  = DictionaryUtils.getWordsFromBundle(getDictionary(), bundle);
 
         mAdapter = new ArrayAdapter<Word>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, words);
         if (mListView != null)
             mListView.setAdapter(mAdapter);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -116,5 +123,9 @@ public class WordsListFragment extends VocabularyFragment implements AbsListView
         if (emptyText instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
+    }
+
+    public ListView getListView() {
+        return mListView;
     }
 }

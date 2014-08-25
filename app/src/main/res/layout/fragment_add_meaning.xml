@@ -2,6 +2,38 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:padding="@dimen/base_padding"
+    android:background="@color/theme_white"
+    android:minWidth="300dp"
+    android:layout_height="wrap_content">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/base_padding"
+        android:layout_marginTop="@dimen/base_padding"
+        android:hint="@string/title_to"
+        android:id="@+id/editText"
+        style="@style/EditTextStyle"
+        android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText2"
+        android:layout_marginBottom="@dimen/base_padding"
+        android:hint="@string/association"
+        style="@style/EditTextStyle"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:layout_marginTop="@dimen/base_padding"
+        android:text="@string/add_meaning"
+        style="@style/ButtonText"
+
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

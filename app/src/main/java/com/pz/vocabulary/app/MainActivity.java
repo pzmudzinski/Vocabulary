@@ -1,6 +1,7 @@
 package com.pz.vocabulary.app;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.pz.vocabulary.app.screens.SettingsActivity_;
 import com.pz.vocabulary.app.screens.Updatable;
 import com.pz.vocabulary.app.screens.VocabularyActionBarActivity;
 import com.pz.vocabulary.app.utils.Arguments;
+import com.pz.vocabulary.app.utils.CustomAlertDialogBuilder;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -135,14 +137,16 @@ public class MainActivity extends VocabularyActionBarActivity implements ActionB
             return true;
         } else if (id == R.id.action_about) {
             final TextView textView = new TextView(this);
-
+            Dialog dialog = new Dialog(this, R.style.CustomDialog);
             textView.setText(R.string.about_text);
             textView.setTextSize(16);
-            textView.setTextColor(getResources().getColor(android.R.color.white));
+            textView.setTextColor(getResources().getColor(R.color.text_color));
             int padding = getResources().getDimensionPixelSize(R.dimen.base_padding);
             textView.setPadding(padding, padding, padding, padding);
             textView.setMovementMethod(LinkMovementMethod.getInstance());
-            AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.about).setView(textView).create();
+            dialog.setTitle(R.string.about);
+            dialog.setContentView(textView);
+
             dialog.show();
 
 

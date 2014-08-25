@@ -10,6 +10,7 @@ import android.view.ContextThemeWrapper;
 
 import com.pz.vocabulary.app.R;
 import com.pz.vocabulary.app.utils.Arguments;
+import com.pz.vocabulary.app.utils.CustomAlertDialogBuilder;
 
 import org.androidannotations.annotations.EActivity;
 
@@ -37,7 +38,7 @@ public class SettingsActivity extends PreferenceActivity {
 
     public void askToConfirmDelete()
     {
-        AlertDialog alertDialog = new AlertDialog.Builder(
+        AlertDialog alertDialog = new CustomAlertDialogBuilder(
            this).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

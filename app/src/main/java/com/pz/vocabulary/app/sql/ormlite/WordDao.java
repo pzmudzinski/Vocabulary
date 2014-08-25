@@ -43,6 +43,33 @@ public class WordDao extends BaseDaoImpl<Word,Long> {
         // delete translations where word_to = id or word_from = id
         translationDao.delete(translationDeleteBuilder.prepare());
 
+        deleteWordsWithNoTranslation();
+
+        deleteMemoriesWithNotExistingTranslations();
+
+        deleteResponsesWithNotExisitingWords();
+        return rows;
+    }
+
+    private void deleteResponsesWithNotExisitingWords() throws SQLException
+    {
+        DeleteBuilder<QuizResponse, Long> responseDeleteBuilder = responseDao.deleteBuilder();
+        responseDeleteBuilder.where().raw(
+                "( SELECT count(1) FROM " + DatabaseTables.TABLE_WORDS +
+                        " WHERE " + DBColumns.WORD_FROM +" = " + DatabaseTables.TABLE_WORDS + "." + DBColumns.ID +  ") < 1"
+        );
+        responseDao.delete(responseDeleteBuilder.prepare());
+    }
+
+    private void deleteMemoriesWithNotExistingTranslations() throws SQLException {
+        DeleteBuilder<Memory, Long> memoryDeleteBuilder = memoryDao.deleteBuilder();
+
+        memoryDeleteBuilder.where().not().exists(translationDao.queryBuilder().selectColumns(DBColumns.MEMORY_ID));
+
+        memoryDao.delete(memoryDeleteBuilder.prepare());
+    }
+
+    private void deleteWordsWithNoTranslation() throws SQLException {
         DeleteBuilder<Word, Long> wordDeleteBuilder = this.deleteBuilder();
 
         /*
@@ -52,6 +79,8 @@ public class WordDao extends BaseDaoImpl<Word,Long> {
             (SELECT count(1) FROM translations WHERE word_from = words.id OR word_to = words.id) < 1
         )
          */
+
+        //delete words which don't have translations
         wordDeleteBuilder.where().raw(
                 "( SELECT count(1) FROM " + DatabaseTables.TABLE_TRANSLATIONS +
                         " WHERE " + DBColumns.WORD_FROM +" = " + DatabaseTables.TABLE_WORDS + "." + DBColumns.ID +
@@ -61,20 +90,22 @@ public class WordDao extends BaseDaoImpl<Word,Long> {
 
 
         this.delete(wordDeleteBuilder.prepare());
+    }
 
-        DeleteBuilder<Memory, Long> memoryDeleteBuilder = memoryDao.deleteBuilder();
+    public void deleteTranslation(long wordFrom, long wordTo) throws SQLException {
+        DeleteBuilder<Translation, Long> deleteBuilder = translationDao.deleteBuilder();
+        deleteBuilder.where().eq(DBColumns.WORD_FROM, wordFrom).and().eq(DBColumns.WORD_TO, wordTo);
 
-        memoryDeleteBuilder.where().not().exists(translationDao.queryBuilder().selectColumns(DBColumns.MEMORY_ID));
+        translationDao.delete(deleteBuilder.prepare());
 
-        memoryDao.delete(memoryDeleteBuilder.prepare());
+        deleteBuilder = translationDao.deleteBuilder();
+        deleteBuilder.where().eq(DBColumns.WORD_FROM, wordTo).and().eq(DBColumns.WORD_TO, wordFrom);
 
-        DeleteBuilder<QuizResponse, Long> responseDeleteBuilder = responseDao.deleteBuilder();
-        responseDeleteBuilder.where().raw(
-                "( SELECT count(1) FROM " + DatabaseTables.TABLE_WORDS +
-                        " WHERE " + DBColumns.WORD_FROM +" = " + DatabaseTables.TABLE_WORDS + "." + DBColumns.ID +  ") < 1"
-        );
-        responseDao.delete(responseDeleteBuilder.prepare());
-        return rows;
+        translationDao.delete(deleteBuilder.prepare());
+
+        deleteWordsWithNoTranslation();
+        deleteMemoriesWithNotExistingTranslations();
+        deleteResponsesWithNotExisitingWords();
     }
 
     protected WordDao(Class<Word> dataClass) throws SQLException {

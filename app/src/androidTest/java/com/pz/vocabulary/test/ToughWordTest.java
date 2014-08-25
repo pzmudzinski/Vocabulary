@@ -1,5 +1,7 @@
 package com.pz.vocabulary.test;
 
+import android.test.suitebuilder.annotation.Suppress;
+
 import com.pz.vocabulary.app.models.Question;
 import com.pz.vocabulary.app.models.Quiz;
 import com.pz.vocabulary.app.models.db.Translation;
@@ -13,6 +15,7 @@ import java.util.List;
 /**
  * Created by piotr on 17/07/14.
  */
+@Suppress
 public class ToughWordTest extends VocabularyTest {
 
     private Quiz quiz ;
