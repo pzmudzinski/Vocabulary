@@ -191,6 +191,11 @@ public class QuizActivity extends VocabularyActionBarActivity implements IntentA
     }
 
     @Override
+    public void onQuestionPostAccepted(int questionNumber) {
+        setActionBarTitleForQuestion(questionNumber);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.quiz, menu);

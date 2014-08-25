@@ -16,6 +16,7 @@ import com.pz.vocabulary.app.sql.DBColumns;
 import com.pz.vocabulary.app.sql.DatabaseTables;
 import com.pz.vocabulary.app.sql.Dictionary;
 import com.pz.vocabulary.app.sql.QuizHistory;
+import com.pz.vocabulary.app.utils.DictionaryUtils;
 
 import org.androidannotations.annotations.ViewById;
 
@@ -214,21 +215,7 @@ public class Quiz extends BaseEntity{
         String usersAnswer = responses.get(questionNumber).getResponse();
         QuizResponse correctResponse = acceptAnswer(questionNumber);
         Word wordFrom = dictionary.findWord(correctResponse.getWordFrom().getId());
-
-        List<Language> languages = dictionary.getLanguages();
-        Language otherLanguage = null;
-        for ( Language language : languages)
-        {
-            if (language.getId() != wordFrom.getLanguageID()) {
-                otherLanguage = language;
-                break;
-            }
-        }
-
-        if (otherLanguage == null)
-            return null;
-
-        Word wordTo = otherLanguage.newWord(usersAnswer);
+        Word wordTo = DictionaryUtils.otherLanguage(dictionary, wordFrom.getLanguageID()).newWord(usersAnswer);
 
         dictionary.insertWordsAndTranslation(wordFrom, wordTo, null);
         return correctResponse;

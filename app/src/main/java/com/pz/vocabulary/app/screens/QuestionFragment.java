@@ -69,6 +69,7 @@ public class QuestionFragment extends VocabularyFragment implements Arguments{
         public void onCorrectAnswer(int questionNumber);
         public void onWrongAnswer(int questionNumber);
         public void onSkipQuestion(int questionNumber);
+        public void onQuestionPostAccepted(int questionNumber);
     }
 
     public static QuestionFragment newInstance(int questionNumber)
@@ -223,11 +224,13 @@ public class QuestionFragment extends VocabularyFragment implements Arguments{
     protected void acceptAnswer()
     {
         showState( callback.getQuiz().acceptAnswer(questionNumber));
+        callback.onQuestionPostAccepted(questionNumber);
     }
 
     @Click(R.id.acceptAnswerAddMeaningButton)
     protected void acceptAnswerAndAddMeaning()
     {
         showState(callback.getQuiz().acceptAnswerAndAddMeaning(questionNumber));
+        callback.onQuestionPostAccepted(questionNumber);
     }
 }
